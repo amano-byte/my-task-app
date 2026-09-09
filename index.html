@@ -48,23 +48,38 @@
     .list-card { background: white; padding: 12px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 
     /* WBSカレンダー */
-    .calendar-wrapper { overflow-x: auto; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 10px; }
+    .calendar-wrapper { overflow-x: auto; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 10px; margin-bottom: 15px;}
     .calendar-grid { display: grid; gap: 1px; background: #eee; border: 1px solid #eee; }
     .cal-header { background: #f8f9fa; font-size: 0.7em; text-align: center; padding: 5px 0; font-weight: bold; }
     .cal-header.weekend { color: var(--q1); }
     .cal-row { display: contents; }
-    .cal-task-name { background: white; padding: 5px; font-size: 0.75em; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-right: 1px solid #eee; }
-    .cal-cell { background: white; position: relative; height: 30px; }
+    
+    /* 進捗付きタスク名セル */
+    .cal-task-name { background: white; padding: 5px; font-size: 0.75em; border-right: 1px solid #eee; display: flex; flex-direction: column; justify-content: center; position: relative;}
+    .cal-task-title { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; z-index: 2;}
+    .cal-task-proj { font-size: 0.8em; color: #8e8e93; z-index: 2;}
+    .cal-task-progress-bg { position: absolute; bottom: 0; left: 0; height: 100%; background: rgba(52, 199, 89, 0.1); z-index: 1;}
+    .cal-task-progress-text { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); font-size: 0.8em; color: var(--q2); font-weight: bold; z-index: 2;}
+
+    .cal-cell { background: white; position: relative; height: 36px; }
     .cal-cell.weekend { background: #fafafa; }
-    .task-bar { position: absolute; top: 5px; height: 20px; background: var(--primary); border-radius: 4px; z-index: 10; opacity: 0.8; font-size: 0.6em; color: white; display: flex; align-items: center; padding: 0 4px; white-space: nowrap; overflow: hidden; }
-    .task-bar.completed { background: var(--q4); text-decoration: line-through; }
+    
+    /* タスクバーの進化 */
+    .task-bar { position: absolute; top: 4px; height: 28px; background: rgba(9, 105, 218, 0.15); border: 1px solid var(--primary); border-radius: 6px; z-index: 10; font-size: 0.65em; color: var(--primary); display: flex; align-items: center; justify-content: space-between; padding: 0 4px; white-space: nowrap; overflow: hidden; font-weight: bold; box-sizing: border-box;}
+    .task-bar.completed { background: #f2f2f7; border-color: #d1d1d6; color: #8e8e93; text-decoration: line-through; }
+    .task-bar-content { display: flex; align-items: center; gap: 4px; overflow: hidden;}
+    .task-bar-flags { flex-shrink: 0; font-size: 1.1em;}
 
     /* モーダル */
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
     .modal-content { background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
     .modal-close { float: right; font-size: 24px; background: none; border: none; padding: 0; line-height: 1; margin-top: -5px; }
     .modal-btn { border: none; padding: 10px 12px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; flex: 1; }
-    .full-btn { width: 100%; margin-bottom: 10px; background: #1c1c1e; color: white; }
+    
+    /* カレンダーボタン類 */
+    .sync-btn { width: 100%; margin-bottom: 8px; background: #1c1c1e; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;}
+    .sync-btn.google { background: #4285F4; }
+    .sync-btn.memo { background: #ffcc00; color: #000; }
     
     .badge-proj { font-size: 0.75em; background: #cce5ff; color: #0056b3; padding: 2px 6px; border-radius: 10px; margin-bottom: 4px; display: inline-block; }
   </style>
@@ -164,6 +179,18 @@
       <button onclick="changeMonth(1)" style="border:none; background:none; font-size:20px; color:var(--primary);">▶</button>
     </div>
     <div class="calendar-wrapper" id="calendar-wrapper"></div>
+    
+    <!-- カレンダー記号の解説（アコーディオン） -->
+    <details style="background:white; border-radius:12px; padding:10px; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+      <summary style="font-weight:bold; color:var(--primary); outline:none;">ℹ️ 記号について（使い方）</summary>
+      <ul style="font-size:0.85em; color:#666; margin:10px 0 0 0; padding-left:20px; line-height:1.6;">
+        <li><span style="color:var(--primary); font-weight:bold;">▶︎</span> : タスクの「開始日」を表します。</li>
+        <li><span style="color:var(--q1); font-weight:bold;">🚩</span> : タスクの「期限日」を表します。</li>
+        <li>バーの中にはタスク名と（開始日〜期限日）が表示されます。</li>
+        <li>左側のタスク名には、プロジェクト全体の進捗状況（緑の背景バーと％）が表示されます。</li>
+        <li>バーをタップすると、タスクの詳細・編集・カレンダーへの追加ができます。</li>
+      </ul>
+    </details>
   </div>
 
   <!-- ===============================
@@ -211,8 +238,12 @@
         <div style="font-size:0.85em; color:#666; margin-bottom:10px;" id="modal-meta"></div>
         <div style="background:#f8f9fa; padding:10px; border-radius:6px; font-size:0.9em; margin-bottom:15px; white-space:pre-wrap;" id="modal-memo"></div>
         
-        <!-- カレンダー追加ボタン -->
-        <button id="add-to-calendar-btn" class="modal-btn full-btn" onclick="addToCalendar()">📅 カレンダーに予定を追加</button>
+        <!-- カレンダー＆メモ連携ボタン群 -->
+        <div id="sync-buttons-container" style="margin-bottom: 15px;">
+          <button class="sync-btn memo" onclick="copyToMemo()">📝 メモ帳にコピーする</button>
+          <button class="sync-btn" onclick="addToAppleCalendar()">🍎 Appleカレンダーに追加</button>
+          <button class="sync-btn google" onclick="addToGoogleCalendar()">🇬 Googleカレンダーに追加</button>
+        </div>
 
         <div id="modal-actions" style="display:flex; gap:8px; justify-content:space-between; flex-wrap:wrap;"></div>
       </div>
@@ -241,18 +272,26 @@
   </div>
 
   <script>
-    // データ初期化 (V10)
-    let projects = JSON.parse(localStorage.getItem('vizProjectsV10')) || [];
-    let tasks = JSON.parse(localStorage.getItem('vizTasksV10')) || [];
-    let members = JSON.parse(localStorage.getItem('vizMembersV10')) || ["自分"];
+    // データ初期化 (V11)
+    let projects = JSON.parse(localStorage.getItem('vizProjectsV11')) || [];
+    let tasks = JSON.parse(localStorage.getItem('vizTasksV11')) || [];
+    let members = JSON.parse(localStorage.getItem('vizMembersV11')) || ["自分"];
     let currentProjectId = null;
     let currentCalDate = new Date();
     let currentOpenedTaskId = null;
 
+    // データ移行（V10からV11へ引き継ぎ。初めての場合は無視されます）
+    if(projects.length === 0 && localStorage.getItem('vizProjectsV10')) {
+      projects = JSON.parse(localStorage.getItem('vizProjectsV10'));
+      tasks = JSON.parse(localStorage.getItem('vizTasksV10'));
+      members = JSON.parse(localStorage.getItem('vizMembersV10'));
+      saveData();
+    }
+
     function saveData() {
-      localStorage.setItem('vizProjectsV10', JSON.stringify(projects));
-      localStorage.setItem('vizTasksV10', JSON.stringify(tasks));
-      localStorage.setItem('vizMembersV10', JSON.stringify(members));
+      localStorage.setItem('vizProjectsV11', JSON.stringify(projects));
+      localStorage.setItem('vizTasksV11', JSON.stringify(tasks));
+      localStorage.setItem('vizMembersV11', JSON.stringify(members));
     }
 
     // --- UI状態管理 ---
@@ -272,15 +311,14 @@
     }
 
     function navToTab(pageId) {
-      if (pageId === 'page-projects') currentProjectId = null; // プロジェクトタブに戻ったら全体表示へリセット
+      if (pageId === 'page-projects') currentProjectId = null;
       
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(pageId).classList.add('active');
       document.getElementById('tab-' + pageId.replace('page-','')).classList.add('active');
       
-      updateHeader();
-      updateProjectDropdowns();
+      updateHeader(); updateProjectDropdowns();
       
       if(pageId === 'page-projects') renderProjects();
       if(pageId === 'page-tasks') renderTasks();
@@ -289,14 +327,8 @@
       if(pageId === 'page-completed') renderCompleted();
     }
 
-    function openProject(id) {
-      currentProjectId = id;
-      navToTab('page-tasks');
-    }
-
-    function goHome() {
-      navToTab('page-projects');
-    }
+    function openProject(id) { currentProjectId = id; navToTab('page-tasks'); }
+    function goHome() { navToTab('page-projects'); }
 
     // --- 設定・メンバー管理 ---
     function openSettings() { document.getElementById('page-settings').style.display = 'block'; renderMembers(); }
@@ -319,23 +351,25 @@
       if (currentProjectId) document.getElementById('task-project-select').value = currentProjectId;
     }
 
-    // --- データ描画 ---
+    // --- データ描画用ヘルパー ---
     function getFilteredTasks(status) {
       let arr = tasks.filter(t => t.status === status);
       if (currentProjectId) arr = arr.filter(t => t.projectId === currentProjectId);
       return arr;
     }
+    function getProjectName(id) { const p = projects.find(x => x.id === id); return p ? p.name : '不明'; }
 
-    function getProjectName(id) {
-      const p = projects.find(x => x.id === id); return p ? p.name : '不明';
-    }
-
+    // --- ページ描画 ---
     function renderProjects() {
       ['pq1','pq2','pq3','pq4'].forEach(q => document.getElementById(`${q}-list`).innerHTML = '');
       projects.forEach(p => {
-        const activeCount = tasks.filter(t => t.projectId === p.id && t.status === 'active').length;
+        const pTasks = tasks.filter(t => t.projectId === p.id);
+        const activeCount = pTasks.filter(t => t.status === 'active').length;
+        const totalCount = pTasks.length;
+        const progress = totalCount > 0 ? Math.round((pTasks.filter(t=>t.status==='completed').length / totalCount)*100) : 0;
+        
         const card = document.createElement('div'); card.className = 'proj-card'; card.onclick = () => openProject(p.id);
-        card.innerHTML = `<span>📁 ${p.name}</span><span class="proj-card-count">残タスク: ${activeCount}件</span>`;
+        card.innerHTML = `<span>📁 ${p.name}</span><span class="proj-card-count">残: ${activeCount}件 / 進捗: ${progress}%</span>`;
         if (p.importance === 'high' && p.urgency === 'high') document.getElementById('pq1-list').appendChild(card);
         else if (p.importance === 'high' && p.urgency === 'low') document.getElementById('pq2-list').appendChild(card);
         else if (p.importance === 'low' && p.urgency === 'high') document.getElementById('pq3-list').appendChild(card);
@@ -359,7 +393,6 @@
         const projBadge = currentProjectId === null ? `<div class="badge-proj">${getProjectName(task.projectId)}</div>` : '';
         div.innerHTML = `${projBadge}<div style="font-weight:bold; margin-bottom:2px;">${task.name}</div><div style="color:#8e8e93; font-size:0.9em;">👤${task.assignee}</div>`;
         div.onclick = () => openModal(task.id);
-        
         const t1 = mType === 'eisenhower' ? task.importance : task.impact; const t2 = mType === 'eisenhower' ? task.urgency : task.effort;
         if (t1==='high' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq1-list').appendChild(div);
         else if (t1==='high' && t2===(mType==='eisenhower'?'low':'high')) document.getElementById('mq2-list').appendChild(div);
@@ -380,30 +413,59 @@
       return card;
     }
 
-    // --- カレンダー WBS ---
+    // --- カレンダー WBS (進捗・フラグ・期間表示強化) ---
     function changeMonth(diff) { currentCalDate.setMonth(currentCalDate.getMonth() + diff); renderCalendarWBS(); }
+    
     function renderCalendarWBS() {
       const year = currentCalDate.getFullYear(); const month = currentCalDate.getMonth();
       document.getElementById('cal-month-title').innerText = `${year}年 ${month + 1}月`;
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       
-      let html = `<div class="calendar-grid" style="grid-template-columns: 90px repeat(${daysInMonth}, 30px);"><div class="cal-header">タスク</div>`;
+      let html = `<div class="calendar-grid" style="grid-template-columns: 120px repeat(${daysInMonth}, 30px);"><div class="cal-header">タスク名</div>`;
       for(let i=1; i<=daysInMonth; i++) {
         const d = new Date(year, month, i).getDay();
         html += `<div class="cal-header ${(d===0||d===6)?'weekend':''}">${i}<br>${['日','月','火','水','木','金','土'][d]}</div>`;
       }
       
       getFilteredTasks('active').concat(getFilteredTasks('completed')).sort((a,b) => new Date(a.startDate) - new Date(b.startDate)).forEach(task => {
-        const projBadge = currentProjectId === null ? `[${getProjectName(task.projectId).slice(0,3)}] ` : '';
-        html += `<div class="cal-row"><div class="cal-task-name" onclick="openModal('${task.id}')">${task.status === 'completed'?'✅ ':''}${projBadge}${task.name}</div>`;
-        const start = new Date(task.startDate); const end = new Date(task.deadline.split('T')[0]);
+        
+        // 進捗状況の計算（そのタスクが属するプロジェクト全体の進捗）
+        const pTasks = tasks.filter(t => t.projectId === task.projectId);
+        const progress = pTasks.length > 0 ? Math.round((pTasks.filter(t=>t.status==='completed').length / pTasks.length)*100) : 0;
+        const projName = currentProjectId === null ? getProjectName(task.projectId).slice(0,5) : '';
+        
+        // タスク名セル (背景に進捗バー)
+        html += `<div class="cal-row">
+          <div class="cal-task-name" onclick="openModal('${task.id}')">
+            <div class="cal-task-progress-bg" style="width: ${progress}%;"></div>
+            <div class="cal-task-progress-text">${progress}%</div>
+            <div class="cal-task-proj">${projName}</div>
+            <div class="cal-task-title">${task.status === 'completed'?'✅':''}${task.name}</div>
+          </div>`;
+          
+        const start = new Date(task.startDate); 
+        const end = new Date(task.deadline.split('T')[0]);
+        const formatStr = `${start.getMonth()+1}/${start.getDate()}〜${end.getMonth()+1}/${end.getDate()}`;
+        
         for(let i=1; i<=daysInMonth; i++) {
           const cDate = new Date(year, month, i);
           html += `<div class="cal-cell ${(cDate.getDay()===0||cDate.getDay()===6)?'weekend':''}">`;
+          
           if(cDate.getTime() === start.getTime() || (i === 1 && start < cDate && end >= cDate)) {
              let dDays = Math.floor((end - Math.max(start, new Date(year, month, 1))) / 86400000) + 1;
              if(dDays > daysInMonth - i + 1) dDays = daysInMonth - i + 1;
-             if(dDays > 0) html += `<div class="task-bar ${task.status==='completed'?'completed':''}" style="width:${(dDays*30)-2}px;" onclick="openModal('${task.id}')">${task.name}</div>`;
+             
+             if(dDays > 0) {
+               const w = (dDays*30)-2;
+               // フラグ・矢印アイコンの表示ロジック
+               const showStart = (cDate.getTime() === start.getTime()) ? '▶︎' : '';
+               const showEnd = (end.getTime() === new Date(year, month, i + dDays - 1).getTime()) ? '<span style="color:var(--q1);">🚩</span>' : '';
+               
+               html += `<div class="task-bar ${task.status==='completed'?'completed':''}" style="width:${w}px;" onclick="openModal('${task.id}')">
+                 <div class="task-bar-content"><span class="task-bar-flags">${showStart}</span> ${task.name} (${formatStr})</div>
+                 <div class="task-bar-flags">${showEnd}</div>
+               </div>`;
+             }
           }
           html += `</div>`;
         }
@@ -412,7 +474,7 @@
       document.getElementById('calendar-wrapper').innerHTML = html + `</div>`;
     }
 
-    // --- データ操作 ---
+    // --- データ登録 ---
     function createProject() {
       const name = document.getElementById('new-proj-name').value.trim();
       if(!name) return;
@@ -434,55 +496,63 @@
       saveData(); document.getElementById('taskForm').reset(); document.getElementById('taskDetails').removeAttribute('open'); navToTab('page-tasks');
     });
 
-    // --- 🗓 iPhoneカレンダー連動機能 (Web Share API) ---
-    window.addToCalendar = function() {
-      if(!currentOpenedTaskId) return;
-      const t = tasks.find(x => x.id === currentOpenedTaskId);
-      if(!t) return;
+    // --- 連動機能 (Apple/Google/Memo) ---
+    
+    // 1. Appleカレンダー (.ics 直接DL)
+    window.addToAppleCalendar = function() {
+      if(!currentOpenedTaskId) return; const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
       
-      const formatICSDate = (date) => {
-        return date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' +
-               String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
-      };
-
-      const startDate = new Date(t.startDate + "T09:00:00");
-      const endDate = new Date(t.deadline);
-      const now = new Date();
-
-      // CRLF(\r\n)必須
+      const formatICSDate = (date) => date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' + String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
+      const startDate = new Date(t.startDate + "T09:00:00"); const endDate = new Date(t.deadline); const now = new Date();
       const icsLines = [
         "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Visualizer App//JP", "BEGIN:VEVENT",
         `UID:${t.id}@visualizer.local`, `DTSTAMP:${formatICSDate(now)}`, `DTSTART:${formatICSDate(startDate)}`, `DTEND:${formatICSDate(endDate)}`,
-        `SUMMARY:${t.name}`, `DESCRIPTION:担当者: ${t.assignee}\\nメモ: ${(t.memo || '').replace(/\n/g, '\\n')}`,
+        `SUMMARY:${t.name}`, `DESCRIPTION:【プロジェクト】${getProjectName(t.projectId)}\\n【担当】${t.assignee}\\n\\n${(t.memo || '').replace(/\n/g, '\\n')}`,
         "END:VEVENT", "END:VCALENDAR"
       ];
-      
-      const icsMSG = icsLines.join('\r\n');
-      const file = new File([icsMSG], `${t.name}.ics`, {type: 'text/calendar'});
+      const blob = new Blob([icsLines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = `${t.name}.ics`; document.body.appendChild(a); a.click();
+      window.URL.revokeObjectURL(url); document.body.removeChild(a);
+    }
 
-      // iPhone(Safari)のネイティブ共有シートを呼び出して「カレンダーに追加」をさせる
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        navigator.share({ files: [file], title: 'カレンダーに追加' }).catch(err => console.log('Share failed:', err));
-      } else {
-        // PC等のフォールバック
-        const blob = new Blob([icsMSG], { type: 'text/calendar;charset=utf-8' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href = url; a.download = `${t.name}.ics`; document.body.appendChild(a); a.click();
-        window.URL.revokeObjectURL(url); document.body.removeChild(a);
-      }
+    // 2. Googleカレンダー (URLパラメータ方式)
+    window.addToGoogleCalendar = function() {
+      if(!currentOpenedTaskId) return; const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
+      
+      const formatGCalDate = (date) => date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' + String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
+      
+      const startDate = new Date(t.startDate + "T09:00:00"); const endDate = new Date(t.deadline);
+      const text = encodeURIComponent(t.name);
+      const dates = encodeURIComponent(`${formatGCalDate(startDate)}/${formatGCalDate(endDate)}`);
+      const details = encodeURIComponent(`【プロジェクト】${getProjectName(t.projectId)}\n【担当】${t.assignee}\n\n${t.memo || ''}`);
+      
+      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}`;
+      window.open(url, '_blank');
+    }
+
+    // 3. メモ帳コピー機能
+    window.copyToMemo = function() {
+      if(!currentOpenedTaskId) return; const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
+      
+      const text = `■タスク名: ${t.name}\n■プロジェクト: ${getProjectName(t.projectId)}\n■担当者: ${t.assignee}\n■期間: ${t.startDate} 〜 ${t.deadline.replace('T',' ')}\n\n■メモ:\n${t.memo || 'なし'}`;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        alert('タスクの内容をコピーしました！\nメモ帳アプリなどにペーストしてください。');
+      }).catch(err => {
+        alert('コピーに失敗しました。');
+      });
     }
 
     // --- モーダル制御 ---
     window.openModal = function(id) {
-      const t = tasks.find(x => x.id === id); if(!t) return;
-      currentOpenedTaskId = id;
-      
+      const t = tasks.find(x => x.id === id); if(!t) return; currentOpenedTaskId = id;
       document.getElementById('modal-view-mode').style.display = 'block'; document.getElementById('modal-edit-mode').style.display = 'none';
       document.getElementById('modal-title').innerText = t.name;
       document.getElementById('modal-meta').innerHTML = `📁 ${getProjectName(t.projectId)} <br>👤 ${t.assignee} <br>📅 期限: ${t.deadline.replace('T', ' ')}`;
       document.getElementById('modal-memo').innerText = t.memo || 'メモはありません';
       
-      document.getElementById('add-to-calendar-btn').style.display = t.status === 'active' ? 'block' : 'none';
+      document.getElementById('sync-buttons-container').style.display = t.status === 'active' ? 'block' : 'none';
 
       let actions = t.status === 'active' 
         ? `<button class="modal-btn" onclick="deleteTask('${t.id}')" style="background:#ff3b30; color:white;">削除</button><button class="modal-btn" onclick="editTask('${t.id}')" style="background:#e5e5ea; color:#1c1c1e;">編集</button><button class="modal-btn" onclick="markDone('${t.id}')" style="background:#34c759; color:white;">✅ 完了</button>`
@@ -493,8 +563,7 @@
     
     window.editTask = function(id) {
       const t = tasks.find(x => x.id === id);
-      document.getElementById('edit-id').value = t.id; document.getElementById('edit-name').value = t.name; document.getElementById('edit-memo').value = t.memo;
-      document.getElementById('edit-project-select').value = t.projectId;
+      document.getElementById('edit-id').value = t.id; document.getElementById('edit-name').value = t.name; document.getElementById('edit-memo').value = t.memo; document.getElementById('edit-project-select').value = t.projectId;
       document.getElementById('edit-startDate').value = t.startDate; document.getElementById('edit-deadline').value = t.deadline; document.getElementById('edit-assignee').value = t.assignee;
       document.getElementById('edit-importance').value = t.importance; document.getElementById('edit-urgency').value = t.urgency; document.getElementById('edit-impact').value = t.impact; document.getElementById('edit-effort').value = t.effort;
       document.getElementById('modal-view-mode').style.display = 'none'; document.getElementById('modal-edit-mode').style.display = 'block';
