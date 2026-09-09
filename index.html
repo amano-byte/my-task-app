@@ -12,106 +12,102 @@
        カラーパレット (ワインレッドテーマ)
        ========================================= */
     :root { 
-      --primary: #8b2635;       /* 優しいワインレッド */
-      --primary-light: #b04153; /* 少し明るいワインレッド */
-      --bg-dark: #6e1c28;       /* 濃いめの背景 */
-      --card-bg: rgba(255, 255, 255, 0.95); /* 半透明の白で読みやすく */
+      --primary: #8b2635; 
+      --bg-dark: #6e1c28; 
+      --card-bg: rgba(255, 255, 255, 0.95);
       --text-main: #2d3748;
       --text-sub: #718096;
       --q1: #e53e3e; --q2: #38a169; --q3: #dd6b20; --q4: #a0aec0;
+      /* ポストイット風 背景色 */
+      --q1-bg: rgba(229, 62, 62, 0.12);
+      --q2-bg: rgba(56, 161, 105, 0.12);
+      --q3-bg: rgba(221, 107, 32, 0.12);
+      --q4-bg: rgba(160, 174, 192, 0.15);
     }
     
-    /* 🐺 MWAM風スタンプ背景 */
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; 
       margin: 0; padding: 0; 
       background-color: var(--primary); 
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Ctext x='20' y='60' font-size='45' opacity='0.12'%3E🐺%3C/text%3E%3Ctext x='70' y='120' font-size='22' font-weight='900' font-family='Arial, sans-serif' fill='%23ffffff' opacity='0.08' transform='rotate(-15 70 120)'%3EMWAM%3C/text%3E%3C/svg%3E");
-      background-attachment: fixed;
-      color: var(--text-main); 
-      -webkit-tap-highlight-color: transparent; 
+      background-attachment: fixed; color: var(--text-main); -webkit-tap-highlight-color: transparent; 
     }
     
-    /* ヘッダー (ワインレッドに白文字) */
+    /* ヘッダー */
     .app-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(139, 38, 53, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 12px) 15px 12px 15px; z-index: 1000; height: 28px; color: white; }
     .header-btn { background: none; border: none; color: white; font-size: 15px; font-weight: bold; padding: 0; cursor: pointer; min-width: 65px; display: flex; align-items: center; gap: 4px; }
-    .header-btn.right { justify-content: flex-end; }
     .header-title { font-weight: 800; font-size: 17px; margin: 0; text-align: center; flex-grow: 1; letter-spacing: 1px; }
 
-    /* 下部ナビゲーションタブ (白背景でアイコンを強調) */
+    /* モード切替 */
+    .global-toggle-bar { position: fixed; top: calc(53px + env(safe-area-inset-top)); left: 0; right: 0; padding: 10px 15px; z-index: 990; background: linear-gradient(to bottom, rgba(139, 38, 53, 0.9), transparent); }
+    .global-toggle { display: flex; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    .global-toggle button { flex: 1; border: none; background: transparent; padding: 10px; font-weight: bold; font-size: 14px; border-radius: 8px; color: rgba(255,255,255,0.7); cursor: pointer; transition: 0.2s; }
+    .global-toggle button.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+    /* 下部ナビゲーション */
     .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; height: 56px; }
     .nav-btn { background: transparent; border: none; font-size: 10px; color: #a0aec0; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 20%; cursor: pointer; transition: 0.2s; }
     .nav-btn .icon { font-size: 22px; margin-bottom: 3px; transition: 0.2s; }
     .nav-btn.active { color: var(--primary); font-weight: bold; }
-    .nav-btn.active .icon { transform: scale(1.1); }
     
-    /* ページコンテナ */
-    .page { display: none; padding: calc(65px + env(safe-area-inset-top)) 15px calc(80px + env(safe-area-inset-bottom)); max-width: 800px; margin: 0 auto; min-height: 100vh; box-sizing: border-box; }
+    .page { display: none; padding: calc(125px + env(safe-area-inset-top)) 15px calc(80px + env(safe-area-bottom)); max-width: 900px; margin: 0 auto; min-height: 100vh; box-sizing: border-box; }
     .page.active { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* 汎用コンポーネント (カードは白で文字を見やすく) */
     .primary-btn { display: block; width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); margin-bottom: 10px; }
     .card { background: var(--card-bg); padding: 18px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.5); }
     .form-grid { display: flex; flex-direction: column; gap: 12px; }
     .form-group-title { font-size: 0.85em; font-weight: bold; color: var(--primary); margin-top: 5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
-    input, select, textarea { padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; background: #fff; appearance: none; -webkit-appearance: none; font-family: inherit; color: var(--text-main); }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 38, 53, 0.2); }
+    input, select, textarea { padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; background: #fff; color: var(--text-main); }
     
-    /* トグルボタン */
     .toggle-group { display: flex; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 4px; margin-bottom: 20px; }
     .toggle-btn { flex: 1; border: none; background: transparent; padding: 10px; font-weight: bold; font-size: 14px; border-radius: 8px; color: rgba(255,255,255,0.7); cursor: pointer; transition: 0.2s; }
     .toggle-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-    /* 🔥 行動設定 (トップ画面) 独自スタイル */
+    /* 目標 */
     .goal-block { margin-bottom: 12px; }
     .goal-label { font-weight: 800; font-size: 0.9em; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-    .goal-input { width: 100%; min-height: 60px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; font-size: 14.5px; color: var(--text-main); line-height: 1.5; resize: vertical; }
-
-    /* 習慣化チェックリスト */
+    .goal-input { width: 100%; min-height: 60px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; font-size: 14px; resize: vertical; }
     .habit-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e2e8f0; }
-    .habit-label { display: flex; align-items: center; gap: 10px; font-size: 15px; flex-grow: 1; }
-    .habit-checkbox { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--primary); }
     .habit-checked { text-decoration: line-through; color: var(--text-sub); }
 
-    /* 📝 リスト画面 */
+    /* リスト */
     .proj-acc { background: var(--card-bg); border-radius: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; }
     .proj-acc-summary { padding: 16px; font-weight: bold; font-size: 16px; outline: none; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.03); border-bottom: 1px solid #e2e8f0; cursor: pointer; color: var(--primary); }
     .proj-acc-summary::-webkit-details-marker { display: none; }
-    .proj-acc-content { padding: 12px; background: transparent; }
     .list-card { background: #fff; padding: 14px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 4px solid var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .list-card.done { border-left-color: #cbd5e1; opacity: 0.6; }
 
-    /* ⊞ マトリクス画面 */
-    .matrix-container { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; height: calc(100vh - 220px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); min-height: 400px; }
-    .quadrant { background: var(--card-bg); border-radius: 16px; padding: 10px; display: flex; flex-direction: column; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .q1 { border-color: rgba(229, 62, 62, 0.4); } .q2 { border-color: rgba(56, 161, 105, 0.4); }
-    .q3 { border-color: rgba(221, 107, 32, 0.4); } .q4 { border-color: rgba(160, 174, 192, 0.4); }
-    .quadrant h3 { margin: 0 0 10px 0; font-size: 0.85em; text-align: center; padding-bottom: 6px; border-bottom: 1px dashed #e2e8f0; color: var(--text-main); }
+    /* ポストイット風 マトリクス画面 */
+    .matrix-container { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; height: calc(100vh - 290px); min-height: 400px; }
+    .quadrant { border-radius: 16px; padding: 10px; display: flex; flex-direction: column; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .q1 { border-color: rgba(229, 62, 62, 0.4); background-color: var(--q1-bg); } 
+    .q2 { border-color: rgba(56, 161, 105, 0.4); background-color: var(--q2-bg); }
+    .q3 { border-color: rgba(221, 107, 32, 0.4); background-color: var(--q3-bg); } 
+    .q4 { border-color: rgba(160, 174, 192, 0.4); background-color: var(--q4-bg); }
+    .quadrant h3 { margin: 0 0 10px 0; font-size: 0.85em; text-align: center; padding-bottom: 6px; border-bottom: 1px dashed rgba(0,0,0,0.1); color: var(--text-main); display: flex; flex-direction: column; gap: 2px;}
     .q-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-    .mini-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; font-size: 0.8em; cursor: pointer; }
+    .mini-card { background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.05); border-radius: 8px; padding: 8px; font-size: 0.8em; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05);}
+    .mini-card.done { opacity: 0.6; text-decoration: line-through; }
 
-    /* 🗓 カレンダー画面 (ガントチャート) */
-    .calendar-wrapper { overflow-x: auto; background: var(--card-bg); border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 16px; border: 1px solid #f1f5f9; }
-    .calendar-grid-vertical { display: grid; background: #e2e8f0; gap: 1px; min-width: 100%; }
-    .cal-v-header { background: #f8fafc; font-weight: bold; font-size: 0.8em; text-align: center; padding: 12px 4px; position: sticky; top: 0; z-index: 10; border-bottom: 2px solid var(--primary); color: var(--text-main); }
-    .cal-v-date { background: #f8fafc; text-align: center; font-weight: bold; font-size: 0.9em; padding: 10px 0; color: var(--text-main); }
-    .cal-v-date.weekend { color: var(--q1); }
-    .cal-v-cell { background: white; padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 44px; }
-    .cal-v-cell.weekend { background: #fbfbfc; }
-    
-    .v-evt { font-size: 0.75em; padding: 6px 8px; border-radius: 8px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-left: 4px solid transparent; }
-    .v-evt.start { background: #e0f2fe; color: #0284c7; border-left-color: #0284c7; }
-    .v-evt.end { background: #fee2e2; color: #dc2626; border-left-color: #dc2626; }
-    .v-evt.start-end { background: #fef3c7; color: #d97706; border-left-color: #d97706; }
-    .v-evt.between { background: transparent; color: var(--text-sub); padding-left: 10px; font-weight: normal; box-shadow: none; display: flex; align-items: center; gap: 4px; }
+    /* ガントチャート */
+    .gantt-wrapper { overflow-x: auto; background: var(--card-bg); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.5); }
+    .gantt-grid { display: grid; background: #e2e8f0; gap: 1px; min-width: max-content; }
+    .gantt-header-cell { background: rgba(139, 38, 53, 0.9); color: white; font-weight: bold; font-size: 0.8em; text-align: center; padding: 8px 4px; }
+    .gantt-days-flex { display: flex; background: #f8fafc; }
+    .gantt-day-col { flex-shrink: 0; text-align: center; border-right: 1px solid #e2e8f0; font-size: 0.75em; padding: 6px 0; font-weight: bold; color: var(--text-sub); }
+    .gantt-day-col.weekend { background: rgba(229, 62, 62, 0.05); color: var(--q1); }
+    .gantt-cell { background: white; padding: 8px; position: relative; }
+    .gantt-tasks-area { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 6px 0; background-image: repeating-linear-gradient(to right, transparent, transparent 34px, #e2e8f0 34px, #e2e8f0 35px); background-size: 35px 100%; min-height: 40px; }
+    .gantt-task-bar { height: 24px; background: rgba(139, 38, 53, 0.15); border: 1px solid var(--primary); border-radius: 6px; font-size: 0.7em; color: var(--primary); display: flex; align-items: center; justify-content: space-between; padding: 0 4px; white-space: nowrap; overflow: hidden; font-weight: bold; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+    .gantt-task-bar.completed { background: #f1f5f9; border-color: #cbd5e1; color: #94a3b8; text-decoration: line-through; }
+    .gantt-memo-textarea { width: 100%; height: 100%; min-height: 50px; border: none; resize: none; background: transparent; padding: 8px; font-size: 0.8em; color: var(--text-main); }
 
-    /* 🔗 確認画面 (アプリ連携追加) */
+    /* 確認画面 (リンク) */
     .app-icon-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
     .app-icon-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: white; font-size: 11px; font-weight: bold; text-align: center; }
     .app-icon-img { width: 50px; height: 50px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); color: var(--text-main); }
-    
-    .lit-link-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 16px; margin-bottom: 14px; border-radius: 30px; background: rgba(255,255,255,0.9); color: var(--primary); font-weight: bold; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.5); font-size: 15px; }
+    .lit-link-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 16px; margin-bottom: 14px; border-radius: 30px; background: rgba(255,255,255,0.9); color: var(--primary); font-weight: bold; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-size: 15px; }
 
     /* モーダル */
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
@@ -130,7 +126,15 @@
     <button id="header-right-btn" class="header-btn right" onclick="openSettings()">⚙️ 設定</button>
   </div>
 
-  <!-- 下部タブ (5つ) -->
+  <!-- グローバルモード切替 -->
+  <div class="global-toggle-bar">
+    <div class="global-toggle">
+      <button id="g-mode-life" class="active" onclick="switchGlobalMode('life')">🏠 ライフ</button>
+      <button id="g-mode-work" onclick="switchGlobalMode('work')">🏢 ワーク</button>
+    </div>
+  </div>
+
+  <!-- 下部タブ -->
   <div class="navbar">
     <button id="tab-list" class="nav-btn" onclick="navToTab('page-list')"><span class="icon">📝</span><span>リスト</span></button>
     <button id="tab-matrix" class="nav-btn" onclick="navToTab('page-matrix')"><span class="icon">⊞</span><span>マトリクス</span></button>
@@ -139,39 +143,16 @@
     <button id="tab-links" class="nav-btn" onclick="navToTab('page-links')"><span class="icon">🔗</span><span>確認</span></button>
   </div>
 
-  <!-- ===============================
-       ページ1: 🔥 行動設定 (トップ画面)
-       =============================== -->
+  <!-- ページ1: 🔥 行動 -->
   <div id="page-goals" class="page active">
-    
-    <!-- ライフを先に配置 -->
-    <div class="toggle-group">
-      <button id="tg-life" class="toggle-btn active" onclick="switchGoalTab('life')">🏠 ライフ</button>
-      <button id="tg-work" class="toggle-btn" onclick="switchGoalTab('work')">🏢 ワーク</button>
-    </div>
-
     <div class="card" style="padding:15px; margin-bottom: 20px;">
-      <div class="goal-block">
-        <div class="goal-label" style="color:#e53e3e;">🚩 Mission <span style="font-size:0.7em; color:var(--text-sub); font-weight:normal;">(果たすべき使命)</span></div>
-        <textarea id="goal-mission" class="goal-input" placeholder="あなたの使命は何ですか？" oninput="saveGoals()"></textarea>
-      </div>
-      <div class="goal-block">
-        <div class="goal-label" style="color:#3182ce;">👁 Vision <span style="font-size:0.7em; color:var(--text-sub); font-weight:normal;">(実現したい未来)</span></div>
-        <textarea id="goal-vision" class="goal-input" placeholder="どのような未来を描いていますか？" oninput="saveGoals()"></textarea>
-      </div>
-      <div class="goal-block" style="margin-bottom:0;">
-        <div class="goal-label" style="color:#38a169;">💎 Value <span style="font-size:0.7em; color:var(--text-sub); font-weight:normal;">(大切にする価値観)</span></div>
-        <textarea id="goal-value" class="goal-input" placeholder="行動の基盤となる価値観は？" oninput="saveGoals()"></textarea>
-      </div>
+      <div class="goal-block"><div class="goal-label" style="color:#e53e3e;">🚩 Mission</div><textarea id="goal-mission" class="goal-input" onblur="saveGoals()"></textarea></div>
+      <div class="goal-block"><div class="goal-label" style="color:#3182ce;">👁 Vision</div><textarea id="goal-vision" class="goal-input" onblur="saveGoals()"></textarea></div>
+      <div class="goal-block" style="margin-bottom:0;"><div class="goal-label" style="color:#38a169;">💎 Value</div><textarea id="goal-value" class="goal-input" onblur="saveGoals()"></textarea></div>
     </div>
-
-    <!-- 期間ごとの行動リスト (アコーディオン廃止・一目で見れる一覧表示) -->
-    <h3 style="font-size:1.1em; text-align:center; color:white; margin-bottom:15px; text-shadow:0 1px 3px rgba(0,0,0,0.3);">期間別の行動</h3>
-    <div id="goal-periods-container" style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
-      <!-- JSで生成 -->
-    </div>
+    <h3 style="font-size:1.1em; text-align:center; color:white; margin-bottom:15px; text-shadow:0 1px 3px rgba(0,0,0,0.5);">期間別の行動</h3>
+    <div id="goal-periods-container" style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;"></div>
     
-    <!-- 習慣化 (チェックリスト) -->
     <details class="card" style="padding:15px;" open>
       <summary style="font-weight:bold; color:var(--primary); outline:none; font-size:1.1em;">🔁 習慣化 (チェックリスト)</summary>
       <div style="margin-top:15px; display:flex; gap:8px; margin-bottom:15px;">
@@ -182,57 +163,48 @@
     </details>
   </div>
 
-  <!-- ===============================
-       ページ2: 📝 リスト
-       =============================== -->
+  <!-- ページ2: 📝 リスト -->
   <div id="page-list" class="page">
-    <div class="toggle-group" style="background:rgba(255,255,255,0.3);">
+    <div class="toggle-group" style="background:rgba(0,0,0,0.4);">
       <button id="tg-active" class="toggle-btn active" onclick="switchListTab('active')" style="color:white;">進行中</button>
       <button id="tg-done" class="toggle-btn" onclick="switchListTab('completed')" style="color:white;">完了済み</button>
     </div>
-
     <div class="card" style="padding:10px; margin-bottom:20px;">
       <details id="taskDetails">
         <summary style="font-weight:bold; color:var(--primary); padding:10px; outline:none;">＋ 新しいタスクを追加</summary>
         <form id="taskForm" class="form-grid" style="margin-top:10px; padding: 0 5px 10px;">
           <input type="text" id="taskName" placeholder="タスク名 (必須)" required>
           <textarea id="memo" placeholder="詳細メモ・手順"></textarea>
-          <div class="form-group-title">プロジェクト紐付け</div>
-          <select id="task-project-select" required></select>
+          <div class="form-group-title">プロジェクト紐付け</div><select id="task-project-select" required></select>
           <div class="form-group-title">スケジュール</div>
           <div><small style="color:var(--text-sub);">開始日</small><input type="date" id="startDate" required></div>
           <div><small style="color:var(--text-sub);">期限</small><input type="datetime-local" id="deadline" required></div>
           <div class="form-group-title">担当者・通知</div>
-          <select id="assignee" required></select>
-          <select class="notify-opt"><option value="">通知1：なし</option><option value="15">15分前</option><option value="60">1時間前</option><option value="1440">1日前</option></select>
-          <div class="form-group-title">評価①：優先順位</div>
+          <select id="assignee" required></select><select class="notify-opt"><option value="">通知1：なし</option><option value="15">15分前</option><option value="60">1時間前</option><option value="1440">1日前</option></select>
+          <div class="form-group-title">評価</div>
           <select id="importance"><option value="high">重要度：高</option><option value="low">重要度：低</option></select>
           <select id="urgency"><option value="high">緊急度：高</option><option value="low">緊急度：低</option></select>
-          <div class="form-group-title">評価②：費用対効果</div>
           <select id="impact"><option value="high">効果：高</option><option value="low">効果：低</option></select>
           <select id="effort"><option value="low">労力：低 (ラク)</option><option value="high">労力：高 (大変)</option></select>
           <button type="submit" class="primary-btn" style="margin-top:10px;">登録する</button>
         </form>
       </details>
     </div>
-
     <div id="list-container"></div>
   </div>
 
-  <!-- ===============================
-       ページ3: ⊞ マトリクス
-       =============================== -->
+  <!-- ページ3: ⊞ マトリクス -->
   <div id="page-matrix" class="page">
+    <div class="toggle-group" style="background:rgba(0,0,0,0.4);">
+      <button id="tg-matrix-active" class="toggle-btn active" onclick="switchMatrixTab('active')" style="color:white;">進行中</button>
+      <button id="tg-matrix-done" class="toggle-btn" onclick="switchMatrixTab('completed')" style="color:white;">完了済み</button>
+    </div>
     <div style="display:flex; gap:10px; margin-bottom:15px;">
       <select id="matrix-type" onchange="renderMatrix()" style="flex:1;">
-        <option value="eisenhower">📊 優先度</option>
-        <option value="impact">📈 費用対効果</option>
+        <option value="eisenhower">📊 優先度</option><option value="impact">📈 費用対効果</option>
       </select>
-      <select id="matrix-proj-filter" onchange="renderMatrix()" style="flex:1;">
-        <option value="all">📁 すべてのPJ</option>
-      </select>
+      <select id="matrix-proj-filter" onchange="renderMatrix()" style="flex:1;"><option value="all">📁 すべてのPJ</option></select>
     </div>
-    
     <div class="matrix-container">
       <div class="quadrant q1"><h3 id="q1-title" style="color:var(--q1)"></h3><div class="q-list" id="mq1-list"></div></div>
       <div class="quadrant q2"><h3 id="q2-title" style="color:var(--q2)"></h3><div class="q-list" id="mq2-list"></div></div>
@@ -241,149 +213,120 @@
     </div>
   </div>
 
-  <!-- ===============================
-       ページ4: 🗓 カレンダー (縦型)
-       =============================== -->
+  <!-- ページ4: 🗓 カレンダー (年次・月次・日次) -->
   <div id="page-wbs" class="page">
-    
-    <details class="card" style="padding:12px; margin-bottom:15px; border-radius:12px;">
-      <summary style="font-weight:bold; color:var(--primary); outline:none;">ℹ️ 記号について（カレンダーの見方）</summary>
-      <ul style="font-size:0.85em; color:var(--text-sub); margin:10px 0 0 0; padding-left:20px; line-height:1.8;">
-        <li><span style="color:#0284c7; font-weight:bold; background:#e0f2fe; padding:2px 6px; border-radius:4px;">🟢 開始</span> : タスクを開始する日。</li>
-        <li><span style="color:#dc2626; font-weight:bold; background:#fee2e2; padding:2px 6px; border-radius:4px;">🏁 期限</span> : タスクを完了させる期限日。</li>
-        <li><span style="color:var(--text-sub); font-weight:bold;">⬇️ 進行中</span> : 開始から期限までの「期間中」を表します。</li>
-        <li><span style="color:#d97706; font-weight:bold; background:#fef3c7; padding:2px 6px; border-radius:4px;">🌟 単日</span> : その日のうちに開始し完了するタスクです。</li>
-      </ul>
-    </details>
+    <div class="toggle-group" style="background:rgba(0,0,0,0.4); margin-bottom:10px;">
+      <button id="tg-cal-daily" class="toggle-btn active" onclick="switchCalView('daily')" style="color:white;">日次 (1ヶ月)</button>
+      <button id="tg-cal-monthly" class="toggle-btn" onclick="switchCalView('monthly')" style="color:white;">月次 (1年)</button>
+      <button id="tg-cal-yearly" class="toggle-btn" onclick="switchCalView('yearly')" style="color:white;">年次 (5年)</button>
+    </div>
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; color:white;">
-      <button onclick="changeMonth(-1)" style="border:none; background:none; font-size:24px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.5);">◀</button>
-      <h3 id="cal-month-title" style="margin:0; font-size:18px; text-shadow:0 1px 2px rgba(0,0,0,0.5);">-</h3>
-      <button onclick="changeMonth(1)" style="border:none; background:none; font-size:24px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.5);">▶</button>
+      <button onclick="changeCalPeriod(-1)" style="border:none; background:none; font-size:24px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.5);">◀</button>
+      <h3 id="cal-period-title" style="margin:0; font-size:18px; text-shadow:0 1px 2px rgba(0,0,0,0.5);">-</h3>
+      <button onclick="changeCalPeriod(1)" style="border:none; background:none; font-size:24px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.5);">▶</button>
     </div>
     
-    <div class="calendar-wrapper" id="calendar-wrapper"></div>
+    <div class="gantt-wrapper" id="gantt-wrapper"></div>
   </div>
 
-  <!-- ===============================
-       ページ5: 🔗 確認 (アプリ連携＆リンク)
-       =============================== -->
+  <!-- ページ5: 🔗 確認 -->
   <div id="page-links" class="page">
     <div style="text-align:center; margin-bottom:24px; padding-top:10px; color:white;">
       <div style="width:70px; height:70px; background:rgba(255,255,255,0.2); border-radius:50%; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; color:white; font-size:30px; box-shadow:0 4px 10px rgba(0,0,0,0.1); backdrop-filter:blur(5px);">📱</div>
       <h2 style="margin:0; font-size:18px;">ショートカット</h2>
-      <p style="margin:4px 0 0; font-size:13px; opacity:0.8;">他のアプリやWebに一瞬で移動</p>
     </div>
-    
-    <!-- アプリアイコンエリア -->
     <div id="apps-container" class="app-icon-grid"></div>
-
-    <h3 style="color:white; font-size:15px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:5px; margin-bottom:15px; text-shadow:0 1px 2px rgba(0,0,0,0.3);">🔗 Webリンク集</h3>
-    <!-- Webリンクエリア -->
+    <h3 style="color:white; font-size:15px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:5px; margin-bottom:15px;">🔗 Webリンク集</h3>
     <div id="links-container"></div>
   </div>
 
-  <!-- ===============================
-       設定ページ・モーダル群
-       =============================== -->
-  
   <!-- ⚙️設定ページ -->
-  <div id="page-settings" class="page" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:1500; overflow-y:auto; padding-top:20px; background-image:none;">
+  <div id="page-settings" class="page" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#5a1721; z-index:3000; overflow-y:auto; padding-top:20px; background-image:none !important;">
     <div style="display:flex; justify-content:space-between; margin-bottom:20px; align-items:center;">
-      <h2 style="margin:0; color:var(--text-main);">設定</h2>
-      <button onclick="closeSettings()" style="font-size:15px; background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:20px; font-weight:bold;">完了</button>
+      <h2 style="margin:0; color:white;">設定</h2>
+      <button onclick="closeSettings()" style="font-size:15px; background:white; border:none; color:var(--primary); padding:8px 16px; border-radius:20px; font-weight:bold;">完了</button>
     </div>
     
-    <button id="notify-btn" class="primary-btn" style="background:var(--q2);" onclick="requestNotificationPermission()">🔔 プッシュ通知を許可する</button>
-    
-    <h3 style="margin-top:20px; font-size:15px; color:var(--text-main);">👥 担当者設定</h3>
+    <h3 style="margin-top:20px; font-size:15px; color:white;">📥 データの書き出し</h3>
+    <div class="card" style="display:flex; flex-direction:column; gap:10px;">
+      <button onclick="exportTasksText()" class="primary-btn" style="background:#475569; margin:0;">📋 タスク一覧をテキストコピー</button>
+      <button onclick="exportTasksCSV()" class="primary-btn" style="margin:0;">📝 タスクをエクセル(CSV)保存</button>
+      <button onclick="exportGoalsCSV()" class="primary-btn" style="background:#ea580c; margin:0;">🎯 目標・行動をエクセル(CSV)保存</button>
+    </div>
+
+    <h3 style="margin-top:20px; font-size:15px; color:white;">🔄 機種変更・データ共有</h3>
+    <div class="card" style="display:flex; flex-direction:column; gap:10px;">
+      <button onclick="exportData()" class="primary-btn" style="margin:0;">全データをコピー (書き出し)</button>
+      <textarea id="import-data-text" placeholder="もらったデータをここにペースト..." style="height:60px; font-size:11px;"></textarea>
+      <button onclick="importData()" class="primary-btn" style="background:var(--q2); margin:0;">データを読み込む</button>
+    </div>
+
+    <h3 style="margin-top:20px; font-size:15px; color:white;">👥 担当者設定</h3>
     <div class="card" style="display:flex; gap:10px;">
       <input type="text" id="new-member-name" placeholder="名前を入力">
       <button onclick="addMember()" style="background:var(--primary); color:white; border:none; border-radius:8px; padding:0 20px; font-weight:bold;">追加</button>
     </div>
     <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:30px;" id="member-list-container"></div>
 
-    <h3 style="font-size:15px; color:var(--text-main);">📱 アプリ・リンク管理</h3>
+    <h3 style="font-size:15px; color:white;">📱 アプリ・リンク管理</h3>
     <div class="card form-grid">
       <div style="display:flex; gap:10px;">
-        <select id="new-link-type" style="width:100px;">
-          <option value="app">アプリ</option>
-          <option value="web">Web</option>
-        </select>
-        <input type="text" id="new-link-title" placeholder="名前 (LINE など)">
+        <select id="new-link-type" style="width:100px;"><option value="app">アプリ</option><option value="web">Web</option></select>
+        <input type="text" id="new-link-title" placeholder="名前">
       </div>
-      <input type="url" id="new-link-url" placeholder="URLまたはスキーム (line://)">
+      <input type="url" id="new-link-url" placeholder="URLまたはスキーム">
       <button onclick="addLink()" style="background:var(--primary); color:white; border:none; border-radius:8px; padding:12px; font-weight:bold;">追加する</button>
-      <p style="font-size:11px; color:var(--text-sub); margin:0;">※アプリのURLスキーム例: <code>line://</code>, <code>twitter://</code>, <code>instagram://</code>, <code>calshow://</code>(カレンダー)</p>
     </div>
     <div style="display:flex; flex-direction:column; gap:10px;" id="settings-links-container"></div>
   </div>
 
-  <!-- ＋プロジェクト作成モーダル -->
+  <!-- モーダル類 -->
   <div id="projectModal" class="modal-overlay">
     <div class="modal-content">
       <button class="modal-close" onclick="document.getElementById('projectModal').style.display='none'">×</button>
-      <h3 style="margin-top:0; color:var(--text-main);">新規プロジェクト</h3>
+      <h3 style="margin-top:0; color:var(--text-main);">新規プロジェクト作成</h3>
       <input type="text" id="new-proj-name" placeholder="プロジェクト名" style="margin-bottom:15px;">
       <button class="primary-btn" onclick="createProject()">作成する</button>
     </div>
   </div>
 
-  <!-- ＋目標アクションモーダル (カレンダー/メモ連携) -->
   <div id="goalActionModal" class="modal-overlay">
     <div class="modal-content">
       <button class="modal-close" onclick="document.getElementById('goalActionModal').style.display='none'">×</button>
       <h3 style="margin-top:0; color:var(--primary);">連携アクション</h3>
-      <p style="font-size:13px; color:var(--text-sub); margin-bottom:15px;">どの行動計画を連携させますか？</p>
-      
-      <div class="form-group-title">1. アクションを選ぶ</div>
       <div style="display:flex; gap:10px; margin-bottom:15px;">
         <button id="ga-btn-memo" class="toggle-btn active" style="background:#e2e8f0; color:var(--text-main);" onclick="selectGoalAction('memo')">📝 メモ帳へコピー</button>
         <button id="ga-btn-gcal" class="toggle-btn" style="background:#e2e8f0; color:var(--text-main);" onclick="selectGoalAction('gcal')">🇬 Gカレンダー</button>
       </div>
-
-      <div class="form-group-title">2. 対象の項目を選ぶ</div>
       <select id="goal-action-target" style="margin-bottom:20px;">
-        <option value="yearly">📅 年次目標</option>
-        <option value="monthly">📆 月次目標</option>
-        <option value="weekly">🗓 週次目標</option>
-        <option value="daily">☀️ 日次行動</option>
+        <option value="yearly">📅 年次目標</option><option value="monthly">📆 月次目標</option><option value="weekly">🗓 週次目標</option><option value="daily">☀️ 日次行動</option>
       </select>
-
       <button class="primary-btn" onclick="executeGoalAction()">実行する</button>
     </div>
   </div>
 
-  <!-- タスク詳細・編集モーダル -->
   <div id="taskModal" class="modal-overlay">
     <div class="modal-content">
       <button class="modal-close" onclick="closeModal()">×</button>
-      
       <div id="modal-view-mode">
         <h3 id="modal-title" style="margin-top:0; color:var(--text-main);"></h3>
         <div style="font-size:0.85em; color:var(--text-sub); margin-bottom:10px;" id="modal-meta"></div>
         <div style="background:#f8fafc; padding:12px; border-radius:8px; font-size:0.9em; margin-bottom:15px; white-space:pre-wrap; border:1px solid #e2e8f0; color:var(--text-main);" id="modal-memo"></div>
-        
         <div style="display:flex; gap:8px; margin-bottom:15px; flex-direction:column;">
           <button class="primary-btn" style="background:#f1f5f9; color:var(--text-main); font-size:14px; padding:10px; margin:0;" onclick="copyToMemo()">📝 メモ帳用にコピー</button>
           <div style="display:flex; gap:8px;">
-            <button class="primary-btn" style="background:#1c1c1e; font-size:14px; padding:10px; margin:0; flex:1;" onclick="addToAppleCalendar()">🍎 Appleカレンダー</button>
-            <button class="primary-btn" style="background:#4285F4; font-size:14px; padding:10px; margin:0; flex:1;" onclick="addToGoogleCalendar()">🇬 Gカレンダー</button>
+            <button class="primary-btn" style="background:#1c1c1e; font-size:14px; padding:10px; margin:0; flex:1;" onclick="addToAppleCalendar()">🍎 Apple</button>
+            <button class="primary-btn" style="background:#4285F4; font-size:14px; padding:10px; margin:0; flex:1;" onclick="addToGoogleCalendar()">🇬 Google</button>
           </div>
         </div>
-
         <div id="modal-actions" style="display:flex; gap:8px; justify-content:space-between; flex-wrap:wrap;"></div>
       </div>
-
       <div id="modal-edit-mode" style="display:none;">
         <h3 style="margin-top:0; color:var(--primary);">タスク編集</h3>
         <form id="editForm" class="form-grid">
-          <input type="hidden" id="edit-id">
-          <input type="text" id="edit-name" required>
-          <textarea id="edit-memo"></textarea>
-          <select id="edit-project-select" required></select>
-          <div><small style="color:var(--text-sub);">開始日</small><input type="date" id="edit-startDate" required></div>
-          <div><small style="color:var(--text-sub);">期限</small><input type="datetime-local" id="edit-deadline" required></div>
+          <input type="hidden" id="edit-id"><input type="text" id="edit-name" required><textarea id="edit-memo"></textarea><select id="edit-project-select" required></select>
+          <div><small style="color:var(--text-sub);">開始日</small><input type="date" id="edit-startDate" required></div><div><small style="color:var(--text-sub);">期限</small><input type="datetime-local" id="edit-deadline" required></div>
           <select id="edit-assignee" required></select>
           <div style="display:flex; gap:10px; margin-top:10px;">
             <button type="button" class="modal-btn" style="background:#e2e8f0; color:var(--text-main);" onclick="cancelEdit()">キャンセル</button>
@@ -395,370 +338,319 @@
   </div>
 
   <script>
-    // データ初期化 (V15)
-    let projects = JSON.parse(localStorage.getItem('vizProjectsV15')) || [];
-    let tasks = JSON.parse(localStorage.getItem('vizTasksV15')) || [];
-    let members = JSON.parse(localStorage.getItem('vizMembersV15')) || ["自分"];
-    
-    // アプリとWebリンクを統合管理
-    let userLinks = JSON.parse(localStorage.getItem('vizUserLinksV15')) || [
-      { type: 'app', title: 'カレンダー', url: 'calshow://', icon: '📅' },
-      { type: 'app', title: 'LINE', url: 'line://', icon: '💬' },
-      { type: 'app', title: 'Twitter(X)', url: 'twitter://', icon: '🐦' }
+    // データ初期化 (V18 - 追加機能対応)
+    let projects = JSON.parse(localStorage.getItem('vizProjectsV18')) || [];
+    let tasks = JSON.parse(localStorage.getItem('vizTasksV18')) || [];
+    let members = JSON.parse(localStorage.getItem('vizMembersV18')) || ["自分"];
+    let userLinks = JSON.parse(localStorage.getItem('vizUserLinksV18')) || [
+      { type: 'app', title: 'Gemini', url: 'https://gemini.google.com/', icon: '✨', mode: 'life' },
+      { type: 'app', title: 'ChatGPT', url: 'https://chatgpt.com/', icon: '🤖', mode: 'life' },
+      { type: 'app', title: 'Copilot', url: 'https://copilot.microsoft.com/', icon: '💻', mode: 'life' },
+      { type: 'app', title: 'Instagram', url: 'instagram://', icon: '📷', mode: 'life' },
+      { type: 'app', title: 'Threads', url: 'https://www.threads.net/', icon: '🧵', mode: 'life' },
+      { type: 'app', title: 'Gemini', url: 'https://gemini.google.com/', icon: '✨', mode: 'work' },
+      { type: 'app', title: 'ChatGPT', url: 'https://chatgpt.com/', icon: '🤖', mode: 'work' },
+      { type: 'app', title: 'Copilot', url: 'https://copilot.microsoft.com/', icon: '💻', mode: 'work' }
     ];
-    
-    // 目標データ (ライフをデフォルト化、habitは配列化)
-    let goals = JSON.parse(localStorage.getItem('vizGoalsV15')) || {
+    let goals = JSON.parse(localStorage.getItem('vizGoalsV18')) || {
       life: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] },
       work: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] }
     };
     
-    let currentGoalTab = 'life'; // 初期をライフに
+    let currentGlobalMode = 'life'; 
     let currentListTab = 'active';
+    let currentMatrixTab = 'active';
+    let currentCalView = 'daily'; // daily, monthly, yearly
     let currentCalDate = new Date();
     let currentOpenedTaskId = null;
     let selectedGoalAction = 'memo';
 
-    // V14からの移行処理
-    if(projects.length === 0 && localStorage.getItem('vizProjectsV14')) {
-      projects = JSON.parse(localStorage.getItem('vizProjectsV14'));
-      tasks = JSON.parse(localStorage.getItem('vizTasksV14'));
-      members = JSON.parse(localStorage.getItem('vizMembersV14'));
-      const oldGoals = JSON.parse(localStorage.getItem('vizGoalsV14'));
-      if(oldGoals) {
-        goals.life = { ...goals.life, ...oldGoals.life, habits: [] };
-        goals.work = { ...goals.work, ...oldGoals.work, habits: [] };
-      }
-      saveData();
+    // 移行処理
+    if(projects.length === 0 && localStorage.getItem('vizProjectsV17')) {
+      projects = JSON.parse(localStorage.getItem('vizProjectsV17')); tasks = JSON.parse(localStorage.getItem('vizTasksV17'));
+      members = JSON.parse(localStorage.getItem('vizMembersV17')); userLinks = JSON.parse(localStorage.getItem('vizUserLinksV17'));
+      goals = JSON.parse(localStorage.getItem('vizGoalsV17')); saveData();
     }
 
     function saveData() {
-      localStorage.setItem('vizProjectsV15', JSON.stringify(projects));
-      localStorage.setItem('vizTasksV15', JSON.stringify(tasks));
-      localStorage.setItem('vizMembersV15', JSON.stringify(members));
-      localStorage.setItem('vizGoalsV15', JSON.stringify(goals));
-      localStorage.setItem('vizUserLinksV15', JSON.stringify(userLinks));
+      localStorage.setItem('vizProjectsV18', JSON.stringify(projects)); localStorage.setItem('vizTasksV18', JSON.stringify(tasks));
+      localStorage.setItem('vizMembersV18', JSON.stringify(members)); localStorage.setItem('vizGoalsV18', JSON.stringify(goals));
+      localStorage.setItem('vizUserLinksV18', JSON.stringify(userLinks));
+    }
+
+    function switchGlobalMode(mode) {
+      currentGlobalMode = mode;
+      document.getElementById('g-mode-life').classList.toggle('active', mode === 'life'); document.getElementById('g-mode-work').classList.toggle('active', mode === 'work');
+      navToTab(document.querySelector('.nav-btn.active').id.replace('tab-', 'page-'));
+    }
+
+    function getFilteredTasks(status) { return tasks.filter(t => t.mode === currentGlobalMode && t.status === status); }
+    function getFilteredProjects() { return projects.filter(p => p.mode === currentGlobalMode); }
+    function getFilteredLinks() { return userLinks.filter(l => l.mode === currentGlobalMode); }
+    function getProjectName(id) { const p = projects.find(x => x.id === id); return p ? p.name : '不明'; }
+
+    // --- エクスポート/インポート ---
+    window.exportTasksCSV = function() {
+      let csv = "プロジェクト,タスク名,状態,開始日,期限,担当者,メモ\n";
+      tasks.filter(t => t.mode === currentGlobalMode).forEach(t => {
+          const status = t.status === 'active' ? '進行中' : '完了'; const safeMemo = (t.memo || '').replace(/"/g, '""').replace(/\n/g, ' ');
+          csv += `"${getProjectName(t.projectId)}","${t.name}","${status}","${t.startDate}","${t.deadline.replace('T',' ')}","${t.assignee}","${safeMemo}"\n`;
+      });
+      const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `Tasks_${currentGlobalMode}.csv`; document.body.appendChild(a); a.click();
+    }
+    window.exportGoalsCSV = function() {
+      const g = goals[currentGlobalMode]; let csv = "項目,内容\n";
+      ["mission","vision","value","yearly","monthly","weekly","daily"].forEach(k => { csv += `"${k}","${(g[k]||'').replace(/"/g, '""').replace(/\n/g, ' ')}"\n`; });
+      const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `Goals_${currentGlobalMode}.csv`; document.body.appendChild(a); a.click();
+    }
+    window.exportTasksText = function() {
+      let text = `■タスク一覧 (${currentGlobalMode === 'work' ? 'ワーク' : 'ライフ'})\n\n`;
+      getFilteredProjects().forEach(p => {
+        const pTasks = tasks.filter(t => t.projectId === p.id && t.status === 'active');
+        if(pTasks.length > 0) {
+          text += `【${p.name}】\n`;
+          pTasks.forEach(t => { text += `・${t.name} (期限: ${t.deadline.split('T')[0].slice(5)} / 担当: ${t.assignee})\n`; });
+          text += `\n`;
+        }
+      });
+      navigator.clipboard.writeText(text).then(() => alert("タスク一覧をクリップボードにコピーしました！"));
+    }
+    window.exportData = function() { navigator.clipboard.writeText(JSON.stringify({ projects, tasks, members, userLinks, goals })).then(() => alert("全データをコピーしました")); }
+    window.importData = function() {
+      try {
+        const data = JSON.parse(document.getElementById('import-data-text').value);
+        if(data.projects && confirm("上書きしますか？")) { projects = data.projects; tasks = data.tasks; members = data.members; userLinks = data.userLinks; goals = data.goals; saveData(); location.reload(); }
+      } catch(e) { alert("エラーが発生しました"); }
     }
 
     // --- UI/ヘッダー制御 ---
     function navToTab(pageId) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(pageId).classList.add('active');
-      document.getElementById('tab-' + pageId.replace('page-','')).classList.add('active');
-      window.scrollTo(0,0);
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active'); document.getElementById('tab-' + pageId.replace('page-','')).classList.add('active'); window.scrollTo(0,0);
+      const title = document.getElementById('header-title'); const right = document.getElementById('header-right-btn'); const left = document.getElementById('header-left-btn');
       
-      const headerTitle = document.getElementById('header-title');
-      const rightBtn = document.getElementById('header-right-btn');
-      const leftBtn = document.getElementById('header-left-btn');
-      
-      if(pageId === 'page-goals') {
-        headerTitle.innerText = '🔥 行動';
-        rightBtn.innerText = '⚙️ 設定'; rightBtn.onclick = openSettings;
-        leftBtn.style.display = 'block';
-        renderGoals();
-      } else {
-        leftBtn.style.display = 'none';
-        if (pageId === 'page-list') {
-          headerTitle.innerText = '📝 リスト';
-          rightBtn.innerText = '＋ PJ作成'; rightBtn.onclick = () => { document.getElementById('projectModal').style.display='flex'; };
-          updateProjectDropdowns(); renderList();
-        } else if (pageId === 'page-matrix') {
-          headerTitle.innerText = '⊞ マトリクス';
-          rightBtn.innerText = '⚙️ 設定'; rightBtn.onclick = openSettings;
-          updateProjectDropdowns(); renderMatrix();
-        } else if (pageId === 'page-wbs') {
-          headerTitle.innerText = '🗓 カレンダー';
-          rightBtn.innerText = '⚙️ 設定'; rightBtn.onclick = openSettings;
-          renderCalendarWBS();
-        } else if (pageId === 'page-links') {
-          headerTitle.innerText = '🔗 確認';
-          rightBtn.innerText = '⚙️ 設定'; rightBtn.onclick = openSettings;
-          renderLinksPage();
-        }
+      if(pageId === 'page-goals') { title.innerText = '🔥 行動'; right.innerText = '⚙️ 設定'; right.onclick = openSettings; left.style.display = 'block'; renderGoals(); } 
+      else {
+        left.style.display = 'none';
+        if (pageId === 'page-list') { title.innerText = '📝 リスト'; right.innerText = '＋ PJ作成'; right.onclick = () => { document.getElementById('projectModal').style.display='flex'; }; updateProjectDropdowns(); renderList(); } 
+        else if (pageId === 'page-matrix') { title.innerText = '⊞ マトリクス'; right.innerText = '⚙️ 設定'; right.onclick = openSettings; updateProjectDropdowns(); renderMatrix(); } 
+        else if (pageId === 'page-wbs') { title.innerText = '🗓 カレンダー'; right.innerText = '⚙️ 設定'; right.onclick = openSettings; renderHorizontalGantt(); } 
+        else if (pageId === 'page-links') { title.innerText = '🔗 確認'; right.innerText = '⚙️ 設定'; right.onclick = openSettings; renderLinksPage(); }
       }
     }
 
-    // --- 🎯 目標設定画面 (Home) ---
-    const goalPeriods = [
-      { id: 'yearly', label: '📅 年次目標', color: '#db2777' },
-      { id: 'monthly', label: '📆 月次目標', color: '#ea580c' },
-      { id: 'weekly', label: '🗓 週次目標', color: '#059669' },
-      { id: 'daily', label: '☀️ 日次行動', color: '#0284c7' }
-    ];
+    // --- 🎯 目標設定 ---
+    const goalPeriods = [{ id: 'yearly', label: '📅 年次目標', color: '#db2777' }, { id: 'monthly', label: '📆 月次目標', color: '#ea580c' }, { id: 'weekly', label: '🗓 週次目標', color: '#059669' }, { id: 'daily', label: '☀️ 日次行動', color: '#0284c7' }];
+    function initGoalsUI() { document.getElementById('goal-periods-container').innerHTML = goalPeriods.map(p => `<div class="card goal-block" style="margin-bottom:0; padding:15px;"><div class="goal-label" style="color:${p.color};">${p.label}</div><textarea id="goal-${p.id}" class="goal-input" placeholder="ここに入力..." onblur="saveGoals()"></textarea></div>`).join(''); }
+    function renderGoals() { const g = goals[currentGlobalMode]; document.getElementById('goal-mission').value = g.mission || ''; document.getElementById('goal-vision').value = g.vision || ''; document.getElementById('goal-value').value = g.value || ''; goalPeriods.forEach(p => document.getElementById(`goal-${p.id}`).value = g[p.id] || ''); renderHabits(); }
+    function saveGoals() { const g = goals[currentGlobalMode]; g.mission = document.getElementById('goal-mission').value; g.vision = document.getElementById('goal-vision').value; g.value = document.getElementById('goal-value').value; goalPeriods.forEach(p => g[p.id] = document.getElementById(`goal-${p.id}`).value); saveData(); }
+    function renderHabits() { const container = document.getElementById('habit-list-container'); container.innerHTML = ''; const habits = goals[currentGlobalMode].habits || []; if(habits.length === 0) { container.innerHTML = '<div style="color:var(--text-sub); font-size:13px; text-align:center;">習慣がありません</div>'; return; } habits.forEach((h, i) => { container.innerHTML += `<div class="habit-item"><label class="habit-label"><input type="checkbox" class="habit-checkbox" ${h.checked ? 'checked' : ''} onchange="toggleHabit(${i})"><span class="${h.checked ? 'habit-checked' : ''}">${h.name}</span></label><button onclick="deleteHabit(${i})" style="background:none; border:none; color:var(--q1); font-size:16px;">×</button></div>`; }); }
+    function addHabit() { const val = document.getElementById('new-habit-input').value.trim(); if(val) { if(!goals[currentGlobalMode].habits) goals[currentGlobalMode].habits = []; goals[currentGlobalMode].habits.push({ name: val, checked: false }); document.getElementById('new-habit-input').value = ''; saveData(); renderHabits(); } }
+    function toggleHabit(i) { goals[currentGlobalMode].habits[i].checked = !goals[currentGlobalMode].habits[i].checked; saveData(); renderHabits(); }
+    function deleteHabit(i) { goals[currentGlobalMode].habits.splice(i, 1); saveData(); renderHabits(); }
 
-    function initGoalsUI() {
-      const container = document.getElementById('goal-periods-container');
-      container.innerHTML = goalPeriods.map(p => `
-        <div class="card goal-block" style="margin-bottom:0; padding:15px;">
-          <div class="goal-label" style="color:${p.color};">${p.label}</div>
-          <textarea id="goal-${p.id}" class="goal-input" placeholder="ここに入力..." onblur="saveGoals()"></textarea>
-        </div>
-      `).join('');
-    }
-    
-    function switchGoalTab(tab) {
-      currentGoalTab = tab;
-      document.getElementById('tg-life').classList.toggle('active', tab === 'life');
-      document.getElementById('tg-work').classList.toggle('active', tab === 'work');
-      renderGoals();
-    }
-
-    function renderGoals() {
-      const g = goals[currentGoalTab];
-      document.getElementById('goal-mission').value = g.mission || '';
-      document.getElementById('goal-vision').value = g.vision || '';
-      document.getElementById('goal-value').value = g.value || '';
-      goalPeriods.forEach(p => document.getElementById(`goal-${p.id}`).value = g[p.id] || '');
-      renderHabits();
-    }
-
-    function saveGoals() {
-      const g = goals[currentGoalTab];
-      g.mission = document.getElementById('goal-mission').value;
-      g.vision = document.getElementById('goal-vision').value;
-      g.value = document.getElementById('goal-value').value;
-      goalPeriods.forEach(p => g[p.id] = document.getElementById(`goal-${p.id}`).value);
-      saveData();
-    }
-
-    // --- 習慣化 (チェックリスト) ---
-    function renderHabits() {
-      const container = document.getElementById('habit-list-container');
-      container.innerHTML = '';
-      const habits = goals[currentGoalTab].habits || [];
-      if(habits.length === 0) {
-        container.innerHTML = '<div style="color:var(--text-sub); font-size:13px; text-align:center;">習慣がありません</div>'; return;
-      }
-      habits.forEach((h, i) => {
-        container.innerHTML += `
-          <div class="habit-item">
-            <label class="habit-label">
-              <input type="checkbox" class="habit-checkbox" ${h.checked ? 'checked' : ''} onchange="toggleHabit(${i})">
-              <span class="${h.checked ? 'habit-checked' : ''}">${h.name}</span>
-            </label>
-            <button onclick="deleteHabit(${i})" style="background:none; border:none; color:var(--q1); font-size:16px;">×</button>
-          </div>
-        `;
-      });
-    }
-    function addHabit() {
-      const input = document.getElementById('new-habit-input');
-      const val = input.value.trim();
-      if(val) {
-        if(!goals[currentGoalTab].habits) goals[currentGoalTab].habits = [];
-        goals[currentGoalTab].habits.push({ name: val, checked: false });
-        input.value = ''; saveData(); renderHabits();
-      }
-    }
-    function toggleHabit(i) {
-      goals[currentGoalTab].habits[i].checked = !goals[currentGoalTab].habits[i].checked;
-      saveData(); renderHabits();
-    }
-    function deleteHabit(i) {
-      goals[currentGoalTab].habits.splice(i, 1);
-      saveData(); renderHabits();
-    }
-
-    // --- 左上 ＋連携アクション ---
     function openGoalActionModal() { document.getElementById('goalActionModal').style.display = 'flex'; }
-    function selectGoalAction(action) {
-      selectedGoalAction = action;
-      document.getElementById('ga-btn-memo').style.background = action === 'memo' ? 'white' : '#e2e8f0';
-      document.getElementById('ga-btn-memo').style.boxShadow = action === 'memo' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none';
-      document.getElementById('ga-btn-gcal').style.background = action === 'gcal' ? 'white' : '#e2e8f0';
-      document.getElementById('ga-btn-gcal').style.boxShadow = action === 'gcal' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none';
-    }
+    function selectGoalAction(action) { selectedGoalAction = action; document.getElementById('ga-btn-memo').style.background = action === 'memo' ? 'white' : '#e2e8f0'; document.getElementById('ga-btn-gcal').style.background = action === 'gcal' ? 'white' : '#e2e8f0'; }
     function executeGoalAction() {
-      const targetId = document.getElementById('goal-action-target').value;
-      const text = goals[currentGoalTab][targetId];
-      if(!text) { alert('対象の項目に入力がありません。'); return; }
-      
-      const labelText = document.querySelector(`#goal-action-target option[value="${targetId}"]`).innerText;
-      const category = currentGoalTab === 'work' ? 'ワーク' : 'ライフ';
-
-      if(selectedGoalAction === 'memo') {
-        navigator.clipboard.writeText(`【${labelText} (${category})】\n${text}`).then(() => {
-          alert('コピーしました！メモ帳にペーストしてください。');
-          document.getElementById('goalActionModal').style.display = 'none';
-        });
-      } else {
-        const title = encodeURIComponent(labelText);
-        const details = encodeURIComponent(`【${category}】\n${text}`);
-        window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}`, '_blank');
-        document.getElementById('goalActionModal').style.display = 'none';
-      }
+      const targetId = document.getElementById('goal-action-target').value; const text = goals[currentGlobalMode][targetId]; if(!text) return alert('入力がありません');
+      const labelText = document.querySelector(`#goal-action-target option[value="${targetId}"]`).innerText; const category = currentGlobalMode === 'work' ? 'ワーク' : 'ライフ';
+      if(selectedGoalAction === 'memo') { navigator.clipboard.writeText(`【${labelText} (${category})】\n${text}`).then(() => { alert('コピーしました！'); document.getElementById('goalActionModal').style.display = 'none'; }); } 
+      else { window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(labelText)}&details=${encodeURIComponent(`【${category}】\n${text}`)}`, '_blank'); document.getElementById('goalActionModal').style.display = 'none'; }
     }
 
-    // --- 🔗 確認画面 (Lit.Link風) ---
+    // --- 🔗 確認画面 ---
     function renderLinksPage() {
-      const appsContainer = document.getElementById('apps-container');
-      const linksContainer = document.getElementById('links-container');
-      appsContainer.innerHTML = ''; linksContainer.innerHTML = '';
-      
-      userLinks.forEach(l => {
-        if(l.type === 'app') {
-          const iconChar = l.icon || '📱';
-          appsContainer.innerHTML += `<a href="${l.url}" class="app-icon-btn"><div class="app-icon-img">${iconChar}</div><span>${l.title}</span></a>`;
-        } else {
-          linksContainer.innerHTML += `<a href="${l.url}" target="_blank" class="lit-link-btn">${l.title}</a>`;
-        }
+      const aCont = document.getElementById('apps-container'); const lCont = document.getElementById('links-container'); aCont.innerHTML = ''; lCont.innerHTML = '';
+      getFilteredLinks().forEach(l => {
+        if(l.type === 'app') aCont.innerHTML += `<a href="${l.url}" class="app-icon-btn"><div class="app-icon-img" style="color:var(--text-main); font-style:normal;">${l.icon||'📱'}</div><span style="color:white;text-decoration:none;">${l.title}</span></a>`;
+        else lCont.innerHTML += `<a href="${l.url}" target="_blank" class="lit-link-btn">${l.title}</a>`;
       });
-      if(appsContainer.innerHTML === '') appsContainer.innerHTML = '<p style="color:white; font-size:12px; grid-column:span 4; text-align:center;">アプリの登録はありません</p>';
-      if(linksContainer.innerHTML === '') linksContainer.innerHTML = '<p style="color:white; font-size:12px; text-align:center;">Webリンクの登録はありません</p>';
+      if(aCont.innerHTML === '') aCont.innerHTML = '<p style="color:white; font-size:12px; grid-column:span 4; text-align:center;">アプリの登録はありません</p>';
+      if(lCont.innerHTML === '') lCont.innerHTML = '<p style="color:white; font-size:12px; text-align:center;">Webリンクの登録はありません</p>';
     }
 
-    // --- 📝 リスト画面 (プロジェクトごとの全体像) ---
-    function switchListTab(tab) {
-      currentListTab = tab;
-      document.getElementById('tg-active').classList.toggle('active', tab === 'active');
-      document.getElementById('tg-done').classList.toggle('active', tab === 'completed');
-      renderList();
-    }
-
+    // --- 📝 リスト画面 ---
+    function switchListTab(tab) { currentListTab = tab; document.getElementById('tg-active').classList.toggle('active', tab === 'active'); document.getElementById('tg-done').classList.toggle('active', tab === 'completed'); renderList(); }
     function renderList() {
-      const container = document.getElementById('list-container'); container.innerHTML = '';
-      if(projects.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:20px; color:rgba(255,255,255,0.7);">右上の「＋ PJ作成」から追加してください。</div>`; return;
-      }
-      projects.forEach(p => {
-        const pTasks = tasks.filter(t => t.projectId === p.id && t.status === currentListTab);
-        pTasks.sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
-        let html = `<details class="proj-acc" open><summary class="proj-acc-summary">📁 ${p.name} <span style="font-size:0.85em; color:var(--text-sub); font-weight:normal;">${pTasks.length}件</span></summary><div class="proj-acc-content">`;
+      const container = document.getElementById('list-container'); container.innerHTML = ''; const curProjs = getFilteredProjects();
+      if(curProjs.length === 0) { container.innerHTML = `<div style="text-align:center; padding:20px; color:white;">右上の「＋ PJ作成」からプロジェクトを追加してください。</div>`; return; }
+      curProjs.forEach(p => {
+        const pTasks = tasks.filter(t => t.projectId === p.id && t.status === currentListTab).sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
+        let html = `<details class="proj-acc" open><summary class="proj-acc-summary"><span>📁 ${p.name} <span style="font-size:0.85em; color:var(--text-sub); font-weight:normal;">${pTasks.length}件</span></span><button onclick="deleteProject('${p.id}', event)" style="background:none;border:none;font-size:18px;color:var(--q1);padding:5px;">🗑️</button></summary><div class="proj-acc-content"><ul style="margin:0; padding-left:20px; font-size:15px; line-height:1.8;">`;
         if(pTasks.length === 0) html += `<div style="color:var(--text-sub); font-size:13px; text-align:center; padding:10px 0;">タスクはありません</div>`;
-        else {
-          pTasks.forEach(t => {
-            const isDone = t.status === 'completed';
-            html += `<div class="list-card ${isDone ? 'done' : ''}" onclick="openModal('${t.id}')"><div><div style="font-weight:bold; ${isDone ? 'text-decoration:line-through;' : ''}">${t.name}</div><div style="font-size:0.8em; color:var(--text-sub); margin-top:4px;">📅 ${t.deadline.split('T')[0].slice(5)} | 👤 ${t.assignee}</div></div><span style="font-size:1.2em; color:var(--text-sub);">${isDone ? '✅' : '›'}</span></div>`;
-          });
-        }
-        html += `</div></details>`;
-        container.innerHTML += html;
+        else { pTasks.forEach(t => { const isDone = t.status === 'completed'; html += `<li style="${isDone?'text-decoration:line-through;color:#94a3b8;':''}" onclick="openModal('${t.id}')"><span style="cursor:pointer; font-weight:bold;">${t.name}</span> <span style="font-size:0.8em; color:var(--text-sub);">[📅 ${t.deadline.split('T')[0].slice(5)}]</span></li>`; }); }
+        html += `</ul></div></details>`; container.innerHTML += html;
       });
     }
+    window.deleteProject = function(id, e) { e.preventDefault(); if(confirm('プロジェクトを削除しますか？')) { projects = projects.filter(p => p.id !== id); tasks = tasks.filter(t => t.projectId !== id); saveData(); updateProjectDropdowns(); renderList(); } }
 
     // --- ⊞ マトリクス画面 ---
+    function switchMatrixTab(tab) { currentMatrixTab = tab; document.getElementById('tg-matrix-active').classList.toggle('active', tab === 'active'); document.getElementById('tg-matrix-done').classList.toggle('active', tab === 'completed'); renderMatrix(); }
     function renderMatrix() {
-      const mType = document.getElementById('matrix-type').value;
-      const filterProj = document.getElementById('matrix-proj-filter').value;
-      if (mType === 'eisenhower') { document.getElementById('q1-title').innerText = '重要・緊急'; document.getElementById('q2-title').innerText = '重要・非緊急'; document.getElementById('q3-title').innerText = '非重要・緊急'; document.getElementById('q4-title').innerText = '非重要・非緊急'; } 
-      else { document.getElementById('q1-title').innerText = '高効果・低労力'; document.getElementById('q2-title').innerText = '高効果・高労力'; document.getElementById('q3-title').innerText = '低効果・低労力'; document.getElementById('q4-title').innerText = '低効果・高労力'; }
+      const mType = document.getElementById('matrix-type').value; const filterProj = document.getElementById('matrix-proj-filter').value;
+      const tTasks = getFilteredTasks(currentMatrixTab);
+      let targetTasks = filterProj !== 'all' ? tTasks.filter(t => t.projectId === filterProj) : tTasks;
+      
+      const counts = {q1:0, q2:0, q3:0, q4:0};
+      targetTasks.forEach(t => {
+        const t1 = mType === 'eisenhower' ? t.importance : t.impact; const t2 = mType === 'eisenhower' ? t.urgency : t.effort;
+        if (t1==='high' && t2===(mType==='eisenhower'?'high':'low')) counts.q1++; else if (t1==='high' && t2===(mType==='eisenhower'?'low':'high')) counts.q2++; else if (t1==='low' && t2===(mType==='eisenhower'?'high':'low')) counts.q3++; else counts.q4++;
+      });
+      
+      if (mType === 'eisenhower') { 
+        document.getElementById('q1-title').innerHTML = `重要・緊急<br><span style="font-size:0.8em;color:var(--text-sub)">(${counts.q1}件)</span>`; document.getElementById('q2-title').innerHTML = `重要・非緊急<br><span style="font-size:0.8em;color:var(--text-sub)">(${counts.q2}件)</span>`; 
+        document.getElementById('q3-title').innerHTML = `非重要・緊急<br><span style="font-size:0.8em;color:var(--text-sub)">(${counts.q3}件)</span>`; document.getElementById('q4-title').innerHTML = `非重要・非緊急<br><span style="font-size:0.8em;color:var(--text-sub)">(${counts.q4}件)</span>`; 
+      } else { 
+        document.getElementById('q1-title').innerHTML = `高効果・低労力<br><span style="font-size:0.8em;color:var(--text-sub)">(${counts.q1}件)</span>`; document.getElementById('q2-title').innerHTML = `高効果・高労力<br><span style="font-size:0.8em;color:var(--text-sub)">(${counts.q2}件)</span>`; 
+        document.getElementById('q3-title').innerHTML = `低効果・低労力<br><span style="font-size:0.8em;color:var(--text-sub)">(${counts.q3}件)</span>`; document.getElementById('q4-title').innerHTML = `低効果・高労力<br><span style="font-size:0.8em;color:var(--text-sub)">(${counts.q4}件)</span>`; 
+      }
+      
       ['q1','q2','q3','q4'].forEach(q => document.getElementById(`m${q}-list`).innerHTML = '');
       
-      let targetTasks = tasks.filter(t => t.status === 'active');
-      if (filterProj !== 'all') targetTasks = targetTasks.filter(t => t.projectId === filterProj);
-
       targetTasks.forEach(task => {
-        const div = document.createElement('div'); div.className = 'mini-card';
-        const p = projects.find(x => x.id === task.projectId);
-        const pBadge = filterProj === 'all' ? `<div style="font-size:0.7em; color:var(--primary); margin-bottom:2px;">[${p?p.name.slice(0,5):''}]</div>` : '';
+        const div = document.createElement('div'); div.className = `mini-card ${currentMatrixTab === 'completed' ? 'done' : ''}`;
+        const pBadge = filterProj === 'all' ? `<div style="font-size:0.7em; color:var(--primary); margin-bottom:2px;">[${getProjectName(task.projectId).slice(0,5)}]</div>` : '';
         div.innerHTML = `${pBadge}<div style="font-weight:bold; color:var(--text-main); margin-bottom:2px;">${task.name}</div>`;
         div.onclick = () => openModal(task.id);
         const t1 = mType === 'eisenhower' ? task.importance : task.impact; const t2 = mType === 'eisenhower' ? task.urgency : task.effort;
-        if (t1==='high' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq1-list').appendChild(div);
-        else if (t1==='high' && t2===(mType==='eisenhower'?'low':'high')) document.getElementById('mq2-list').appendChild(div);
-        else if (t1==='low' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq3-list').appendChild(div);
-        else document.getElementById('mq4-list').appendChild(div);
+        if (t1==='high' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq1-list').appendChild(div); else if (t1==='high' && t2===(mType==='eisenhower'?'low':'high')) document.getElementById('mq2-list').appendChild(div); else if (t1==='low' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq3-list').appendChild(div); else document.getElementById('mq4-list').appendChild(div);
       });
     }
 
-    // --- 🗓 カレンダー (縦型ガント・直感記号) ---
-    function changeMonth(diff) { currentCalDate.setMonth(currentCalDate.getMonth() + diff); renderCalendarWBS(); }
-    
-    function renderCalendarWBS() {
-      const year = currentCalDate.getFullYear(); const month = currentCalDate.getMonth();
-      document.getElementById('cal-month-title').innerText = `${year}年 ${month + 1}月`;
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      
-      const cols = projects.length;
-      if (cols === 0) { document.getElementById('calendar-wrapper').innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-sub);">プロジェクトがありません</p>'; return; }
-
-      let html = `<div class="calendar-grid-vertical" style="grid-template-columns: 50px repeat(${cols}, minmax(130px, 1fr));"><div class="cal-v-header">日付</div>`;
-      projects.forEach(p => { html += `<div class="cal-v-header">${p.name}</div>`; });
-
-      for(let i=1; i<=daysInMonth; i++) {
-        const cDate = new Date(year, month, i); const dayOfWeek = cDate.getDay();
-        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6) ? 'weekend' : '';
-        const dayStr = ['日','月','火','水','木','金','土'][dayOfWeek];
-        html += `<div class="cal-v-date ${isWeekend}">${i}<br><span style="font-size:0.75em; color:var(--text-sub);">${dayStr}</span></div>`;
-        
-        projects.forEach(p => {
-          html += `<div class="cal-v-cell ${isWeekend}">`;
-          tasks.filter(t => t.projectId === p.id).forEach(task => {
-             const tStart = new Date(task.startDate); tStart.setHours(0,0,0,0);
-             const tEnd = new Date(task.deadline.split('T')[0]); tEnd.setHours(0,0,0,0);
-             const cDateMidnight = new Date(year, month, i); cDateMidnight.setHours(0,0,0,0);
-             const isStart = (cDateMidnight.getTime() === tStart.getTime());
-             const isEnd = (cDateMidnight.getTime() === tEnd.getTime());
-             const isBetween = (tStart.getTime() < cDateMidnight.getTime() && cDateMidnight.getTime() < tEnd.getTime());
-             const doneStyle = task.status === 'completed' ? 'text-decoration:line-through; opacity:0.5;' : '';
-
-             if (isStart && isEnd) html += `<div class="v-evt start-end" style="${doneStyle}" onclick="openModal('${task.id}')">🌟 ${task.name}</div>`;
-             else if (isStart) html += `<div class="v-evt start" style="${doneStyle}" onclick="openModal('${task.id}')">🟢 ${task.name}</div>`;
-             else if (isEnd) html += `<div class="v-evt end" style="${doneStyle}" onclick="openModal('${task.id}')">🏁 ${task.name}</div>`;
-             else if (isBetween) html += `<div class="v-evt between" style="${doneStyle}" onclick="openModal('${task.id}')">⬇️ ${task.name}</div>`;
-          });
-          html += `</div>`;
-        });
-      }
-      html += `</div>`;
-      document.getElementById('calendar-wrapper').innerHTML = html;
+    // --- 🗓 カレンダー切替・描画 ---
+    function switchCalView(view) {
+      currentCalView = view;
+      document.getElementById('tg-cal-daily').classList.toggle('active', view === 'daily');
+      document.getElementById('tg-cal-monthly').classList.toggle('active', view === 'monthly');
+      document.getElementById('tg-cal-yearly').classList.toggle('active', view === 'yearly');
+      currentCalDate = new Date(); // リセット
+      renderHorizontalGantt();
     }
+    
+    function changeCalPeriod(diff) {
+      if(currentCalView === 'daily') currentCalDate.setMonth(currentCalDate.getMonth() + diff);
+      else if(currentCalView === 'monthly') currentCalDate.setFullYear(currentCalDate.getFullYear() + diff);
+      else currentCalDate.setFullYear(currentCalDate.getFullYear() + (diff * 5));
+      renderHorizontalGantt();
+    }
+    
+    function renderHorizontalGantt() {
+      const curProjs = getFilteredProjects();
+      if (curProjs.length === 0) { document.getElementById('gantt-wrapper').innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-sub);">プロジェクトがありません</p>'; return; }
+      
+      const year = currentCalDate.getFullYear(); const month = currentCalDate.getMonth();
+      let colsHtml = ''; let colCount = 0; let cellWidth = 35;
+      
+      if(currentCalView === 'daily') {
+        document.getElementById('cal-period-title').innerText = `${year}年 ${month + 1}月`;
+        const daysInMonth = new Date(year, month + 1, 0).getDate(); colCount = daysInMonth; cellWidth = 35;
+        for(let i=1; i<=daysInMonth; i++) {
+          const d = new Date(year, month, i).getDay(); const isW = (d===0||d===6) ? 'weekend' : '';
+          colsHtml += `<div class="gantt-day-col ${isW}" style="width:${cellWidth}px;">${i}<br>${['日','月','火','水','木','金','土'][d]}</div>`;
+        }
+      } else if (currentCalView === 'monthly') {
+        document.getElementById('cal-period-title').innerText = `${year}年`;
+        colCount = 12; cellWidth = 45;
+        for(let i=1; i<=12; i++) colsHtml += `<div class="gantt-day-col" style="width:${cellWidth}px;"><br>${i}月</div>`;
+      } else {
+        document.getElementById('cal-period-title').innerText = `${year}年 〜 ${year+4}年`;
+        colCount = 5; cellWidth = 60;
+        for(let i=0; i<5; i++) colsHtml += `<div class="gantt-day-col" style="width:${cellWidth}px;"><br>${year+i}</div>`;
+      }
+
+      let html = `<div class="gantt-grid" style="grid-template-columns: 120px ${cellWidth * colCount}px 140px;">`;
+      html += `<div class="gantt-header-cell">プロジェクト</div><div class="gantt-header-cell" style="padding:0;"><div class="gantt-days-flex">${colsHtml}</div></div><div class="gantt-header-cell">メモ</div>`;
+
+      curProjs.forEach(p => {
+        const pTasks = tasks.filter(t => t.projectId === p.id).sort((a,b) => new Date(a.startDate) - new Date(b.startDate));
+        const progress = pTasks.length > 0 ? Math.round((pTasks.filter(t=>t.status==='completed').length / pTasks.length)*100) : 0;
+        let lDate = '-'; if(pTasks.length>0) lDate = pTasks.reduce((l,t) => new Date(t.deadline)>new Date(l.deadline)?t:l).deadline.split('T')[0];
+
+        html += `<div class="gantt-cell gantt-proj-info"><div style="font-weight:bold; font-size:13px;">${p.name}</div><div style="font-size:11px; color:var(--q2);">進捗: ${progress}%</div><div style="font-size:11px; color:var(--q1);">🏁 ${lDate}</div></div>`;
+        html += `<div class="gantt-cell" style="padding:0;"><div class="gantt-tasks-area"><div style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; pointer-events:none;">`;
+        for(let i=0; i<colCount; i++) {
+          let bg = ''; if(currentCalView === 'daily') { const d = new Date(year, month, i+1).getDay(); if(d===0||d===6) bg='background:rgba(229,62,62,0.05);'; }
+          html += `<div style="width:${cellWidth}px; border-right:1px solid #e2e8f0; ${bg}"></div>`;
+        }
+        html += `</div>`;
+
+        pTasks.forEach(task => {
+          const tStart = new Date(task.startDate); tStart.setHours(0,0,0,0);
+          const tEnd = new Date(task.deadline.split('T')[0]); tEnd.setHours(0,0,0,0);
+          
+          let marginLeft = 0; let width = 0; let shouldRender = false;
+          
+          if (currentCalView === 'daily') {
+            const mStart = new Date(year, month, 1); const mEnd = new Date(year, month + 1, 0);
+            if (tEnd >= mStart && tStart <= mEnd) {
+              const startDay = Math.max(1, tStart.getDate() + (tStart.getMonth() < month ? -31 : 0)); // 簡易補正
+              const actualStart = tStart < mStart ? 1 : tStart.getDate();
+              const actualEnd = tEnd > mEnd ? daysInMonth : tEnd.getDate();
+              marginLeft = (actualStart - 1) * cellWidth; width = (actualEnd - actualStart + 1) * cellWidth - 4; shouldRender = true;
+            }
+          } else if (currentCalView === 'monthly') {
+            const yStart = new Date(year, 0, 1); const yEnd = new Date(year, 11, 31);
+            if (tEnd >= yStart && tStart <= yEnd) {
+              const actualStart = tStart < yStart ? 0 : tStart.getMonth();
+              const actualEnd = tEnd > yEnd ? 11 : tEnd.getMonth();
+              marginLeft = actualStart * cellWidth; width = (actualEnd - actualStart + 1) * cellWidth - 4; shouldRender = true;
+            }
+          } else if (currentCalView === 'yearly') {
+            const yStart = new Date(year, 0, 1); const yEnd = new Date(year+4, 11, 31);
+            if (tEnd >= yStart && tStart <= yEnd) {
+              const actualStart = tStart < yStart ? 0 : tStart.getFullYear() - year;
+              const actualEnd = tEnd > yEnd ? 4 : tEnd.getFullYear() - year;
+              marginLeft = actualStart * cellWidth; width = (actualEnd - actualStart + 1) * cellWidth - 4; shouldRender = true;
+            }
+          }
+
+          if (shouldRender && width > 0) {
+            const doneClass = task.status === 'completed' ? 'completed' : '';
+            html += `<div class="gantt-task-bar ${doneClass}" style="margin-left:${marginLeft+2}px; width:${width}px; position:relative; z-index:5;" onclick="openModal('${task.id}')"><span style="overflow:hidden; text-overflow:ellipsis;">${task.name}</span></div>`;
+          }
+        });
+        html += `</div></div><div class="gantt-cell gantt-memo-cell"><textarea class="gantt-memo-textarea" onchange="saveProjectMemo('${p.id}', this.value)" placeholder="メモ...">${p.memo || ''}</textarea></div>`;
+      });
+      html += `</div>`; document.getElementById('gantt-wrapper').innerHTML = html;
+    }
+    window.saveProjectMemo = function(id, val) { const p = projects.find(x => x.id === id); if(p) { p.memo = val; saveData(); } }
 
     // --- 設定関連 ---
     function openSettings() { document.getElementById('page-settings').style.display = 'block'; renderMembers(); renderSettingsLinks(); }
     function closeSettings() { document.getElementById('page-settings').style.display = 'none'; if(document.getElementById('page-links').classList.contains('active')) renderLinksPage(); }
-    
-    // メンバー管理
-    function renderMembers() {
-      const container = document.getElementById('member-list-container'); container.innerHTML = '';
-      members.forEach((m, i) => container.innerHTML += `<div class="card" style="margin:0; padding:10px; display:flex; justify-content:space-between;"><span>👤 ${m}</span>${m !== '自分' ? `<button onclick="deleteMember(${i})" style="background:none; border:none; color:var(--q1); font-size:20px;">×</button>` : ''}</div>`);
-      updateAssigneeDropdowns();
-    }
-    function addMember() { const name = document.getElementById('new-member-name').value.trim(); if(name && !members.includes(name)) { members.push(name); saveData(); document.getElementById('new-member-name').value=''; renderMembers(); } }
+    function renderMembers() { const c = document.getElementById('member-list-container'); c.innerHTML = ''; members.forEach((m, i) => c.innerHTML += `<div class="card" style="margin:0; padding:10px; display:flex; justify-content:space-between;"><span>👤 ${m}</span>${m !== '自分' ? `<button onclick="deleteMember(${i})" style="background:none; border:none; color:var(--q1); font-size:20px;">×</button>` : ''}</div>`); updateAssigneeDropdowns(); }
+    function addMember() { const n = document.getElementById('new-member-name').value.trim(); if(n && !members.includes(n)) { members.push(n); saveData(); document.getElementById('new-member-name').value=''; renderMembers(); } }
     function deleteMember(i) { members.splice(i, 1); saveData(); renderMembers(); }
-    function updateAssigneeDropdowns() { const html = members.map(m => `<option value="${m}">${m}</option>`).join(''); document.getElementById('assignee').innerHTML = html; document.getElementById('edit-assignee').innerHTML = html; }
+    function updateAssigneeDropdowns() { const h = members.map(m => `<option value="${m}">${m}</option>`).join(''); document.getElementById('assignee').innerHTML = h; document.getElementById('edit-assignee').innerHTML = h; }
     
-    // リンク＆アプリ管理
-    function renderSettingsLinks() {
-      const container = document.getElementById('settings-links-container'); container.innerHTML = '';
-      userLinks.forEach((l, i) => {
-        container.innerHTML += `<div class="card" style="margin:0; padding:10px; display:flex; justify-content:space-between; align-items:center;"><div><div style="font-weight:bold; font-size:14px;">${l.type==='app'?'📱':'🌐'} ${l.title}</div><div style="font-size:11px; color:var(--text-sub);">${l.url}</div></div><button onclick="deleteLink(${i})" style="background:none; border:none; color:var(--q1); font-size:20px;">×</button></div>`;
-      });
-    }
+    function renderSettingsLinks() { const c = document.getElementById('settings-links-container'); c.innerHTML = ''; getFilteredLinks().forEach((l, i) => { const rI = userLinks.findIndex(ul => ul === l); c.innerHTML += `<div class="card" style="margin:0; padding:10px; display:flex; justify-content:space-between; align-items:center;"><div><div style="font-weight:bold; font-size:14px;">${l.type==='app'?'📱':'🌐'} ${l.title}</div><div style="font-size:11px; color:var(--text-sub);">${l.url}</div></div><button onclick="deleteLink(${rI})" style="background:none; border:none; color:var(--q1); font-size:20px;">×</button></div>`; }); }
     function addLink() {
-      const type = document.getElementById('new-link-type').value;
-      const title = document.getElementById('new-link-title').value.trim();
-      const url = document.getElementById('new-link-url').value.trim();
+      const type = document.getElementById('new-link-type').value; const title = document.getElementById('new-link-title').value.trim(); const url = document.getElementById('new-link-url').value.trim();
       if(title && url) {
         let icon = type === 'app' ? '📱' : '🌐';
-        if(url.includes('line://')) icon = '💬'; else if(url.includes('twitter://')) icon = '🐦'; else if(url.includes('instagram://')) icon = '📷';
-        userLinks.push({type, title, url, icon}); saveData(); 
-        document.getElementById('new-link-title').value=''; document.getElementById('new-link-url').value=''; renderSettingsLinks(); 
+        if(url.includes('line')) icon = '💬'; else if(url.includes('twitter')) icon = '🐦'; else if(url.includes('strava')) icon = '🚴'; else if(url.includes('cal')) icon = '📅'; else if(url.includes('gemini')) icon = '✨'; else if(url.includes('chatgpt')) icon = '🤖'; else if(url.includes('copilot')) icon = '💻'; else if(url.includes('instagram')) icon = '📷'; else if(url.includes('threads')) icon = '🧵';
+        userLinks.push({type, title, url, icon, mode: currentGlobalMode}); saveData(); document.getElementById('new-link-title').value=''; document.getElementById('new-link-url').value=''; renderSettingsLinks(); 
       }
     }
     function deleteLink(i) { userLinks.splice(i, 1); saveData(); renderSettingsLinks(); }
 
-    // プロジェクト作成・タスク登録
     function updateProjectDropdowns() {
-      const html = projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-      document.getElementById('task-project-select').innerHTML = html || '<option value="">(PJを作成してください)</option>';
-      document.getElementById('edit-project-select').innerHTML = html;
-      document.getElementById('matrix-proj-filter').innerHTML = '<option value="all">📁 すべてのPJ</option>' + html;
+      const h = getFilteredProjects().map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+      document.getElementById('task-project-select').innerHTML = h || '<option value="">(PJを作成してください)</option>';
+      document.getElementById('edit-project-select').innerHTML = h;
+      document.getElementById('matrix-proj-filter').innerHTML = '<option value="all">📁 すべてのPJ</option>' + h;
     }
-    function createProject() {
-      const name = document.getElementById('new-proj-name').value.trim();
-      if(!name) return; projects.push({ id: Date.now().toString(), name: name });
-      saveData(); document.getElementById('projectModal').style.display = 'none'; document.getElementById('new-proj-name').value = ''; updateProjectDropdowns(); if(document.getElementById('page-list').classList.contains('active')) renderList();
-    }
+    function createProject() { const n = document.getElementById('new-proj-name').value.trim(); if(!n) return; projects.push({ id: Date.now().toString(), name: n, memo: '', mode: currentGlobalMode }); saveData(); document.getElementById('projectModal').style.display = 'none'; document.getElementById('new-proj-name').value = ''; updateProjectDropdowns(); if(document.getElementById('page-list').classList.contains('active')) renderList(); }
+    
     document.getElementById('taskForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const projId = document.getElementById('task-project-select').value; if(!projId) { alert("プロジェクトを作成してください。"); return; }
+      e.preventDefault(); const pId = document.getElementById('task-project-select').value; if(!pId) return alert("プロジェクトを作成してください。");
       tasks.push({
-        id: Date.now().toString(), projectId: projId, name: document.getElementById('taskName').value, memo: document.getElementById('memo').value,
+        id: Date.now().toString(), projectId: pId, name: document.getElementById('taskName').value, memo: document.getElementById('memo').value,
         startDate: document.getElementById('startDate').value, deadline: document.getElementById('deadline').value, assignee: document.getElementById('assignee').value,
         importance: document.getElementById('importance').value, urgency: document.getElementById('urgency').value, impact: document.getElementById('impact').value, effort: document.getElementById('effort').value,
-        notifies: Array.from(document.querySelectorAll('.notify-opt')).map(sel => sel.value), notifiedAlerts: [], status: 'active'
+        notifies: Array.from(document.querySelectorAll('.notify-opt')).map(sel => sel.value), notifiedAlerts: [], status: 'active', mode: currentGlobalMode
       });
       saveData(); document.getElementById('taskForm').reset(); document.getElementById('taskDetails').removeAttribute('open'); renderList();
     });
@@ -771,12 +663,8 @@
       document.getElementById('modal-title').innerText = t.name;
       document.getElementById('modal-meta').innerHTML = `📁 ${p?p.name:''} <br>👤 ${t.assignee} <br>📅 期限: ${t.deadline.replace('T', ' ')}`;
       document.getElementById('modal-memo').innerText = t.memo || 'メモはありません';
-      
-      let actions = t.status === 'active' 
-        ? `<button class="modal-btn" onclick="deleteTask('${t.id}')" style="background:#fee2e2; color:#dc2626;">削除</button><button class="modal-btn" onclick="editTask('${t.id}')" style="background:#e2e8f0; color:var(--text-main);">編集</button><button class="modal-btn" onclick="markDone('${t.id}')" style="background:#10b981; color:white;">✅ 完了</button>`
-        : `<button class="modal-btn" onclick="deleteTask('${t.id}')" style="background:#fee2e2; color:#dc2626;">削除</button><button class="modal-btn" onclick="restoreTask('${t.id}')" style="background:var(--primary); color:white;">↩️ 未完了</button>`;
-      document.getElementById('modal-actions').innerHTML = actions;
-      document.getElementById('taskModal').style.display = 'flex';
+      let actions = t.status === 'active' ? `<button class="modal-btn" onclick="deleteTask('${t.id}')" style="background:#fee2e2; color:#dc2626;">削除</button><button class="modal-btn" onclick="editTask('${t.id}')" style="background:#e2e8f0; color:var(--text-main);">編集</button><button class="modal-btn" onclick="markDone('${t.id}')" style="background:#10b981; color:white;">✅ 完了</button>` : `<button class="modal-btn" onclick="deleteTask('${t.id}')" style="background:#fee2e2; color:#dc2626;">削除</button><button class="modal-btn" onclick="restoreTask('${t.id}')" style="background:var(--primary); color:white;">↩️ 未完了</button>`;
+      document.getElementById('modal-actions').innerHTML = actions; document.getElementById('taskModal').style.display = 'flex';
     }
     
     window.editTask = function(id) {
@@ -805,28 +693,25 @@
     window.addToAppleCalendar = function() {
       const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
       const formatICSDate = (date) => date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' + String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
-      const startDate = new Date(t.startDate + "T09:00:00"); const endDate = new Date(t.deadline); const now = new Date(); const p = projects.find(x => x.id === t.projectId);
-      const icsLines = ["BEGIN:VCALENDAR", "VERSION:2.0", "BEGIN:VEVENT", `UID:${t.id}@visualizer`, `DTSTAMP:${formatICSDate(now)}`, `DTSTART:${formatICSDate(startDate)}`, `DTEND:${formatICSDate(endDate)}`, `SUMMARY:${t.name}`, `DESCRIPTION:【PJ】${p?p.name:''}\\n【担当】${t.assignee}\\n\\n${(t.memo || '').replace(/\n/g, '\\n')}`, "END:VEVENT", "END:VCALENDAR"];
-      const blob = new Blob([icsLines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+      const s = new Date(t.startDate + "T09:00:00"); const e = new Date(t.deadline); const n = new Date(); const p = projects.find(x => x.id === t.projectId);
+      const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "BEGIN:VEVENT", `UID:${t.id}@visualizer`, `DTSTAMP:${formatICSDate(n)}`, `DTSTART:${formatICSDate(s)}`, `DTEND:${formatICSDate(e)}`, `SUMMARY:${t.name}`, `DESCRIPTION:【PJ】${p?p.name:''}\\n【担当】${t.assignee}\\n\\n${(t.memo || '').replace(/\n/g, '\\n')}`, "END:VEVENT", "END:VCALENDAR"];
+      const blob = new Blob([ics.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
       const url = window.URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${t.name}.ics`; document.body.appendChild(a); a.click(); window.URL.revokeObjectURL(url); document.body.removeChild(a);
     }
     window.addToGoogleCalendar = function() {
       const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
-      const formatGCalDate = (date) => date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' + String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
+      const fGCal = (date) => date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' + String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
       const p = projects.find(x => x.id === t.projectId); const text = encodeURIComponent(t.name);
-      const dates = encodeURIComponent(`${formatGCalDate(new Date(t.startDate + "T09:00:00"))}/${formatGCalDate(new Date(t.deadline))}`);
+      const dates = encodeURIComponent(`${fGCal(new Date(t.startDate + "T09:00:00"))}/${fGCal(new Date(t.deadline))}`);
       const details = encodeURIComponent(`【PJ】${p?p.name:''}\n【担当】${t.assignee}\n\n${t.memo || ''}`);
       window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}`, '_blank');
     }
     window.copyToMemo = function() {
       const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return; const p = projects.find(x => x.id === t.projectId);
-      const text = `■タスク: ${t.name}\n■プロジェクト: ${p?p.name:''}\n■期間: ${t.startDate} 〜 ${t.deadline.replace('T',' ')}\n\n${t.memo || ''}`;
-      navigator.clipboard.writeText(text).then(() => { alert('コピーしました！\nメモ帳にペーストしてください。'); });
+      navigator.clipboard.writeText(`■タスク: ${t.name}\n■プロジェクト: ${p?p.name:''}\n■期間: ${t.startDate} 〜 ${t.deadline.replace('T',' ')}\n\n${t.memo || ''}`).then(() => alert('コピーしました！\nメモ帳にペーストしてください。'));
     }
 
     // --- バックグラウンド通知 ---
-    function requestNotificationPermission() { if ("Notification" in window) { Notification.requestPermission().then(p => { if (p === "granted") { alert("通知を許可しました"); document.getElementById('notify-btn').style.display = 'none'; }}); } }
-    if ("Notification" in window && Notification.permission === "granted") { document.getElementById('notify-btn').style.display = 'none'; }
     setInterval(() => {
       if (Notification.permission !== "granted") return;
       const now = new Date(); let updated = false;
@@ -847,7 +732,7 @@
 
     // 初期化実行
     initGoalsUI(); updateAssigneeDropdowns(); updateProjectDropdowns(); 
-    navToTab('page-goals'); // 起動時は目標タブ
+    navToTab('page-goals'); 
   </script>
 </body>
 </html>
