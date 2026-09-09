@@ -8,24 +8,46 @@
   <title>Visualizer</title>
   
   <style>
-    :root { --primary: #8b2635; --bg-dark: #6e1c28; --card-bg: rgba(255, 255, 255, 0.95); --text-main: #2d3748; --text-sub: #718096; --q1: #e53e3e; --q2: #38a169; --q3: #dd6b20; --q4: #a0aec0; --q1-bg: rgba(229, 62, 62, 0.12); --q2-bg: rgba(56, 161, 105, 0.12); --q3-bg: rgba(221, 107, 32, 0.12); --q4-bg: rgba(160, 174, 192, 0.15); }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; margin: 0; padding: 0; background-color: var(--primary); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Ctext x='20' y='60' font-size='45' opacity='0.12'%3E🐺%3C/text%3E%3Ctext x='70' y='120' font-size='22' font-weight='900' font-family='Arial, sans-serif' fill='%23ffffff' opacity='0.08' transform='rotate(-15 70 120)'%3EMWAM%3C/text%3E%3C/svg%3E"); background-attachment: fixed; color: var(--text-main); -webkit-tap-highlight-color: transparent; }
+    /* =========================================
+       カラーパレット (ワインレッドテーマ)
+       ========================================= */
+    :root { 
+      --primary: #8b2635; 
+      --bg-dark: #6e1c28; 
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --text-main: #2d3748;
+      --text-sub: #718096;
+      --q1: #ef4444; --q2: #10b981; --q3: #f59e0b; --q4: #94a3b8;
+    }
     
-    .app-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(139, 38, 53, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 12px) 15px 12px 15px; z-index: 1000; height: 28px; color: white; }
-    .header-btn { background: none; border: none; color: white; font-size: 15px; font-weight: bold; padding: 0; cursor: pointer; min-width: 65px; display: flex; align-items: center; gap: 4px; }
-    .header-title { font-weight: 800; font-size: 17px; margin: 0; text-align: center; flex-grow: 1; letter-spacing: 1px; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; 
+      margin: 0; padding: 0; 
+      background-color: var(--primary); 
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Ctext x='20' y='60' font-size='45' opacity='0.12'%3E🐺%3C/text%3E%3Ctext x='70' y='120' font-size='22' font-weight='900' font-family='Arial, sans-serif' fill='%23ffffff' opacity='0.08' transform='rotate(-15 70 120)'%3EMWAM%3C/text%3E%3C/svg%3E");
+      background-attachment: fixed; color: var(--text-main); -webkit-tap-highlight-color: transparent; 
+    }
+    
+    /* 修正: ヘッダーにモード切り替えを統合 */
+    .app-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(139, 38, 53, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 12px) 15px 12px 15px; z-index: 1000; height: 32px; color: white; }
+    
+    .header-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .header-btn { background: none; border: none; color: white; font-size: 15px; font-weight: bold; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .header-title { font-weight: 800; font-size: 17px; margin: 0; text-align: center; flex: 1; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .header-right-group { display: flex; justify-content: flex-end; flex: 1; }
 
-    .global-toggle-bar { position: fixed; top: calc(53px + env(safe-area-inset-top)); left: 0; right: 0; padding: 10px 15px; z-index: 990; background: linear-gradient(to bottom, rgba(139, 38, 53, 0.9), transparent); }
-    .global-toggle { display: flex; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-    .global-toggle button { flex: 1; border: none; background: transparent; padding: 10px; font-weight: bold; font-size: 14px; border-radius: 8px; color: rgba(255,255,255,0.7); cursor: pointer; transition: 0.2s; }
-    .global-toggle button.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    /* モード切替ボタンスタイル (小型化) */
+    .mode-toggle-mini { display: flex; background: rgba(0,0,0,0.3); border-radius: 6px; padding: 3px; }
+    .mode-toggle-mini button { border: none; background: transparent; padding: 4px 10px; font-weight: bold; font-size: 12px; border-radius: 4px; color: rgba(255,255,255,0.6); cursor: pointer; transition: 0.2s; }
+    .mode-toggle-mini button.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
 
+    /* 下部ナビゲーション */
     .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; height: 56px; }
     .nav-btn { background: transparent; border: none; font-size: 10px; color: #a0aec0; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 20%; cursor: pointer; transition: 0.2s; }
     .nav-btn .icon { font-size: 22px; margin-bottom: 3px; transition: 0.2s; }
     .nav-btn.active { color: var(--primary); font-weight: bold; }
     
-    .page { display: none; padding: calc(125px + env(safe-area-inset-top)) 15px calc(80px + env(safe-area-bottom)); max-width: 900px; margin: 0 auto; min-height: 100vh; box-sizing: border-box; }
+    .page { display: none; padding: calc(65px + env(safe-area-inset-top)) 15px calc(80px + env(safe-area-bottom)); max-width: 900px; margin: 0 auto; min-height: 100vh; box-sizing: border-box; }
     .page.active { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     
@@ -33,7 +55,7 @@
     .card { background: var(--card-bg); padding: 18px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.5); }
     .form-grid { display: flex; flex-direction: column; gap: 12px; }
     .form-group-title { font-size: 0.85em; font-weight: bold; color: var(--primary); margin-top: 5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
-    input, select, textarea { padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; background: #fff; color: var(--text-main); }
+    input, select, textarea { padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; background: #fff; appearance: none; font-family: inherit; color: var(--text-main); }
     
     .toggle-group { display: flex; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 4px; margin-bottom: 20px; }
     .toggle-btn { flex: 1; border: none; background: transparent; padding: 10px; font-weight: bold; font-size: 14px; border-radius: 8px; color: rgba(255,255,255,0.7); cursor: pointer; transition: 0.2s; }
@@ -52,17 +74,21 @@
     .list-card { background: #fff; padding: 14px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 4px solid var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .list-card.done { border-left-color: #cbd5e1; opacity: 0.6; }
 
-    /* ポストイット風 マトリクス画面 */
+    /* 修正: マトリクス (付箋/ポストイット風デザイン) */
     .matrix-container { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; height: calc(100vh - 290px); min-height: 400px; }
-    .quadrant { border-radius: 16px; padding: 10px; display: flex; flex-direction: column; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .q1 { border-color: rgba(229, 62, 62, 0.4); background-color: var(--q1-bg); } 
-    .q2 { border-color: rgba(56, 161, 105, 0.4); background-color: var(--q2-bg); }
-    .q3 { border-color: rgba(221, 107, 32, 0.4); background-color: var(--q3-bg); } 
-    .q4 { border-color: rgba(160, 174, 192, 0.4); background-color: var(--q4-bg); }
+    .quadrant { background: white; border-radius: 16px; padding: 10px; display: flex; flex-direction: column; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .q1 { border-color: var(--q1); } .q2 { border-color: var(--q2); }
+    .q3 { border-color: var(--q3); } .q4 { border-color: var(--q4); }
     .quadrant h3 { margin: 0 0 10px 0; font-size: 0.85em; text-align: center; padding-bottom: 6px; border-bottom: 1px dashed rgba(0,0,0,0.1); color: var(--text-main); display: flex; flex-direction: column; gap: 2px;}
-    .q-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-    .mini-card { background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.05); border-radius: 8px; padding: 8px; font-size: 0.8em; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05);}
-    .mini-card.done { opacity: 0.6; text-decoration: line-through; }
+    .q-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 2px; }
+    
+    /* 付箋カラーのカード */
+    .mini-card { border-radius: 6px; padding: 8px; font-size: 0.8em; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05); color: var(--text-main); }
+    .mini-card.done { opacity: 0.5; text-decoration: line-through; }
+    .mc-q1 { background-color: #fee2e2; border-left: 4px solid var(--q1); }
+    .mc-q2 { background-color: #dcfce7; border-left: 4px solid var(--q2); }
+    .mc-q3 { background-color: #ffedd5; border-left: 4px solid var(--q3); }
+    .mc-q4 { background-color: #f1f5f9; border-left: 4px solid var(--q4); }
 
     /* ガントチャート */
     .gantt-wrapper { overflow-x: auto; background: var(--card-bg); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.5); }
@@ -92,23 +118,22 @@
 </head>
 <body>
 
-  <!-- 固定ヘッダー -->
+  <!-- 固定ヘッダー (左上に連携とモード切替をコンパクトに配置) -->
   <div class="app-header">
-    <button id="header-left-btn" class="header-btn" onclick="openGoalActionModal()" style="display:none;">＋ 連携</button>
-    <div id="header-spacer" class="header-btn" style="visibility:hidden;"></div>
+    <div class="header-left-group">
+      <button id="header-left-btn" class="header-btn" onclick="openGoalActionModal()" style="display:none; background:rgba(0,0,0,0.3); padding:4px 8px; border-radius:6px; font-size:12px;">＋連携</button>
+      <div class="mode-toggle-mini">
+        <button id="g-mode-life" class="active" onclick="switchGlobalMode('life')">🏠</button>
+        <button id="g-mode-work" onclick="switchGlobalMode('work')">🏢</button>
+      </div>
+    </div>
     <h2 id="header-title" class="header-title">🔥 行動</h2>
-    <button id="header-right-btn" class="header-btn right" onclick="openSettings()">⚙️ 設定</button>
-  </div>
-
-  <!-- グローバルモード切替 -->
-  <div class="global-toggle-bar">
-    <div class="global-toggle">
-      <button id="g-mode-life" class="active" onclick="switchGlobalMode('life')">🏠 ライフ</button>
-      <button id="g-mode-work" onclick="switchGlobalMode('work')">🏢 ワーク</button>
+    <div class="header-right-group">
+      <button id="header-right-btn" class="header-btn right" onclick="openSettings()">⚙️ 設定</button>
     </div>
   </div>
 
-  <!-- 下部タブ -->
+  <!-- 下部タブ (5つ) -->
   <div class="navbar">
     <button id="tab-list" class="nav-btn" onclick="navToTab('page-list')"><span class="icon">📝</span><span>リスト</span></button>
     <button id="tab-matrix" class="nav-btn" onclick="navToTab('page-matrix')"><span class="icon">⊞</span><span>マトリクス</span></button>
@@ -167,7 +192,7 @@
     <div id="list-container"></div>
   </div>
 
-  <!-- ページ3: ⊞ マトリクス (付箋風) -->
+  <!-- ページ3: ⊞ マトリクス (付箋デザイン＆完了管理) -->
   <div id="page-matrix" class="page">
     <div class="toggle-group" style="background:rgba(0,0,0,0.4);">
       <button id="tg-matrix-active" class="toggle-btn active" onclick="switchMatrixTab('active')" style="color:white;">進行中</button>
@@ -187,23 +212,10 @@
     </div>
   </div>
 
-  <!-- ページ4: 🗓 カレンダー (年次・月次・日次) -->
+  <!-- ページ4: 🗓 カレンダー (年次・月次・週次・日次) -->
   <div id="page-wbs" class="page">
-    <div class="toggle-group" style="background:rgba(0,0,0,0.4); margin-bottom:10px;">
-      <button id="tg-cal-daily" class="toggle-btn active" onclick="switchCalView('daily')" style="color:white;">日次 (1ヶ月)</button>
-      <button id="tg-cal-monthly" class="toggle-btn" onclick="switchCalView('monthly')" style="color:white;">月次 (1年)</button>
-      <button id="tg-cal-yearly" class="toggle-btn" onclick="switchCalView('yearly')" style="color:white;">年次 (5年)</button>
-    </div>
-
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; color:white;">
-      <button onclick="changeCalPeriod(-1)" style="border:none; background:none; font-size:24px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.5);">◀</button>
-      <h3 id="cal-period-title" style="margin:0; font-size:18px; text-shadow:0 1px 2px rgba(0,0,0,0.5);">-</h3>
-      <button onclick="changeCalPeriod(1)" style="border:none; background:none; font-size:24px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.5);">▶</button>
-    </div>
     
-    <div class="gantt-wrapper" id="gantt-wrapper"></div>
-    
-    <details style="background:white; border-radius:12px; padding:12px; box-shadow:0 1px 3px rgba(0,0,0,0.03); border:1px solid #f1f5f9;">
+    <details class="card" style="padding:12px; margin-bottom:15px; border-radius:12px;">
       <summary style="font-weight:bold; color:var(--primary); outline:none;">ℹ️ 記号について（カレンダーの見方）</summary>
       <ul style="font-size:0.85em; color:var(--text-sub); margin:10px 0 0 0; padding-left:20px; line-height:1.8;">
         <li><span style="color:#0284c7; font-weight:bold; background:#e0f2fe; padding:2px 6px; border-radius:4px;">🟢 開始</span> : タスクを開始する日。</li>
@@ -212,6 +224,21 @@
         <li><span style="color:#d97706; font-weight:bold; background:#fef3c7; padding:2px 6px; border-radius:4px;">🌟 単日</span> : その日のうちに開始し完了するタスクです。</li>
       </ul>
     </details>
+
+    <div class="toggle-group" style="background:rgba(0,0,0,0.4); margin-bottom:10px;">
+      <button id="tg-cal-daily" class="toggle-btn active" onclick="switchCalView('daily')" style="color:white; padding:10px 5px;">日次</button>
+      <button id="tg-cal-weekly" class="toggle-btn" onclick="switchCalView('weekly')" style="color:white; padding:10px 5px;">週次</button>
+      <button id="tg-cal-monthly" class="toggle-btn" onclick="switchCalView('monthly')" style="color:white; padding:10px 5px;">月次</button>
+      <button id="tg-cal-yearly" class="toggle-btn" onclick="switchCalView('yearly')" style="color:white; padding:10px 5px;">年次</button>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; color:white;">
+      <button onclick="changeCalPeriod(-1)" style="border:none; background:none; font-size:24px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.5);">◀</button>
+      <h3 id="cal-period-title" style="margin:0; font-size:16px; text-shadow:0 1px 2px rgba(0,0,0,0.5);">-</h3>
+      <button onclick="changeCalPeriod(1)" style="border:none; background:none; font-size:24px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.5);">▶</button>
+    </div>
+    
+    <div class="gantt-wrapper" id="gantt-wrapper"></div>
   </div>
 
   <!-- ページ5: 🔗 確認 -->
@@ -225,7 +252,7 @@
     <div id="links-container"></div>
   </div>
 
-  <!-- ⚙️設定ページ (完全に不透明な背景) -->
+  <!-- ⚙️設定ページ -->
   <div id="page-settings" class="page" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#5a1721; z-index:3000; overflow-y:auto; padding-top:20px; background-image:none !important;">
     <div style="display:flex; justify-content:space-between; margin-bottom:20px; align-items:center;">
       <h2 style="margin:0; color:white;">設定</h2>
@@ -328,43 +355,36 @@
   </div>
 
   <script>
-    // --- 🚨 強力なデータ復旧エンジン (過去全バージョン検索) ---
+    // --- 🚨 データ復旧エンジン ---
     function recoverOldData() {
-      const oldVersions = ['18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8'];
+      const oldVersions = ['19', '18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8'];
       for (let v of oldVersions) {
         let oldProj = localStorage.getItem(`vizProjectsV${v}`);
         if (oldProj && JSON.parse(oldProj).length > 0) {
            return {
-             v: v,
-             p: JSON.parse(oldProj),
-             t: JSON.parse(localStorage.getItem(`vizTasksV${v}`)) || [],
+             v: v, p: JSON.parse(oldProj), t: JSON.parse(localStorage.getItem(`vizTasksV${v}`)) || [],
              m: JSON.parse(localStorage.getItem(`vizMembersV${v}`)) || ["自分"],
              l: JSON.parse(localStorage.getItem(`vizUserLinksV${v}`)) || [],
              g: JSON.parse(localStorage.getItem(`vizGoalsV${v}`)) || null
            };
         }
-      }
-      return null;
+      } return null;
     }
-
     window.forceRecoverData = function() {
       const recovered = recoverOldData();
-      if(recovered) {
-        if(confirm(`過去のデータ(V${recovered.v})が見つかりました。復元しますか？\n(現在のデータは上書きされます)`)) {
-          projects = recovered.p.map(p => ({...p, mode: p.mode || 'life'}));
-          tasks = recovered.t.map(t => ({...t, mode: t.mode || 'life'}));
-          members = recovered.m; userLinks = recovered.l.map(l => ({...l, mode: l.mode || 'life'}));
-          if(recovered.g) { goals.life = {...goals.life, ...recovered.g.life}; goals.work = {...goals.work, ...recovered.g.work}; }
-          saveData(); alert("復元完了しました！画面を更新します。"); location.reload();
-        }
-      } else { alert("過去のデータは見つかりませんでした。"); }
+      if(recovered && confirm(`過去のデータ(V${recovered.v})が見つかりました。復元しますか？\n(現在のデータは上書きされます)`)) {
+        projects = recovered.p.map(p => ({...p, mode: p.mode || 'life'})); tasks = recovered.t.map(t => ({...t, mode: t.mode || 'life'}));
+        members = recovered.m; userLinks = recovered.l.map(l => ({...l, mode: l.mode || 'life'}));
+        if(recovered.g) { goals.life = {...goals.life, ...recovered.g.life}; goals.work = {...goals.work, ...recovered.g.work}; }
+        saveData(); alert("復元完了しました！画面を更新します。"); location.reload();
+      } else if (!recovered) { alert("過去のデータは見つかりませんでした。"); }
     }
 
-    // --- データ初期化 (V19 - 復旧・強化版) ---
-    let projects = JSON.parse(localStorage.getItem('vizProjectsV19')) || [];
-    let tasks = JSON.parse(localStorage.getItem('vizTasksV19')) || [];
-    let members = JSON.parse(localStorage.getItem('vizMembersV19')) || ["自分"];
-    let userLinks = JSON.parse(localStorage.getItem('vizUserLinksV19')) || [
+    // --- データ初期化 (V20) ---
+    let projects = JSON.parse(localStorage.getItem('vizProjectsV20')) || [];
+    let tasks = JSON.parse(localStorage.getItem('vizTasksV20')) || [];
+    let members = JSON.parse(localStorage.getItem('vizMembersV20')) || ["自分"];
+    let userLinks = JSON.parse(localStorage.getItem('vizUserLinksV20')) || [
       { type: 'app', title: 'Gemini', url: 'https://gemini.google.com/', icon: '✨', mode: 'life' },
       { type: 'app', title: 'ChatGPT', url: 'https://chatgpt.com/', icon: '🤖', mode: 'life' },
       { type: 'app', title: 'Copilot', url: 'https://copilot.microsoft.com/', icon: '💻', mode: 'life' },
@@ -374,7 +394,7 @@
       { type: 'app', title: 'ChatGPT', url: 'https://chatgpt.com/', icon: '🤖', mode: 'work' },
       { type: 'app', title: 'Copilot', url: 'https://copilot.microsoft.com/', icon: '💻', mode: 'work' }
     ];
-    let goals = JSON.parse(localStorage.getItem('vizGoalsV19')) || {
+    let goals = JSON.parse(localStorage.getItem('vizGoalsV20')) || {
       life: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] },
       work: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] }
     };
@@ -382,17 +402,15 @@
     let currentGlobalMode = 'life'; 
     let currentListTab = 'active';
     let currentMatrixTab = 'active';
-    let currentCalView = 'daily'; // daily, monthly, yearly
+    let currentCalView = 'daily'; // daily, weekly, monthly, yearly
     let currentCalDate = new Date();
     let currentOpenedTaskId = null;
     let selectedGoalAction = 'memo';
 
-    // 初回起動時に過去データがあれば自動移行
     if(projects.length === 0) {
       const rec = recoverOldData();
       if(rec) {
-        projects = rec.p.map(p => ({...p, mode: p.mode || 'life'}));
-        tasks = rec.t.map(t => ({...t, mode: t.mode || 'life'}));
+        projects = rec.p.map(p => ({...p, mode: p.mode || 'life'})); tasks = rec.t.map(t => ({...t, mode: t.mode || 'life'}));
         members = rec.m; userLinks = rec.l.map(l => ({...l, mode: l.mode || 'life'}));
         if(rec.g) { goals.life = {...goals.life, ...rec.g.life}; goals.work = {...goals.work, ...rec.g.work}; }
         saveData();
@@ -400,9 +418,9 @@
     }
 
     function saveData() {
-      localStorage.setItem('vizProjectsV19', JSON.stringify(projects)); localStorage.setItem('vizTasksV19', JSON.stringify(tasks));
-      localStorage.setItem('vizMembersV19', JSON.stringify(members)); localStorage.setItem('vizGoalsV19', JSON.stringify(goals));
-      localStorage.setItem('vizUserLinksV19', JSON.stringify(userLinks));
+      localStorage.setItem('vizProjectsV20', JSON.stringify(projects)); localStorage.setItem('vizTasksV20', JSON.stringify(tasks));
+      localStorage.setItem('vizMembersV20', JSON.stringify(members)); localStorage.setItem('vizGoalsV20', JSON.stringify(goals));
+      localStorage.setItem('vizUserLinksV20', JSON.stringify(userLinks));
     }
 
     function switchGlobalMode(mode) {
@@ -458,7 +476,7 @@
       document.getElementById(pageId).classList.add('active'); document.getElementById('tab-' + pageId.replace('page-','')).classList.add('active'); window.scrollTo(0,0);
       const title = document.getElementById('header-title'); const right = document.getElementById('header-right-btn'); const left = document.getElementById('header-left-btn');
       
-      if(pageId === 'page-goals') { title.innerText = '🔥 行動'; right.innerText = '⚙️ 設定'; right.onclick = openSettings; left.style.display = 'block'; renderGoals(); } 
+      if(pageId === 'page-goals') { title.innerText = '🔥 行動'; right.innerText = '⚙️ 設定'; right.onclick = openSettings; left.style.display = 'flex'; renderGoals(); } 
       else {
         left.style.display = 'none';
         if (pageId === 'page-list') { title.innerText = '📝 リスト'; right.innerText = '＋ PJ作成'; right.onclick = () => { document.getElementById('projectModal').style.display='flex'; }; updateProjectDropdowns(); renderList(); } 
@@ -537,27 +555,34 @@
       ['q1','q2','q3','q4'].forEach(q => document.getElementById(`m${q}-list`).innerHTML = '');
       
       targetTasks.forEach(task => {
-        const div = document.createElement('div'); div.className = `mini-card ${currentMatrixTab === 'completed' ? 'done' : ''}`;
-        const pBadge = filterProj === 'all' ? `<div style="font-size:0.7em; color:var(--primary); margin-bottom:2px;">[${getProjectName(task.projectId).slice(0,5)}]</div>` : '';
-        div.innerHTML = `${pBadge}<div style="font-weight:bold; color:var(--text-main); margin-bottom:2px;">${task.name}</div>`;
+        const div = document.createElement('div');
+        const pBadge = filterProj === 'all' ? `<div style="font-size:0.7em; color:var(--text-sub); margin-bottom:2px;">[${getProjectName(task.projectId).slice(0,5)}]</div>` : '';
+        div.innerHTML = `${pBadge}<div style="font-weight:bold; margin-bottom:2px;">${task.name}</div>`;
         div.onclick = () => openModal(task.id);
+        
         const t1 = mType === 'eisenhower' ? task.importance : task.impact; const t2 = mType === 'eisenhower' ? task.urgency : task.effort;
-        if (t1==='high' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq1-list').appendChild(div); else if (t1==='high' && t2===(mType==='eisenhower'?'low':'high')) document.getElementById('mq2-list').appendChild(div); else if (t1==='low' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq3-list').appendChild(div); else document.getElementById('mq4-list').appendChild(div);
+        
+        // 所属する象限に合わせてカード色（付箋カラー）を変更
+        if (t1==='high' && t2===(mType==='eisenhower'?'high':'low')) { div.className = `mini-card mc-q1 ${currentMatrixTab === 'completed' ? 'done' : ''}`; document.getElementById('mq1-list').appendChild(div); }
+        else if (t1==='high' && t2===(mType==='eisenhower'?'low':'high')) { div.className = `mini-card mc-q2 ${currentMatrixTab === 'completed' ? 'done' : ''}`; document.getElementById('mq2-list').appendChild(div); }
+        else if (t1==='low' && t2===(mType==='eisenhower'?'high':'low')) { div.className = `mini-card mc-q3 ${currentMatrixTab === 'completed' ? 'done' : ''}`; document.getElementById('mq3-list').appendChild(div); }
+        else { div.className = `mini-card mc-q4 ${currentMatrixTab === 'completed' ? 'done' : ''}`; document.getElementById('mq4-list').appendChild(div); }
       });
     }
 
-    // --- 🗓 カレンダー切替・描画 ---
+    // --- 🗓 カレンダー (日次・週次・月次・年次) ---
     function switchCalView(view) {
       currentCalView = view;
       document.getElementById('tg-cal-daily').classList.toggle('active', view === 'daily');
+      document.getElementById('tg-cal-weekly').classList.toggle('active', view === 'weekly');
       document.getElementById('tg-cal-monthly').classList.toggle('active', view === 'monthly');
       document.getElementById('tg-cal-yearly').classList.toggle('active', view === 'yearly');
-      currentCalDate = new Date(); // リセット
-      renderHorizontalGantt();
+      currentCalDate = new Date(); renderHorizontalGantt();
     }
     
     function changeCalPeriod(diff) {
       if(currentCalView === 'daily') currentCalDate.setMonth(currentCalDate.getMonth() + diff);
+      else if(currentCalView === 'weekly') currentCalDate.setDate(currentCalDate.getDate() + (diff * 7 * 4)); // ざっくり4週間移動
       else if(currentCalView === 'monthly') currentCalDate.setFullYear(currentCalDate.getFullYear() + diff);
       else currentCalDate.setFullYear(currentCalDate.getFullYear() + (diff * 5));
       renderHorizontalGantt();
@@ -576,6 +601,15 @@
         for(let i=1; i<=daysInMonth; i++) {
           const d = new Date(year, month, i).getDay(); const isW = (d===0||d===6) ? 'weekend' : '';
           colsHtml += `<div class="gantt-day-col ${isW}" style="width:${cellWidth}px;">${i}<br>${['日','月','火','水','木','金','土'][d]}</div>`;
+        }
+      } else if (currentCalView === 'weekly') {
+        document.getElementById('cal-period-title').innerText = `${year}年 ${month+1}月〜 (12週間)`;
+        colCount = 12; cellWidth = 55;
+        const startOfWeek = new Date(currentCalDate); startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + 1);
+        for(let i=0; i<12; i++) {
+          const wStart = new Date(startOfWeek); wStart.setDate(startOfWeek.getDate() + i*7);
+          const wEnd = new Date(wStart); wEnd.setDate(wStart.getDate() + 6);
+          colsHtml += `<div class="gantt-day-col" style="width:${cellWidth}px; font-size:10px;"><br>${wStart.getMonth()+1}/${wStart.getDate()}<br>|<br>${wEnd.getMonth()+1}/${wEnd.getDate()}</div>`;
         }
       } else if (currentCalView === 'monthly') {
         document.getElementById('cal-period-title').innerText = `${year}年`;
@@ -617,6 +651,16 @@
               const actualEnd = tEnd > mEnd ? new Date(year, month + 1, 0).getDate() : tEnd.getDate();
               marginLeft = (actualStart - 1) * cellWidth; width = (actualEnd - actualStart + 1) * cellWidth - 4; shouldRender = true;
             }
+          } else if (currentCalView === 'weekly') {
+            const startOfWeek = new Date(currentCalDate); startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + 1); startOfWeek.setHours(0,0,0,0);
+            const endOfPeriod = new Date(startOfWeek); endOfPeriod.setDate(startOfWeek.getDate() + 12*7 - 1);
+            if (tEnd >= startOfWeek && tStart <= endOfPeriod) {
+              const actualStart = tStart < startOfWeek ? startOfWeek : tStart;
+              const actualEnd = tEnd > endOfPeriod ? endOfPeriod : tEnd;
+              const dFromStart = Math.floor((actualStart - startOfWeek) / 86400000);
+              const duration = Math.floor((actualEnd - actualStart) / 86400000) + 1;
+              marginLeft = dFromStart * (cellWidth / 7); width = duration * (cellWidth / 7) - 2; shouldRender = true;
+            }
           } else if (currentCalView === 'monthly') {
             const yStart = new Date(year, 0, 1); const yEnd = new Date(year, 11, 31);
             if (tEnd >= yStart && tStart <= yEnd) {
@@ -648,7 +692,7 @@
     function openSettings() { document.getElementById('page-settings').style.display = 'block'; renderMembers(); renderSettingsLinks(); }
     function closeSettings() { document.getElementById('page-settings').style.display = 'none'; if(document.getElementById('page-links').classList.contains('active')) renderLinksPage(); }
     function renderMembers() { const c = document.getElementById('member-list-container'); c.innerHTML = ''; members.forEach((m, i) => c.innerHTML += `<div class="card" style="margin:0; padding:10px; display:flex; justify-content:space-between;"><span>👤 ${m}</span>${m !== '自分' ? `<button onclick="deleteMember(${i})" style="background:none; border:none; color:var(--q1); font-size:20px;">×</button>` : ''}</div>`); updateAssigneeDropdowns(); }
-    function addMember() { const n = document.getElementById('new-member-name').value.trim(); if(n && !members.includes(n)) { members.push(n); saveData(); document.getElementById('new-member-name').value=''; renderMembers(); } }
+    function addMember() { const n = document.getElementById('new-member-name').value.trim(); if(n && !members.includes(name)) { members.push(name); saveData(); document.getElementById('new-member-name').value=''; renderMembers(); } }
     function deleteMember(i) { members.splice(i, 1); saveData(); renderMembers(); }
     function updateAssigneeDropdowns() { const h = members.map(m => `<option value="${m}">${m}</option>`).join(''); document.getElementById('assignee').innerHTML = h; document.getElementById('edit-assignee').innerHTML = h; }
     
@@ -679,7 +723,7 @@
         importance: document.getElementById('importance').value, urgency: document.getElementById('urgency').value, impact: document.getElementById('impact').value, effort: document.getElementById('effort').value,
         notifies: Array.from(document.querySelectorAll('.notify-opt')).map(sel => sel.value), notifiedAlerts: [], status: 'active', mode: currentGlobalMode
       });
-      saveData(); document.getElementById('taskForm').reset(); document.getElementById('taskDetails').removeAttribute('open'); renderList();
+      saveData(); document.getElementById('taskForm').reset(); document.getElementById('taskDetails').removeAttribute('open'); navToTab('page-tasks');
     });
 
     // --- モーダル・連携 ---
