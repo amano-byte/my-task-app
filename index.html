@@ -28,7 +28,7 @@
       background-attachment: fixed; color: var(--text-main); -webkit-tap-highlight-color: transparent; 
     }
     
-    /* 修正: ヘッダーにモード切り替えを統合 */
+    /* ヘッダー (モード切り替え統合) */
     .app-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(139, 38, 53, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 12px) 15px 12px 15px; z-index: 1000; height: 32px; color: white; }
     
     .header-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
@@ -47,7 +47,8 @@
     .nav-btn .icon { font-size: 22px; margin-bottom: 3px; transition: 0.2s; }
     .nav-btn.active { color: var(--primary); font-weight: bold; }
     
-    .page { display: none; padding: calc(65px + env(safe-area-inset-top)) 15px calc(80px + env(safe-area-bottom)); max-width: 900px; margin: 0 auto; min-height: 100vh; box-sizing: border-box; }
+    /* ページの余白 (エラー修正済み) */
+    .page { display: none; padding: calc(75px + env(safe-area-inset-top)) 15px calc(80px + env(safe-area-inset-bottom)); max-width: 900px; margin: 0 auto; min-height: 100vh; box-sizing: border-box; }
     .page.active { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     
@@ -71,10 +72,11 @@
     /* リスト */
     .proj-acc { background: var(--card-bg); border-radius: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; }
     .proj-acc-summary { padding: 16px; font-weight: bold; font-size: 16px; outline: none; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.03); border-bottom: 1px solid #e2e8f0; cursor: pointer; color: var(--primary); }
+    .proj-acc-summary::-webkit-details-marker { display: none; }
     .list-card { background: #fff; padding: 14px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 4px solid var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .list-card.done { border-left-color: #cbd5e1; opacity: 0.6; }
 
-    /* 修正: マトリクス (付箋/ポストイット風デザイン) */
+    /* マトリクス (付箋/ポストイット風デザイン) */
     .matrix-container { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; height: calc(100vh - 290px); min-height: 400px; }
     .quadrant { background: white; border-radius: 16px; padding: 10px; display: flex; flex-direction: column; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     .q1 { border-color: var(--q1); } .q2 { border-color: var(--q2); }
@@ -192,7 +194,7 @@
     <div id="list-container"></div>
   </div>
 
-  <!-- ページ3: ⊞ マトリクス (付箋デザイン＆完了管理) -->
+  <!-- ページ3: ⊞ マトリクス (付箋風) -->
   <div id="page-matrix" class="page">
     <div class="toggle-group" style="background:rgba(0,0,0,0.4);">
       <button id="tg-matrix-active" class="toggle-btn active" onclick="switchMatrixTab('active')" style="color:white;">進行中</button>
@@ -357,7 +359,7 @@
   <script>
     // --- 🚨 データ復旧エンジン ---
     function recoverOldData() {
-      const oldVersions = ['19', '18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8'];
+      const oldVersions = ['20', '19', '18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8'];
       for (let v of oldVersions) {
         let oldProj = localStorage.getItem(`vizProjectsV${v}`);
         if (oldProj && JSON.parse(oldProj).length > 0) {
@@ -380,11 +382,11 @@
       } else if (!recovered) { alert("過去のデータは見つかりませんでした。"); }
     }
 
-    // --- データ初期化 (V20) ---
-    let projects = JSON.parse(localStorage.getItem('vizProjectsV20')) || [];
-    let tasks = JSON.parse(localStorage.getItem('vizTasksV20')) || [];
-    let members = JSON.parse(localStorage.getItem('vizMembersV20')) || ["自分"];
-    let userLinks = JSON.parse(localStorage.getItem('vizUserLinksV20')) || [
+    // --- データ初期化 (V21) ---
+    let projects = JSON.parse(localStorage.getItem('vizProjectsV21')) || [];
+    let tasks = JSON.parse(localStorage.getItem('vizTasksV21')) || [];
+    let members = JSON.parse(localStorage.getItem('vizMembersV21')) || ["自分"];
+    let userLinks = JSON.parse(localStorage.getItem('vizUserLinksV21')) || [
       { type: 'app', title: 'Gemini', url: 'https://gemini.google.com/', icon: '✨', mode: 'life' },
       { type: 'app', title: 'ChatGPT', url: 'https://chatgpt.com/', icon: '🤖', mode: 'life' },
       { type: 'app', title: 'Copilot', url: 'https://copilot.microsoft.com/', icon: '💻', mode: 'life' },
@@ -394,7 +396,7 @@
       { type: 'app', title: 'ChatGPT', url: 'https://chatgpt.com/', icon: '🤖', mode: 'work' },
       { type: 'app', title: 'Copilot', url: 'https://copilot.microsoft.com/', icon: '💻', mode: 'work' }
     ];
-    let goals = JSON.parse(localStorage.getItem('vizGoalsV20')) || {
+    let goals = JSON.parse(localStorage.getItem('vizGoalsV21')) || {
       life: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] },
       work: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] }
     };
@@ -418,9 +420,9 @@
     }
 
     function saveData() {
-      localStorage.setItem('vizProjectsV20', JSON.stringify(projects)); localStorage.setItem('vizTasksV20', JSON.stringify(tasks));
-      localStorage.setItem('vizMembersV20', JSON.stringify(members)); localStorage.setItem('vizGoalsV20', JSON.stringify(goals));
-      localStorage.setItem('vizUserLinksV20', JSON.stringify(userLinks));
+      localStorage.setItem('vizProjectsV21', JSON.stringify(projects)); localStorage.setItem('vizTasksV21', JSON.stringify(tasks));
+      localStorage.setItem('vizMembersV21', JSON.stringify(members)); localStorage.setItem('vizGoalsV21', JSON.stringify(goals));
+      localStorage.setItem('vizUserLinksV21', JSON.stringify(userLinks));
     }
 
     function switchGlobalMode(mode) {
@@ -474,15 +476,15 @@
     function navToTab(pageId) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(pageId).classList.add('active'); document.getElementById('tab-' + pageId.replace('page-','')).classList.add('active'); window.scrollTo(0,0);
-      const title = document.getElementById('header-title'); const right = document.getElementById('header-right-btn'); const left = document.getElementById('header-left-btn');
+      const title = document.getElementById('header-title'); const leftBtn = document.getElementById('header-left-btn');
       
-      if(pageId === 'page-goals') { title.innerText = '🔥 行動'; right.innerText = '⚙️ 設定'; right.onclick = openSettings; left.style.display = 'flex'; renderGoals(); } 
+      if(pageId === 'page-goals') { title.innerText = '🔥 行動'; leftBtn.style.display = 'flex'; renderGoals(); } 
       else {
-        left.style.display = 'none';
-        if (pageId === 'page-list') { title.innerText = '📝 リスト'; right.innerText = '＋ PJ作成'; right.onclick = () => { document.getElementById('projectModal').style.display='flex'; }; updateProjectDropdowns(); renderList(); } 
-        else if (pageId === 'page-matrix') { title.innerText = '⊞ マトリクス'; right.innerText = '⚙️ 設定'; right.onclick = openSettings; updateProjectDropdowns(); renderMatrix(); } 
-        else if (pageId === 'page-wbs') { title.innerText = '🗓 カレンダー'; right.innerText = '⚙️ 設定'; right.onclick = openSettings; renderHorizontalGantt(); } 
-        else if (pageId === 'page-links') { title.innerText = '🔗 確認'; right.innerText = '⚙️ 設定'; right.onclick = openSettings; renderLinksPage(); }
+        leftBtn.style.display = 'none';
+        if (pageId === 'page-list') { title.innerText = '📝 リスト'; updateProjectDropdowns(); renderList(); } 
+        else if (pageId === 'page-matrix') { title.innerText = '⊞ マトリクス'; updateProjectDropdowns(); renderMatrix(); } 
+        else if (pageId === 'page-wbs') { title.innerText = '🗓 カレンダー'; renderHorizontalGantt(); } 
+        else if (pageId === 'page-links') { title.innerText = '🔗 確認'; renderLinksPage(); }
       }
     }
 
@@ -520,7 +522,7 @@
     function switchListTab(tab) { currentListTab = tab; document.getElementById('tg-active').classList.toggle('active', tab === 'active'); document.getElementById('tg-done').classList.toggle('active', tab === 'completed'); renderList(); }
     function renderList() {
       const container = document.getElementById('list-container'); container.innerHTML = ''; const curProjs = getFilteredProjects();
-      if(curProjs.length === 0) { container.innerHTML = `<div style="text-align:center; padding:20px; color:white;">右上の「＋ PJ作成」からプロジェクトを追加してください。</div>`; return; }
+      if(curProjs.length === 0) { container.innerHTML = `<div style="text-align:center; padding:20px; color:white;">右上の「⚙️設定」または左記からPJを追加してください。</div>`; return; }
       curProjs.forEach(p => {
         const pTasks = tasks.filter(t => t.projectId === p.id && t.status === currentListTab).sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
         let html = `<details class="proj-acc" open><summary class="proj-acc-summary"><span>📁 ${p.name} <span style="font-size:0.85em; color:var(--text-sub); font-weight:normal;">${pTasks.length}件</span></span><button onclick="deleteProject('${p.id}', event)" style="background:none;border:none;font-size:18px;color:var(--q1);padding:5px;">🗑️</button></summary><div class="proj-acc-content"><ul style="margin:0; padding-left:20px; font-size:15px; line-height:1.8;">`;
@@ -561,8 +563,6 @@
         div.onclick = () => openModal(task.id);
         
         const t1 = mType === 'eisenhower' ? task.importance : task.impact; const t2 = mType === 'eisenhower' ? task.urgency : task.effort;
-        
-        // 所属する象限に合わせてカード色（付箋カラー）を変更
         if (t1==='high' && t2===(mType==='eisenhower'?'high':'low')) { div.className = `mini-card mc-q1 ${currentMatrixTab === 'completed' ? 'done' : ''}`; document.getElementById('mq1-list').appendChild(div); }
         else if (t1==='high' && t2===(mType==='eisenhower'?'low':'high')) { div.className = `mini-card mc-q2 ${currentMatrixTab === 'completed' ? 'done' : ''}`; document.getElementById('mq2-list').appendChild(div); }
         else if (t1==='low' && t2===(mType==='eisenhower'?'high':'low')) { div.className = `mini-card mc-q3 ${currentMatrixTab === 'completed' ? 'done' : ''}`; document.getElementById('mq3-list').appendChild(div); }
@@ -570,7 +570,7 @@
       });
     }
 
-    // --- 🗓 カレンダー (日次・週次・月次・年次) ---
+    // --- 🗓 カレンダー切替・描画 ---
     function switchCalView(view) {
       currentCalView = view;
       document.getElementById('tg-cal-daily').classList.toggle('active', view === 'daily');
@@ -582,7 +582,7 @@
     
     function changeCalPeriod(diff) {
       if(currentCalView === 'daily') currentCalDate.setMonth(currentCalDate.getMonth() + diff);
-      else if(currentCalView === 'weekly') currentCalDate.setDate(currentCalDate.getDate() + (diff * 7 * 4)); // ざっくり4週間移動
+      else if(currentCalView === 'weekly') currentCalDate.setDate(currentCalDate.getDate() + (diff * 7 * 4)); 
       else if(currentCalView === 'monthly') currentCalDate.setFullYear(currentCalDate.getFullYear() + diff);
       else currentCalDate.setFullYear(currentCalDate.getFullYear() + (diff * 5));
       renderHorizontalGantt();
@@ -597,6 +597,7 @@
       
       if(currentCalView === 'daily') {
         document.getElementById('cal-period-title').innerText = `${year}年 ${month + 1}月`;
+        // 修正: 月末まで確実に表示するため日数を計算
         const daysInMonth = new Date(year, month + 1, 0).getDate(); colCount = daysInMonth; cellWidth = 35;
         for(let i=1; i<=daysInMonth; i++) {
           const d = new Date(year, month, i).getDay(); const isW = (d===0||d===6) ? 'weekend' : '';
@@ -692,7 +693,7 @@
     function openSettings() { document.getElementById('page-settings').style.display = 'block'; renderMembers(); renderSettingsLinks(); }
     function closeSettings() { document.getElementById('page-settings').style.display = 'none'; if(document.getElementById('page-links').classList.contains('active')) renderLinksPage(); }
     function renderMembers() { const c = document.getElementById('member-list-container'); c.innerHTML = ''; members.forEach((m, i) => c.innerHTML += `<div class="card" style="margin:0; padding:10px; display:flex; justify-content:space-between;"><span>👤 ${m}</span>${m !== '自分' ? `<button onclick="deleteMember(${i})" style="background:none; border:none; color:var(--q1); font-size:20px;">×</button>` : ''}</div>`); updateAssigneeDropdowns(); }
-    function addMember() { const n = document.getElementById('new-member-name').value.trim(); if(n && !members.includes(name)) { members.push(name); saveData(); document.getElementById('new-member-name').value=''; renderMembers(); } }
+    function addMember() { const n = document.getElementById('new-member-name').value.trim(); if(n && !members.includes(n)) { members.push(n); saveData(); document.getElementById('new-member-name').value=''; renderMembers(); } }
     function deleteMember(i) { members.splice(i, 1); saveData(); renderMembers(); }
     function updateAssigneeDropdowns() { const h = members.map(m => `<option value="${m}">${m}</option>`).join(''); document.getElementById('assignee').innerHTML = h; document.getElementById('edit-assignee').innerHTML = h; }
     
@@ -723,7 +724,7 @@
         importance: document.getElementById('importance').value, urgency: document.getElementById('urgency').value, impact: document.getElementById('impact').value, effort: document.getElementById('effort').value,
         notifies: Array.from(document.querySelectorAll('.notify-opt')).map(sel => sel.value), notifiedAlerts: [], status: 'active', mode: currentGlobalMode
       });
-      saveData(); document.getElementById('taskForm').reset(); document.getElementById('taskDetails').removeAttribute('open'); navToTab('page-tasks');
+      saveData(); document.getElementById('taskForm').reset(); document.getElementById('taskDetails').removeAttribute('open'); renderList();
     });
 
     // --- モーダル・連携 ---
