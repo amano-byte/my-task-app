@@ -11,13 +11,13 @@
     :root { --primary: #0969da; --bg: #f2f2f7; --q1: #ff3b30; --q2: #34c759; --q3: #ff9500; --q4: #8e8e93; }
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; margin: 0; padding: 0; background-color: var(--bg); color: #1c1c1e; -webkit-tap-highlight-color: transparent; }
     
-    /* ヘッダー */
+    /* 共通ヘッダー */
     .app-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid #d1d1d6; display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 10px) 15px 10px 15px; z-index: 1000; height: 30px; }
     .header-btn { background: none; border: none; color: var(--primary); font-size: 16px; font-weight: 500; padding: 0; cursor: pointer; min-width: 60px; text-align: left; }
     .header-btn.right { text-align: right; }
     .header-title { font-weight: bold; font-size: 18px; margin: 0; text-align: center; flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* 下部ナビゲーションタブ */
+    /* 下部タブ */
     .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid #d1d1d6; display: flex; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; height: 55px; }
     .nav-btn { background: transparent; border: none; font-size: 10px; color: #8e8e93; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 20%; cursor: pointer; }
     .nav-btn .icon { font-size: 20px; margin-bottom: 2px; }
@@ -47,28 +47,23 @@
     .mini-card { background: #f8f9fa; border: 1px solid #e5e5ea; border-radius: 6px; padding: 6px; font-size: 0.75em; cursor: pointer; }
     .list-card { background: white; padding: 12px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 
-    /* WBSカレンダー */
-    .calendar-wrapper { overflow-x: auto; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 10px; margin-bottom: 15px;}
-    .calendar-grid { display: grid; gap: 1px; background: #eee; border: 1px solid #eee; }
-    .cal-header { background: #f8f9fa; font-size: 0.7em; text-align: center; padding: 5px 0; font-weight: bold; }
-    .cal-header.weekend { color: var(--q1); }
-    .cal-row { display: contents; }
+    /* =========================================
+       新・WBS縦型カレンダー (全体像俯瞰ガントチャート)
+       ========================================= */
+    .calendar-wrapper { overflow-x: auto; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 15px; }
+    .calendar-grid-vertical { display: grid; background: #d1d1d6; gap: 1px; min-width: 100%; }
+    .cal-v-header { background: #f8f9fa; font-weight: bold; font-size: 0.8em; text-align: center; padding: 10px 4px; position: sticky; top: 0; z-index: 10; border-bottom: 2px solid var(--primary); }
+    .cal-v-date { background: #f8f9fa; text-align: center; font-weight: bold; font-size: 0.9em; padding: 8px 0; }
+    .cal-v-date.weekend { color: var(--q1); }
+    .cal-v-cell { background: white; padding: 4px; display: flex; flex-direction: column; gap: 4px; min-height: 40px; }
+    .cal-v-cell.weekend { background: #fafafa; }
     
-    /* 進捗付きタスク名セル */
-    .cal-task-name { background: white; padding: 5px; font-size: 0.75em; border-right: 1px solid #eee; display: flex; flex-direction: column; justify-content: center; position: relative;}
-    .cal-task-title { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; z-index: 2;}
-    .cal-task-proj { font-size: 0.8em; color: #8e8e93; z-index: 2;}
-    .cal-task-progress-bg { position: absolute; bottom: 0; left: 0; height: 100%; background: rgba(52, 199, 89, 0.1); z-index: 1;}
-    .cal-task-progress-text { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); font-size: 0.8em; color: var(--q2); font-weight: bold; z-index: 2;}
-
-    .cal-cell { background: white; position: relative; height: 36px; }
-    .cal-cell.weekend { background: #fafafa; }
-    
-    /* タスクバーの進化 */
-    .task-bar { position: absolute; top: 4px; height: 28px; background: rgba(9, 105, 218, 0.15); border: 1px solid var(--primary); border-radius: 6px; z-index: 10; font-size: 0.65em; color: var(--primary); display: flex; align-items: center; justify-content: space-between; padding: 0 4px; white-space: nowrap; overflow: hidden; font-weight: bold; box-sizing: border-box;}
-    .task-bar.completed { background: #f2f2f7; border-color: #d1d1d6; color: #8e8e93; text-decoration: line-through; }
-    .task-bar-content { display: flex; align-items: center; gap: 4px; overflow: hidden;}
-    .task-bar-flags { flex-shrink: 0; font-size: 1.1em;}
+    /* タスクの記号バッジ */
+    .v-evt { font-size: 0.75em; padding: 4px 6px; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .v-evt.start { background: #e6f2ff; color: #0056b3; border-left: 3px solid #0056b3; }
+    .v-evt.end { background: #ffeeeb; color: #c92a2a; border-left: 3px solid #c92a2a; }
+    .v-evt.start-end { background: #f4f0ff; color: #5f3dc4; border-left: 3px solid #5f3dc4; }
+    .v-evt.between { background: transparent; color: #8e8e93; border-left: 2px dashed #d1d1d6; padding-left: 8px; font-weight: normal; box-shadow: none; margin-left: 2px; }
 
     /* モーダル */
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
@@ -103,9 +98,7 @@
     <button id="tab-completed" class="nav-btn" onclick="navToTab('page-completed')"><span class="icon">✅</span><span>完了</span></button>
   </div>
 
-  <!-- ===============================
-       ページ1: プロジェクト (Visualizer)
-       =============================== -->
+  <!-- ページ1: プロジェクト -->
   <div id="page-projects" class="page active">
     <button class="primary-btn" onclick="document.getElementById('projectModal').style.display='flex'">＋ 新規プロジェクト</button>
     <div class="proj-matrix-container">
@@ -116,9 +109,7 @@
     </div>
   </div>
 
-  <!-- ===============================
-       ページ2: リスト
-       =============================== -->
+  <!-- ページ2: リスト -->
   <div id="page-tasks" class="page">
     <div class="card" style="padding:10px;">
       <details id="taskDetails">
@@ -126,26 +117,21 @@
         <form id="taskForm" class="form-grid" style="margin-top:10px;">
           <input type="text" id="taskName" placeholder="タスク名 (必須)" required>
           <textarea id="memo" placeholder="詳細メモ・手順"></textarea>
-          
           <div class="form-group-title">プロジェクト紐付け</div>
           <select id="task-project-select" required></select>
-
           <div class="form-group-title">スケジュール</div>
           <div><small style="color:#8e8e93;">開始日</small><input type="date" id="startDate" required></div>
           <div><small style="color:#8e8e93;">期限</small><input type="datetime-local" id="deadline" required></div>
-          
           <div class="form-group-title">担当者・通知</div>
           <select id="assignee" required></select>
           <select class="notify-opt"><option value="">通知1：なし</option><option value="15">15分前</option><option value="60">1時間前</option><option value="1440">1日前</option></select>
           <select class="notify-opt"><option value="">通知2：なし</option><option value="10080">1週間前</option></select>
-
           <div class="form-group-title">評価①：優先順位</div>
           <select id="importance"><option value="high">重要度：高</option><option value="low">重要度：低</option></select>
           <select id="urgency"><option value="high">緊急度：高</option><option value="low">緊急度：低</option></select>
           <div class="form-group-title">評価②：費用対効果</div>
           <select id="impact"><option value="high">効果：高</option><option value="low">効果：低</option></select>
           <select id="effort"><option value="low">労力：低 (ラク)</option><option value="high">労力：高 (大変)</option></select>
-          
           <button type="submit" class="primary-btn" style="margin-top:10px;">登録する</button>
         </form>
       </details>
@@ -153,9 +139,7 @@
     <div id="task-list-container"></div>
   </div>
 
-  <!-- ===============================
-       ページ3: マトリクス
-       =============================== -->
+  <!-- ページ3: マトリクス -->
   <div id="page-matrix" class="page">
     <select id="matrix-type" onchange="renderMatrix()" style="margin-bottom:10px;">
       <option value="eisenhower">📊 アイゼンハワー (重要×緊急)</option>
@@ -169,38 +153,34 @@
     </div>
   </div>
 
-  <!-- ===============================
-       ページ4: カレンダー WBS
-       =============================== -->
+  <!-- ページ4: カレンダー WBS (新・縦型) -->
   <div id="page-wbs" class="page">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
       <button onclick="changeMonth(-1)" style="border:none; background:none; font-size:20px; color:var(--primary);">◀</button>
       <h3 id="cal-month-title" style="margin:0;">-</h3>
       <button onclick="changeMonth(1)" style="border:none; background:none; font-size:20px; color:var(--primary);">▶</button>
     </div>
+    
+    <!-- ここに縦型カレンダーが描画される -->
     <div class="calendar-wrapper" id="calendar-wrapper"></div>
     
-    <!-- カレンダー記号の解説（アコーディオン） -->
+    <!-- 記号の解説（プルダウン） -->
     <details style="background:white; border-radius:12px; padding:10px; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
       <summary style="font-weight:bold; color:var(--primary); outline:none;">ℹ️ 記号について（使い方）</summary>
       <ul style="font-size:0.85em; color:#666; margin:10px 0 0 0; padding-left:20px; line-height:1.6;">
-        <li><span style="color:var(--primary); font-weight:bold;">▶︎</span> : タスクの「開始日」を表します。</li>
-        <li><span style="color:var(--q1); font-weight:bold;">🚩</span> : タスクの「期限日」を表します。</li>
-        <li>バーの中にはタスク名と（開始日〜期限日）が表示されます。</li>
-        <li>左側のタスク名には、プロジェクト全体の進捗状況（緑の背景バーと％）が表示されます。</li>
-        <li>バーをタップすると、タスクの詳細・編集・カレンダーへの追加ができます。</li>
+        <li><span style="color:#0056b3; font-weight:bold; background:#e6f2ff; padding:2px 4px; border-radius:4px;">▶︎ タスク</span> : その日が「開始日」であることを表します。</li>
+        <li><span style="color:#c92a2a; font-weight:bold; background:#ffeeeb; padding:2px 4px; border-radius:4px;">🚩 タスク</span> : その日が「期限日」であることを表します。</li>
+        <li><span style="color:#5f3dc4; font-weight:bold; background:#f4f0ff; padding:2px 4px; border-radius:4px;">▶︎🚩 タスク</span> : その日のうちに開始し、期限を迎えます。</li>
+        <li><span style="color:#8e8e93; font-weight:bold;">┃ タスク</span> : 開始日〜期限日の間の「期間中」を表します。縦に線として繋がります。</li>
+        <li>タスク（記号）をタップすると、タスクの詳細確認・編集・カレンダー連携ができます。</li>
       </ul>
     </details>
   </div>
 
-  <!-- ===============================
-       ページ5: 完了済み
-       =============================== -->
+  <!-- ページ5: 完了済み -->
   <div id="page-completed" class="page"><div id="completed-list"></div></div>
 
-  <!-- ===============================
-       設定ページ (オーバーレイ)
-       =============================== -->
+  <!-- 設定ページ (オーバーレイ) -->
   <div id="page-settings" class="page" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:1500; overflow-y:auto; padding-top:20px;">
     <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
       <h2 style="margin:0;">設定</h2>
@@ -240,7 +220,7 @@
         
         <!-- カレンダー＆メモ連携ボタン群 -->
         <div id="sync-buttons-container" style="margin-bottom: 15px;">
-          <button class="sync-btn memo" onclick="copyToMemo()">📝 メモ帳にコピーする</button>
+          <button class="sync-btn memo" onclick="copyToMemo()">📝 メモ帳アプリ用にコピー</button>
           <button class="sync-btn" onclick="addToAppleCalendar()">🍎 Appleカレンダーに追加</button>
           <button class="sync-btn google" onclick="addToGoogleCalendar()">🇬 Googleカレンダーに追加</button>
         </div>
@@ -272,26 +252,26 @@
   </div>
 
   <script>
-    // データ初期化 (V11)
-    let projects = JSON.parse(localStorage.getItem('vizProjectsV11')) || [];
-    let tasks = JSON.parse(localStorage.getItem('vizTasksV11')) || [];
-    let members = JSON.parse(localStorage.getItem('vizMembersV11')) || ["自分"];
+    // データ初期化 (V12)
+    let projects = JSON.parse(localStorage.getItem('vizProjectsV12')) || [];
+    let tasks = JSON.parse(localStorage.getItem('vizTasksV12')) || [];
+    let members = JSON.parse(localStorage.getItem('vizMembersV12')) || ["自分"];
     let currentProjectId = null;
     let currentCalDate = new Date();
     let currentOpenedTaskId = null;
 
-    // データ移行（V10からV11へ引き継ぎ。初めての場合は無視されます）
-    if(projects.length === 0 && localStorage.getItem('vizProjectsV10')) {
-      projects = JSON.parse(localStorage.getItem('vizProjectsV10'));
-      tasks = JSON.parse(localStorage.getItem('vizTasksV10'));
-      members = JSON.parse(localStorage.getItem('vizMembersV10'));
+    // データ移行（V11がある場合引き継ぎ）
+    if(projects.length === 0 && localStorage.getItem('vizProjectsV11')) {
+      projects = JSON.parse(localStorage.getItem('vizProjectsV11'));
+      tasks = JSON.parse(localStorage.getItem('vizTasksV11'));
+      members = JSON.parse(localStorage.getItem('vizMembersV11'));
       saveData();
     }
 
     function saveData() {
-      localStorage.setItem('vizProjectsV11', JSON.stringify(projects));
-      localStorage.setItem('vizTasksV11', JSON.stringify(tasks));
-      localStorage.setItem('vizMembersV11', JSON.stringify(members));
+      localStorage.setItem('vizProjectsV12', JSON.stringify(projects));
+      localStorage.setItem('vizTasksV12', JSON.stringify(tasks));
+      localStorage.setItem('vizMembersV12', JSON.stringify(members));
     }
 
     // --- UI状態管理 ---
@@ -413,65 +393,78 @@
       return card;
     }
 
-    // --- カレンダー WBS (進捗・フラグ・期間表示強化) ---
+    // --- 新・カレンダー WBS (縦型クロステーブル) ---
     function changeMonth(diff) { currentCalDate.setMonth(currentCalDate.getMonth() + diff); renderCalendarWBS(); }
     
     function renderCalendarWBS() {
-      const year = currentCalDate.getFullYear(); const month = currentCalDate.getMonth();
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
       document.getElementById('cal-month-title').innerText = `${year}年 ${month + 1}月`;
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       
-      let html = `<div class="calendar-grid" style="grid-template-columns: 120px repeat(${daysInMonth}, 30px);"><div class="cal-header">タスク名</div>`;
-      for(let i=1; i<=daysInMonth; i++) {
-        const d = new Date(year, month, i).getDay();
-        html += `<div class="cal-header ${(d===0||d===6)?'weekend':''}">${i}<br>${['日','月','火','水','木','金','土'][d]}</div>`;
-      }
+      // 表示する列（プロジェクト）の決定
+      const displayProjects = currentProjectId ? projects.filter(p => p.id === currentProjectId) : projects;
+      const cols = displayProjects.length;
       
-      getFilteredTasks('active').concat(getFilteredTasks('completed')).sort((a,b) => new Date(a.startDate) - new Date(b.startDate)).forEach(task => {
-        
-        // 進捗状況の計算（そのタスクが属するプロジェクト全体の進捗）
-        const pTasks = tasks.filter(t => t.projectId === task.projectId);
-        const progress = pTasks.length > 0 ? Math.round((pTasks.filter(t=>t.status==='completed').length / pTasks.length)*100) : 0;
-        const projName = currentProjectId === null ? getProjectName(task.projectId).slice(0,5) : '';
-        
-        // タスク名セル (背景に進捗バー)
-        html += `<div class="cal-row">
-          <div class="cal-task-name" onclick="openModal('${task.id}')">
-            <div class="cal-task-progress-bg" style="width: ${progress}%;"></div>
-            <div class="cal-task-progress-text">${progress}%</div>
-            <div class="cal-task-proj">${projName}</div>
-            <div class="cal-task-title">${task.status === 'completed'?'✅':''}${task.name}</div>
-          </div>`;
-          
-        const start = new Date(task.startDate); 
-        const end = new Date(task.deadline.split('T')[0]);
-        const formatStr = `${start.getMonth()+1}/${start.getDate()}〜${end.getMonth()+1}/${end.getDate()}`;
-        
-        for(let i=1; i<=daysInMonth; i++) {
-          const cDate = new Date(year, month, i);
-          html += `<div class="cal-cell ${(cDate.getDay()===0||cDate.getDay()===6)?'weekend':''}">`;
-          
-          if(cDate.getTime() === start.getTime() || (i === 1 && start < cDate && end >= cDate)) {
-             let dDays = Math.floor((end - Math.max(start, new Date(year, month, 1))) / 86400000) + 1;
-             if(dDays > daysInMonth - i + 1) dDays = daysInMonth - i + 1;
-             
-             if(dDays > 0) {
-               const w = (dDays*30)-2;
-               // フラグ・矢印アイコンの表示ロジック
-               const showStart = (cDate.getTime() === start.getTime()) ? '▶︎' : '';
-               const showEnd = (end.getTime() === new Date(year, month, i + dDays - 1).getTime()) ? '<span style="color:var(--q1);">🚩</span>' : '';
-               
-               html += `<div class="task-bar ${task.status==='completed'?'completed':''}" style="width:${w}px;" onclick="openModal('${task.id}')">
-                 <div class="task-bar-content"><span class="task-bar-flags">${showStart}</span> ${task.name} (${formatStr})</div>
-                 <div class="task-bar-flags">${showEnd}</div>
-               </div>`;
-             }
-          }
-          html += `</div>`;
-        }
-        html += `</div>`;
+      // グリッド構築: 1列目(日付) 50px + 各プロジェクト列 (最小120px)
+      let html = `<div class="calendar-grid-vertical" style="grid-template-columns: 50px repeat(${cols}, minmax(130px, 1fr));">`;
+      
+      // 表頭 (ヘッダー)
+      html += `<div class="cal-v-header">日付</div>`;
+      displayProjects.forEach(p => {
+        html += `<div class="cal-v-header">${p.name}</div>`;
       });
-      document.getElementById('calendar-wrapper').innerHTML = html + `</div>`;
+
+      const allTasks = getFilteredTasks('active').concat(getFilteredTasks('completed'));
+
+      // 日付ループ (縦軸)
+      for(let i=1; i<=daysInMonth; i++) {
+        const cDate = new Date(year, month, i);
+        const dayOfWeek = cDate.getDay();
+        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6) ? 'weekend' : '';
+        const dayStr = ['日','月','火','水','木','金','土'][dayOfWeek];
+        
+        // 日付セル
+        html += `<div class="cal-v-date ${isWeekend}">${i}<br><span style="font-size:0.75em; color:#8e8e93;">${dayStr}</span></div>`;
+        
+        // プロジェクトごとのセル
+        displayProjects.forEach(p => {
+          html += `<div class="cal-v-cell ${isWeekend}">`;
+          
+          const pTasks = allTasks.filter(t => t.projectId === p.id);
+          pTasks.forEach(task => {
+             const tStart = new Date(task.startDate);
+             // 時間を無視して日付のみで比較するための処理
+             tStart.setHours(0,0,0,0);
+             
+             const tEndStr = task.deadline.split('T')[0];
+             const tEnd = new Date(tEndStr);
+             tEnd.setHours(0,0,0,0);
+             
+             const cDateMidnight = new Date(year, month, i);
+             cDateMidnight.setHours(0,0,0,0);
+             
+             const isStart = (cDateMidnight.getTime() === tStart.getTime());
+             const isEnd = (cDateMidnight.getTime() === tEnd.getTime());
+             const isBetween = (tStart.getTime() < cDateMidnight.getTime() && cDateMidnight.getTime() < tEnd.getTime());
+             
+             const doneStyle = task.status === 'completed' ? 'text-decoration:line-through; opacity:0.6;' : '';
+
+             if (isStart && isEnd) {
+                 html += `<div class="v-evt start-end" style="${doneStyle}" onclick="openModal('${task.id}')">▶︎🚩 ${task.name}</div>`;
+             } else if (isStart) {
+                 html += `<div class="v-evt start" style="${doneStyle}" onclick="openModal('${task.id}')">▶︎ ${task.name}</div>`;
+             } else if (isEnd) {
+                 html += `<div class="v-evt end" style="${doneStyle}" onclick="openModal('${task.id}')">🚩 ${task.name}</div>`;
+             } else if (isBetween) {
+                 html += `<div class="v-evt between" style="${doneStyle}" onclick="openModal('${task.id}')">┃ ${task.name}</div>`;
+             }
+          });
+          html += `</div>`;
+        });
+      }
+      html += `</div>`;
+      document.getElementById('calendar-wrapper').innerHTML = html;
     }
 
     // --- データ登録 ---
@@ -496,52 +489,42 @@
       saveData(); document.getElementById('taskForm').reset(); document.getElementById('taskDetails').removeAttribute('open'); navToTab('page-tasks');
     });
 
-    // --- 連動機能 (Apple/Google/Memo) ---
-    
-    // 1. Appleカレンダー (.ics 直接DL)
+    // --- カレンダー・メモ連携機能 ---
     window.addToAppleCalendar = function() {
       if(!currentOpenedTaskId) return; const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
       
       const formatICSDate = (date) => date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' + String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
       const startDate = new Date(t.startDate + "T09:00:00"); const endDate = new Date(t.deadline); const now = new Date();
+      
       const icsLines = [
         "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Visualizer App//JP", "BEGIN:VEVENT",
         `UID:${t.id}@visualizer.local`, `DTSTAMP:${formatICSDate(now)}`, `DTSTART:${formatICSDate(startDate)}`, `DTEND:${formatICSDate(endDate)}`,
         `SUMMARY:${t.name}`, `DESCRIPTION:【プロジェクト】${getProjectName(t.projectId)}\\n【担当】${t.assignee}\\n\\n${(t.memo || '').replace(/\n/g, '\\n')}`,
         "END:VEVENT", "END:VCALENDAR"
       ];
+      
       const blob = new Blob([icsLines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = `${t.name}.ics`; document.body.appendChild(a); a.click();
       window.URL.revokeObjectURL(url); document.body.removeChild(a);
     }
 
-    // 2. Googleカレンダー (URLパラメータ方式)
     window.addToGoogleCalendar = function() {
       if(!currentOpenedTaskId) return; const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
       
       const formatGCalDate = (date) => date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' + String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
-      
       const startDate = new Date(t.startDate + "T09:00:00"); const endDate = new Date(t.deadline);
       const text = encodeURIComponent(t.name);
       const dates = encodeURIComponent(`${formatGCalDate(startDate)}/${formatGCalDate(endDate)}`);
       const details = encodeURIComponent(`【プロジェクト】${getProjectName(t.projectId)}\n【担当】${t.assignee}\n\n${t.memo || ''}`);
       
-      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}`;
-      window.open(url, '_blank');
+      window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}`, '_blank');
     }
 
-    // 3. メモ帳コピー機能
     window.copyToMemo = function() {
       if(!currentOpenedTaskId) return; const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
-      
       const text = `■タスク名: ${t.name}\n■プロジェクト: ${getProjectName(t.projectId)}\n■担当者: ${t.assignee}\n■期間: ${t.startDate} 〜 ${t.deadline.replace('T',' ')}\n\n■メモ:\n${t.memo || 'なし'}`;
-      
-      navigator.clipboard.writeText(text).then(() => {
-        alert('タスクの内容をコピーしました！\nメモ帳アプリなどにペーストしてください。');
-      }).catch(err => {
-        alert('コピーに失敗しました。');
-      });
+      navigator.clipboard.writeText(text).then(() => { alert('タスクの内容をコピーしました！\nメモ帳アプリなどにペーストしてください。'); }).catch(err => { alert('コピーに失敗しました。'); });
     }
 
     // --- モーダル制御 ---
