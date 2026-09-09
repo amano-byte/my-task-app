@@ -13,14 +13,14 @@
     
     /* 共通ヘッダー */
     .app-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid #d1d1d6; display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 10px) 15px 10px 15px; z-index: 1000; height: 30px; }
-    .header-btn { background: none; border: none; color: var(--primary); font-size: 16px; font-weight: 500; padding: 0; cursor: pointer; min-width: 60px; text-align: left; }
-    .header-btn.right { text-align: right; }
+    .header-btn { background: none; border: none; color: var(--primary); font-size: 16px; font-weight: bold; padding: 0; cursor: pointer; min-width: 60px; text-align: left; }
+    .header-btn.right { text-align: right; font-size: 14px; }
     .header-title { font-weight: bold; font-size: 18px; margin: 0; text-align: center; flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* 下部タブ */
+    /* 下部ナビゲーションタブ (4つ) */
     .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid #d1d1d6; display: flex; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; height: 55px; }
-    .nav-btn { background: transparent; border: none; font-size: 10px; color: #8e8e93; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 20%; cursor: pointer; }
-    .nav-btn .icon { font-size: 20px; margin-bottom: 2px; }
+    .nav-btn { background: transparent; border: none; font-size: 10px; color: #8e8e93; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 25%; cursor: pointer; }
+    .nav-btn .icon { font-size: 22px; margin-bottom: 2px; }
     .nav-btn.active { color: var(--primary); font-weight: bold; }
     
     /* ページ共通 */
@@ -34,22 +34,42 @@
     .form-group-title { font-size: 0.9em; font-weight: bold; color: var(--primary); margin-top: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
     input, select, textarea { padding: 12px; border: 1px solid #d1d1d6; border-radius: 8px; font-size: 16px; width: 100%; box-sizing: border-box; background: #fff; appearance: none; -webkit-appearance: none; }
     
-    /* プロジェクト・マトリクス */
-    .proj-matrix-container, .matrix-container { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; height: calc(100vh - 200px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); min-height: 380px; }
+    /* トグルボタン群 */
+    .toggle-group { display: flex; background: #e5e5ea; border-radius: 8px; padding: 3px; margin-bottom: 15px; }
+    .toggle-btn { flex: 1; border: none; background: transparent; padding: 8px; font-weight: bold; font-size: 14px; border-radius: 6px; color: #8e8e93; cursor: pointer; transition: 0.2s; }
+    .toggle-btn.active { background: white; color: #1c1c1e; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+    /* 目標設定画面 (MVV & 行動目標) */
+    .goal-section { margin-bottom: 20px; }
+    .goal-input { width: 100%; min-height: 60px; font-size: 14px; margin-bottom: 5px; }
+    .goal-details { background: white; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; }
+    .goal-summary { padding: 15px; font-weight: bold; font-size: 16px; color: var(--primary); outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+    .goal-summary::-webkit-details-marker { display: none; }
+    .goal-summary::after { content: '+'; font-size: 20px; color: #8e8e93; }
+    details[open] .goal-summary::after { content: '-'; }
+    .goal-content { padding: 0 15px 15px; }
+    .action-btn-row { display: flex; gap: 10px; margin-top: 10px; }
+    .sync-btn { flex: 1; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer;}
+    .sync-btn.google { background: #4285F4; color: white; }
+    .sync-btn.memo { background: #ffcc00; color: #000; }
+
+    /* リスト画面 (プロジェクトごとのアコーディオン) */
+    .proj-acc { background: white; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; }
+    .proj-acc-summary { padding: 15px; font-weight: bold; font-size: 16px; outline: none; display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; border-bottom: 1px solid #eee; }
+    .proj-acc-content { padding: 10px; background: #fff; }
+    .list-card { background: #f2f2f7; padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 4px solid var(--primary); }
+    .list-card.done { border-left-color: #8e8e93; opacity: 0.7; }
+
+    /* マトリクス 2x2 */
+    .matrix-container { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; height: calc(100vh - 200px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); min-height: 380px; }
     .quadrant { background: white; border-radius: 12px; padding: 8px; display: flex; flex-direction: column; border: 2px solid transparent; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
     .q1 { border-color: rgba(255, 59, 48, 0.4); } .q2 { border-color: rgba(52, 199, 89, 0.4); }
     .q3 { border-color: rgba(255, 149, 0, 0.4); } .q4 { border-color: rgba(142, 142, 147, 0.4); }
     .quadrant h3 { margin: 0 0 8px 0; font-size: 0.85em; text-align: center; padding-bottom: 5px; border-bottom: 1px solid #eee; }
     .q-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-    
-    /* カード類 */
-    .proj-card { background: #f2f2f7; padding: 10px; border-radius: 8px; font-size: 0.9em; font-weight: bold; text-align: center; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
     .mini-card { background: #f8f9fa; border: 1px solid #e5e5ea; border-radius: 6px; padding: 6px; font-size: 0.75em; cursor: pointer; }
-    .list-card { background: white; padding: 12px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 
-    /* =========================================
-       新・WBS縦型カレンダー (全体像俯瞰ガントチャート)
-       ========================================= */
+    /* 縦型カレンダー (ガントチャート) */
     .calendar-wrapper { overflow-x: auto; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 15px; }
     .calendar-grid-vertical { display: grid; background: #d1d1d6; gap: 1px; min-width: 100%; }
     .cal-v-header { background: #f8f9fa; font-weight: bold; font-size: 0.8em; text-align: center; padding: 10px 4px; position: sticky; top: 0; z-index: 10; border-bottom: 2px solid var(--primary); }
@@ -58,60 +78,75 @@
     .cal-v-cell { background: white; padding: 4px; display: flex; flex-direction: column; gap: 4px; min-height: 40px; }
     .cal-v-cell.weekend { background: #fafafa; }
     
-    /* タスクの記号バッジ */
-    .v-evt { font-size: 0.75em; padding: 4px 6px; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    .v-evt.start { background: #e6f2ff; color: #0056b3; border-left: 3px solid #0056b3; }
-    .v-evt.end { background: #ffeeeb; color: #c92a2a; border-left: 3px solid #c92a2a; }
-    .v-evt.start-end { background: #f4f0ff; color: #5f3dc4; border-left: 3px solid #5f3dc4; }
-    .v-evt.between { background: transparent; color: #8e8e93; border-left: 2px dashed #d1d1d6; padding-left: 8px; font-weight: normal; box-shadow: none; margin-left: 2px; }
+    /* タスクの記号バッジ (一目でわかるように大幅改修) */
+    .v-evt { font-size: 0.75em; padding: 6px 8px; border-radius: 6px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; box-shadow: 0 1px 2px rgba(0,0,0,0.1); border-left: 4px solid transparent; }
+    .v-evt.start { background: #e6f2ff; color: #0056b3; border-left-color: #0056b3; }
+    .v-evt.end { background: #ffeeeb; color: #c92a2a; border-left-color: #c92a2a; }
+    .v-evt.start-end { background: #fff8cc; color: #b08d00; border-left-color: #ffcc00; }
+    .v-evt.between { background: transparent; color: #8e8e93; border-left: 2px dashed #d1d1d6; padding-left: 10px; font-weight: normal; box-shadow: none; margin-left: 4px; }
 
     /* モーダル */
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
     .modal-content { background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
     .modal-close { float: right; font-size: 24px; background: none; border: none; padding: 0; line-height: 1; margin-top: -5px; }
     .modal-btn { border: none; padding: 10px 12px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; flex: 1; }
-    
-    /* カレンダーボタン類 */
-    .sync-btn { width: 100%; margin-bottom: 8px; background: #1c1c1e; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;}
-    .sync-btn.google { background: #4285F4; }
-    .sync-btn.memo { background: #ffcc00; color: #000; }
-    
-    .badge-proj { font-size: 0.75em; background: #cce5ff; color: #0056b3; padding: 2px 6px; border-radius: 10px; margin-bottom: 4px; display: inline-block; }
   </style>
 </head>
 <body>
 
   <!-- 固定ヘッダー -->
   <div class="app-header">
-    <button id="header-back" class="header-btn" onclick="goHome()" style="display:none;">‹ 戻る</button>
     <div id="header-spacer" class="header-btn" style="visibility:hidden;"></div>
-    <h2 id="header-title" class="header-title">Visualizer (全体)</h2>
-    <button id="header-settings" class="header-btn right" onclick="openSettings()">⚙️ 設定</button>
+    <h2 id="header-title" class="header-title">🎯 目標設定</h2>
+    <!-- 右上ボタンはページに応じてJavaScriptで切り替え -->
+    <button id="header-right-btn" class="header-btn right" onclick="openSettings()">⚙️ 設定</button>
   </div>
 
-  <!-- 下部タブ (グローバル共通) -->
+  <!-- 下部タブ (4つ) -->
   <div class="navbar">
-    <button id="tab-projects" class="nav-btn active" onclick="navToTab('page-projects')"><span class="icon">📁</span><span>プロジェクト</span></button>
-    <button id="tab-tasks" class="nav-btn" onclick="navToTab('page-tasks')"><span class="icon">📝</span><span>リスト</span></button>
+    <button id="tab-goals" class="nav-btn active" onclick="navToTab('page-goals')"><span class="icon">🎯</span><span>目標</span></button>
+    <button id="tab-list" class="nav-btn" onclick="navToTab('page-list')"><span class="icon">📝</span><span>リスト</span></button>
     <button id="tab-matrix" class="nav-btn" onclick="navToTab('page-matrix')"><span class="icon">⊞</span><span>マトリクス</span></button>
     <button id="tab-wbs" class="nav-btn" onclick="navToTab('page-wbs')"><span class="icon">🗓</span><span>カレンダー</span></button>
-    <button id="tab-completed" class="nav-btn" onclick="navToTab('page-completed')"><span class="icon">✅</span><span>完了</span></button>
   </div>
 
-  <!-- ページ1: プロジェクト -->
-  <div id="page-projects" class="page active">
-    <button class="primary-btn" onclick="document.getElementById('projectModal').style.display='flex'">＋ 新規プロジェクト</button>
-    <div class="proj-matrix-container">
-      <div class="quadrant q1"><h3 style="color:var(--q1)">重要・緊急</h3><div class="q-list" id="pq1-list"></div></div>
-      <div class="quadrant q2"><h3 style="color:var(--q2)">重要・非緊急</h3><div class="q-list" id="pq2-list"></div></div>
-      <div class="quadrant q3"><h3 style="color:var(--q3)">非重要・緊急</h3><div class="q-list" id="pq3-list"></div></div>
-      <div class="quadrant q4"><h3 style="color:var(--q4)">非重要・非緊急</h3><div class="q-list" id="pq4-list"></div></div>
+  <!-- ===============================
+       ページ1: 🎯 目標設定 (ホーム)
+       =============================== -->
+  <div id="page-goals" class="page active">
+    
+    <div class="toggle-group">
+      <button id="tg-work" class="toggle-btn active" onclick="switchGoalTab('work')">🏢 ワーク</button>
+      <button id="tg-life" class="toggle-btn" onclick="switchGoalTab('life')">🏠 ライフ</button>
+    </div>
+
+    <!-- MVV セクション -->
+    <div class="card goal-section">
+      <div class="form-group-title" style="color:#e63946;">Mission (果たすべき使命)</div>
+      <textarea id="goal-mission" class="goal-input" placeholder="あなたの使命は何ですか？" onblur="saveGoals()"></textarea>
+      
+      <div class="form-group-title" style="color:#0969da; margin-top:10px;">Vision (実現したい未来)</div>
+      <textarea id="goal-vision" class="goal-input" placeholder="どのような未来を描いていますか？" onblur="saveGoals()"></textarea>
+      
+      <div class="form-group-title" style="color:#28a745; margin-top:10px;">Value (大切にする価値観)</div>
+      <textarea id="goal-value" class="goal-input" placeholder="行動の基盤となる価値観は？" onblur="saveGoals()"></textarea>
+    </div>
+
+    <h3 style="font-size:1.1em; text-align:center; color:#666;">行動計画 (アクション)</h3>
+
+    <!-- 行動目標 (アコーディオン) -->
+    <div id="goal-periods-container">
+      <!-- JSで 年次・月次・週次・日次 を生成 -->
     </div>
   </div>
 
-  <!-- ページ2: リスト -->
-  <div id="page-tasks" class="page">
-    <div class="card" style="padding:10px;">
+  <!-- ===============================
+       ページ2: 📝 リスト (プロジェクトとタスク)
+       =============================== -->
+  <div id="page-list" class="page">
+    
+    <!-- タスク追加用の簡易フォーム -->
+    <div class="card" style="padding:10px; margin-bottom:20px;">
       <details id="taskDetails">
         <summary style="font-weight:bold; color:var(--primary); padding:5px; outline:none;">＋ 新しいタスクを追加</summary>
         <form id="taskForm" class="form-grid" style="margin-top:10px;">
@@ -125,7 +160,6 @@
           <div class="form-group-title">担当者・通知</div>
           <select id="assignee" required></select>
           <select class="notify-opt"><option value="">通知1：なし</option><option value="15">15分前</option><option value="60">1時間前</option><option value="1440">1日前</option></select>
-          <select class="notify-opt"><option value="">通知2：なし</option><option value="10080">1週間前</option></select>
           <div class="form-group-title">評価①：優先順位</div>
           <select id="importance"><option value="high">重要度：高</option><option value="low">重要度：低</option></select>
           <select id="urgency"><option value="high">緊急度：高</option><option value="low">緊急度：低</option></select>
@@ -136,15 +170,31 @@
         </form>
       </details>
     </div>
-    <div id="task-list-container"></div>
+
+    <div class="toggle-group">
+      <button id="tg-active" class="toggle-btn active" onclick="switchListTab('active')">進行中</button>
+      <button id="tg-done" class="toggle-btn" onclick="switchListTab('completed')">完了済み</button>
+    </div>
+
+    <!-- プロジェクトごとのアコーディオンリスト -->
+    <div id="list-container"></div>
   </div>
 
-  <!-- ページ3: マトリクス -->
+  <!-- ===============================
+       ページ3: ⊞ マトリクス
+       =============================== -->
   <div id="page-matrix" class="page">
-    <select id="matrix-type" onchange="renderMatrix()" style="margin-bottom:10px;">
-      <option value="eisenhower">📊 アイゼンハワー (重要×緊急)</option>
-      <option value="impact">📈 タスクマトリクス (効果×労力)</option>
-    </select>
+    <div style="display:flex; gap:10px; margin-bottom:10px;">
+      <select id="matrix-type" onchange="renderMatrix()" style="flex:1;">
+        <option value="eisenhower">📊 アイゼンハワー</option>
+        <option value="impact">📈 費用対効果</option>
+      </select>
+      <!-- プロジェクトで絞り込めるようにする -->
+      <select id="matrix-proj-filter" onchange="renderMatrix()" style="flex:1;">
+        <option value="all">📁 すべてのPJ</option>
+      </select>
+    </div>
+    
     <div class="matrix-container">
       <div class="quadrant q1"><h3 id="q1-title" style="color:var(--q1)"></h3><div class="q-list" id="mq1-list"></div></div>
       <div class="quadrant q2"><h3 id="q2-title" style="color:var(--q2)"></h3><div class="q-list" id="mq2-list"></div></div>
@@ -153,7 +203,9 @@
     </div>
   </div>
 
-  <!-- ページ4: カレンダー WBS (新・縦型) -->
+  <!-- ===============================
+       ページ4: 🗓 カレンダー (縦型ガント)
+       =============================== -->
   <div id="page-wbs" class="page">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
       <button onclick="changeMonth(-1)" style="border:none; background:none; font-size:20px; color:var(--primary);">◀</button>
@@ -161,26 +213,23 @@
       <button onclick="changeMonth(1)" style="border:none; background:none; font-size:20px; color:var(--primary);">▶</button>
     </div>
     
-    <!-- ここに縦型カレンダーが描画される -->
     <div class="calendar-wrapper" id="calendar-wrapper"></div>
     
-    <!-- 記号の解説（プルダウン） -->
     <details style="background:white; border-radius:12px; padding:10px; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
-      <summary style="font-weight:bold; color:var(--primary); outline:none;">ℹ️ 記号について（使い方）</summary>
+      <summary style="font-weight:bold; color:var(--primary); outline:none;">ℹ️ 記号について（一目でわかるルール）</summary>
       <ul style="font-size:0.85em; color:#666; margin:10px 0 0 0; padding-left:20px; line-height:1.6;">
-        <li><span style="color:#0056b3; font-weight:bold; background:#e6f2ff; padding:2px 4px; border-radius:4px;">▶︎ タスク</span> : その日が「開始日」であることを表します。</li>
-        <li><span style="color:#c92a2a; font-weight:bold; background:#ffeeeb; padding:2px 4px; border-radius:4px;">🚩 タスク</span> : その日が「期限日」であることを表します。</li>
-        <li><span style="color:#5f3dc4; font-weight:bold; background:#f4f0ff; padding:2px 4px; border-radius:4px;">▶︎🚩 タスク</span> : その日のうちに開始し、期限を迎えます。</li>
-        <li><span style="color:#8e8e93; font-weight:bold;">┃ タスク</span> : 開始日〜期限日の間の「期間中」を表します。縦に線として繋がります。</li>
-        <li>タスク（記号）をタップすると、タスクの詳細確認・編集・カレンダー連携ができます。</li>
+        <li><span style="color:#0056b3; font-weight:bold; background:#e6f2ff; padding:2px 4px; border-radius:4px;">🟢 開始</span> : タスクを開始する日。</li>
+        <li><span style="color:#c92a2a; font-weight:bold; background:#ffeeeb; padding:2px 4px; border-radius:4px;">🏁 期限</span> : タスクを完了させる期限日。</li>
+        <li><span style="color:#8e8e93; font-weight:bold;">⬇️ 進行中</span> : 開始から期限までの「期間中」を表します。</li>
+        <li><span style="color:#b08d00; font-weight:bold; background:#fff8cc; padding:2px 4px; border-radius:4px;">🌟 単日</span> : その日のうちに開始し、完了するタスクです。</li>
       </ul>
     </details>
   </div>
 
-  <!-- ページ5: 完了済み -->
-  <div id="page-completed" class="page"><div id="completed-list"></div></div>
-
-  <!-- 設定ページ (オーバーレイ) -->
+  <!-- ===============================
+       設定画面・モーダル類
+       =============================== -->
+  <!-- ⚙️設定ページ -->
   <div id="page-settings" class="page" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:1500; overflow-y:auto; padding-top:20px;">
     <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
       <h2 style="margin:0;">設定</h2>
@@ -195,20 +244,17 @@
     <div style="display:flex; flex-direction:column; gap:10px;" id="member-list-container"></div>
   </div>
 
-  <!-- プロジェクト作成モーダル -->
+  <!-- ＋プロジェクト作成モーダル -->
   <div id="projectModal" class="modal-overlay">
     <div class="modal-content">
       <button class="modal-close" onclick="document.getElementById('projectModal').style.display='none'">×</button>
       <h3 style="margin-top:0;">新規プロジェクト</h3>
       <input type="text" id="new-proj-name" placeholder="プロジェクト名" style="margin-bottom:15px;">
-      <div class="form-group-title">プロジェクトの優先度</div>
-      <select id="new-proj-imp" style="margin-bottom:10px;"><option value="high">重要度：高</option><option value="low">重要度：低</option></select>
-      <select id="new-proj-urg" style="margin-bottom:15px;"><option value="high">緊急度：高</option><option value="low">緊急度：低</option></select>
       <button class="primary-btn" onclick="createProject()">作成する</button>
     </div>
   </div>
 
-  <!-- タスク詳細モーダル -->
+  <!-- タスク詳細・編集モーダル -->
   <div id="taskModal" class="modal-overlay">
     <div class="modal-content">
       <button class="modal-close" onclick="closeModal()">×</button>
@@ -218,11 +264,12 @@
         <div style="font-size:0.85em; color:#666; margin-bottom:10px;" id="modal-meta"></div>
         <div style="background:#f8f9fa; padding:10px; border-radius:6px; font-size:0.9em; margin-bottom:15px; white-space:pre-wrap;" id="modal-memo"></div>
         
-        <!-- カレンダー＆メモ連携ボタン群 -->
         <div id="sync-buttons-container" style="margin-bottom: 15px;">
-          <button class="sync-btn memo" onclick="copyToMemo()">📝 メモ帳アプリ用にコピー</button>
-          <button class="sync-btn" onclick="addToAppleCalendar()">🍎 Appleカレンダーに追加</button>
-          <button class="sync-btn google" onclick="addToGoogleCalendar()">🇬 Googleカレンダーに追加</button>
+          <button class="sync-btn memo" style="width:100%; margin-bottom:8px;" onclick="copyToMemo()">📝 メモ帳用にコピー</button>
+          <div style="display:flex; gap:8px;">
+            <button class="sync-btn" style="background:#1c1c1e; color:white;" onclick="addToAppleCalendar()">🍎 Appleカレンダー</button>
+            <button class="sync-btn google" onclick="addToGoogleCalendar()">🇬 Googleカレンダー</button>
+          </div>
         </div>
 
         <div id="modal-actions" style="display:flex; gap:8px; justify-content:space-between; flex-wrap:wrap;"></div>
@@ -238,10 +285,6 @@
           <div><small style="color:#8e8e93;">開始日</small><input type="date" id="edit-startDate" required></div>
           <div><small style="color:#8e8e93;">期限</small><input type="datetime-local" id="edit-deadline" required></div>
           <select id="edit-assignee" required></select>
-          <select id="edit-importance"><option value="high">重要：高</option><option value="low">重要：低</option></select>
-          <select id="edit-urgency"><option value="high">緊急：高</option><option value="low">緊急：低</option></select>
-          <select id="edit-impact"><option value="high">効果：高</option><option value="low">効果：低</option></select>
-          <select id="edit-effort"><option value="low">労力：低</option><option value="high">労力：高</option></select>
           <div style="display:flex; gap:10px; margin-top:10px;">
             <button type="button" class="modal-btn" style="background:#e5e5ea; color:#1c1c1e;" onclick="cancelEdit()">キャンセル</button>
             <button type="submit" class="modal-btn" style="background:var(--primary); color:white;">保存</button>
@@ -252,65 +295,270 @@
   </div>
 
   <script>
-    // データ初期化 (V12)
-    let projects = JSON.parse(localStorage.getItem('vizProjectsV12')) || [];
-    let tasks = JSON.parse(localStorage.getItem('vizTasksV12')) || [];
-    let members = JSON.parse(localStorage.getItem('vizMembersV12')) || ["自分"];
-    let currentProjectId = null;
+    // データ初期化 (V13として管理)
+    let projects = JSON.parse(localStorage.getItem('vizProjectsV13')) || [];
+    let tasks = JSON.parse(localStorage.getItem('vizTasksV13')) || [];
+    let members = JSON.parse(localStorage.getItem('vizMembersV13')) || ["自分"];
+    
+    // 目標データ (MVV と 期間別アクション)
+    let goals = JSON.parse(localStorage.getItem('vizGoalsV13')) || {
+      work: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '' },
+      life: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '' }
+    };
+    
+    let currentGoalTab = 'work'; // 'work' or 'life'
+    let currentListTab = 'active'; // 'active' or 'completed'
     let currentCalDate = new Date();
     let currentOpenedTaskId = null;
 
-    // データ移行（V11がある場合引き継ぎ）
-    if(projects.length === 0 && localStorage.getItem('vizProjectsV11')) {
-      projects = JSON.parse(localStorage.getItem('vizProjectsV11'));
-      tasks = JSON.parse(localStorage.getItem('vizTasksV11'));
-      members = JSON.parse(localStorage.getItem('vizMembersV11'));
+    // 前バージョン(V12)からのデータ引き継ぎ
+    if(projects.length === 0 && localStorage.getItem('vizProjectsV12')) {
+      projects = JSON.parse(localStorage.getItem('vizProjectsV12'));
+      tasks = JSON.parse(localStorage.getItem('vizTasksV12'));
+      members = JSON.parse(localStorage.getItem('vizMembersV12'));
       saveData();
     }
 
     function saveData() {
-      localStorage.setItem('vizProjectsV12', JSON.stringify(projects));
-      localStorage.setItem('vizTasksV12', JSON.stringify(tasks));
-      localStorage.setItem('vizMembersV12', JSON.stringify(members));
+      localStorage.setItem('vizProjectsV13', JSON.stringify(projects));
+      localStorage.setItem('vizTasksV13', JSON.stringify(tasks));
+      localStorage.setItem('vizMembersV13', JSON.stringify(members));
+      localStorage.setItem('vizGoalsV13', JSON.stringify(goals));
     }
 
-    // --- UI状態管理 ---
-    function updateHeader() {
-      if (currentProjectId) {
-        const p = projects.find(x => x.id === currentProjectId);
-        document.getElementById('header-title').innerText = p ? p.name : 'プロジェクト';
-        document.getElementById('header-back').style.display = 'block';
-        document.getElementById('header-spacer').style.display = 'none';
-        document.getElementById('header-settings').style.display = 'none';
-      } else {
-        document.getElementById('header-title').innerText = 'Visualizer (全体)';
-        document.getElementById('header-back').style.display = 'none';
-        document.getElementById('header-spacer').style.display = 'block';
-        document.getElementById('header-settings').style.display = 'block';
-      }
-    }
-
+    // --- UI/ヘッダー・タブ制御 ---
     function navToTab(pageId) {
-      if (pageId === 'page-projects') currentProjectId = null;
-      
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(pageId).classList.add('active');
       document.getElementById('tab-' + pageId.replace('page-','')).classList.add('active');
       
-      updateHeader(); updateProjectDropdowns();
+      const headerTitle = document.getElementById('header-title');
+      const rightBtn = document.getElementById('header-right-btn');
       
-      if(pageId === 'page-projects') renderProjects();
-      if(pageId === 'page-tasks') renderTasks();
-      if(pageId === 'page-matrix') renderMatrix();
-      if(pageId === 'page-wbs') renderCalendarWBS();
-      if(pageId === 'page-completed') renderCompleted();
+      if(pageId === 'page-goals') {
+        headerTitle.innerText = '🎯 目標設定';
+        rightBtn.innerText = '⚙️ 設定';
+        rightBtn.onclick = openSettings;
+        renderGoals();
+      } else if (pageId === 'page-list') {
+        headerTitle.innerText = '📝 プロジェクト・リスト';
+        rightBtn.innerText = '＋ PJ作成';
+        rightBtn.onclick = () => { document.getElementById('projectModal').style.display='flex'; };
+        updateProjectDropdowns();
+        renderList();
+      } else if (pageId === 'page-matrix') {
+        headerTitle.innerText = '⊞ マトリクス';
+        rightBtn.innerText = '⚙️ 設定';
+        rightBtn.onclick = openSettings;
+        updateProjectDropdowns();
+        renderMatrix();
+      } else if (pageId === 'page-wbs') {
+        headerTitle.innerText = '🗓 カレンダー';
+        rightBtn.innerText = '⚙️ 設定';
+        rightBtn.onclick = openSettings;
+        renderCalendarWBS();
+      }
     }
 
-    function openProject(id) { currentProjectId = id; navToTab('page-tasks'); }
-    function goHome() { navToTab('page-projects'); }
+    // --- 🎯 目標設定画面 (Home) ---
+    const periods = [
+      { id: 'yearly', label: '年次目標', icon: '📅' },
+      { id: 'monthly', label: '月次目標', icon: '📆' },
+      { id: 'weekly', label: '週次目標', icon: '🗓' },
+      { id: 'daily', label: '日次行動', icon: '☀️' }
+    ];
 
-    // --- 設定・メンバー管理 ---
+    function initGoalsUI() {
+      const container = document.getElementById('goal-periods-container');
+      container.innerHTML = periods.map(p => `
+        <details class="goal-details">
+          <summary class="goal-summary">${p.icon} ${p.label}</summary>
+          <div class="goal-content">
+            <textarea id="goal-${p.id}" class="goal-input" placeholder="${p.label}を入力..." onblur="saveGoals()"></textarea>
+            <div class="action-btn-row">
+              <button class="sync-btn memo" onclick="copyGoal('${p.id}', '${p.label}')">📝 メモ帳コピー</button>
+              <button class="sync-btn google" onclick="addGoalToGCal('${p.id}', '${p.label}')">🇬 カレンダーへ</button>
+            </div>
+          </div>
+        </details>
+      `).join('');
+    }
+    
+    function switchGoalTab(tab) {
+      currentGoalTab = tab;
+      document.getElementById('tg-work').classList.toggle('active', tab === 'work');
+      document.getElementById('tg-life').classList.toggle('active', tab === 'life');
+      renderGoals();
+    }
+
+    function renderGoals() {
+      const g = goals[currentGoalTab];
+      document.getElementById('goal-mission').value = g.mission;
+      document.getElementById('goal-vision').value = g.vision;
+      document.getElementById('goal-value').value = g.value;
+      periods.forEach(p => document.getElementById(`goal-${p.id}`).value = g[p.id]);
+    }
+
+    function saveGoals() {
+      const g = goals[currentGoalTab];
+      g.mission = document.getElementById('goal-mission').value;
+      g.vision = document.getElementById('goal-vision').value;
+      g.value = document.getElementById('goal-value').value;
+      periods.forEach(p => g[p.id] = document.getElementById(`goal-${p.id}`).value);
+      saveData();
+    }
+
+    function copyGoal(id, label) {
+      const text = document.getElementById(`goal-${id}`).value;
+      if(!text) return alert('内容がありません');
+      const copyText = `【${label} (${currentGoalTab==='work'?'ワーク':'ライフ'})】\n${text}`;
+      navigator.clipboard.writeText(copyText).then(() => alert('コピーしました！'));
+    }
+
+    function addGoalToGCal(id, label) {
+      const text = document.getElementById(`goal-${id}`).value;
+      if(!text) return alert('内容がありません');
+      const title = encodeURIComponent(`🎯 ${label}`);
+      const details = encodeURIComponent(`【${currentGoalTab==='work'?'ワーク':'ライフ'}】\n${text}`);
+      window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}`, '_blank');
+    }
+
+    // --- 📝 リスト画面 (プロジェクトごとのアコーディオン) ---
+    function switchListTab(tab) {
+      currentListTab = tab;
+      document.getElementById('tg-active').classList.toggle('active', tab === 'active');
+      document.getElementById('tg-done').classList.toggle('active', tab === 'completed');
+      renderList();
+    }
+
+    function renderList() {
+      const container = document.getElementById('list-container');
+      container.innerHTML = '';
+      
+      if(projects.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:20px; color:#8e8e93;">右上の「＋ PJ作成」から<br>プロジェクトを追加してください。</div>`;
+        return;
+      }
+
+      projects.forEach(p => {
+        const pTasks = tasks.filter(t => t.projectId === p.id && t.status === currentListTab);
+        pTasks.sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
+        
+        let html = `
+          <details class="proj-acc" open>
+            <summary class="proj-acc-summary">📁 ${p.name} <span style="font-size:0.8em; color:#8e8e93; font-weight:normal;">${pTasks.length}件</span></summary>
+            <div class="proj-acc-content">
+        `;
+        
+        if(pTasks.length === 0) {
+          html += `<div style="color:#8e8e93; font-size:13px; text-align:center;">タスクはありません</div>`;
+        } else {
+          pTasks.forEach(t => {
+            const isDone = t.status === 'completed';
+            html += `
+              <div class="list-card ${isDone ? 'done' : ''}" onclick="openModal('${t.id}')">
+                <div>
+                  <div style="font-weight:bold; ${isDone ? 'text-decoration:line-through;' : ''}">${t.name}</div>
+                  <div style="font-size:0.8em; color:#8e8e93;">📅 ${t.deadline.split('T')[0].slice(5)} | 👤 ${t.assignee}</div>
+                </div>
+                <span style="font-size:1.2em;">${isDone ? '✅' : '›'}</span>
+              </div>
+            `;
+          });
+        }
+        html += `</div></details>`;
+        container.innerHTML += html;
+      });
+    }
+
+    // --- ⊞ マトリクス画面 ---
+    function renderMatrix() {
+      const mType = document.getElementById('matrix-type').value;
+      const filterProj = document.getElementById('matrix-proj-filter').value;
+      
+      if (mType === 'eisenhower') { document.getElementById('q1-title').innerText = '重要・緊急'; document.getElementById('q2-title').innerText = '重要・非緊急'; document.getElementById('q3-title').innerText = '非重要・緊急'; document.getElementById('q4-title').innerText = '非重要・非緊急'; } 
+      else { document.getElementById('q1-title').innerText = '高効果・低労力'; document.getElementById('q2-title').innerText = '高効果・高労力'; document.getElementById('q3-title').innerText = '低効果・低労力'; document.getElementById('q4-title').innerText = '低効果・高労力'; }
+      ['q1','q2','q3','q4'].forEach(q => document.getElementById(`m${q}-list`).innerHTML = '');
+      
+      let targetTasks = tasks.filter(t => t.status === 'active');
+      if (filterProj !== 'all') targetTasks = targetTasks.filter(t => t.projectId === filterProj);
+
+      targetTasks.forEach(task => {
+        const div = document.createElement('div'); div.className = 'mini-card';
+        const p = projects.find(x => x.id === task.projectId);
+        const pBadge = `<div style="font-size:0.7em; color:#0056b3; margin-bottom:2px;">[${p?p.name.slice(0,5):''}]</div>`;
+        div.innerHTML = `${pBadge}<div style="font-weight:bold; margin-bottom:2px;">${task.name}</div>`;
+        div.onclick = () => openModal(task.id);
+        
+        const t1 = mType === 'eisenhower' ? task.importance : task.impact; const t2 = mType === 'eisenhower' ? task.urgency : task.effort;
+        if (t1==='high' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq1-list').appendChild(div);
+        else if (t1==='high' && t2===(mType==='eisenhower'?'low':'high')) document.getElementById('mq2-list').appendChild(div);
+        else if (t1==='low' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq3-list').appendChild(div);
+        else document.getElementById('mq4-list').appendChild(div);
+      });
+    }
+
+    // --- 🗓 カレンダー (縦型ガント・記号最適化) ---
+    function changeMonth(diff) { currentCalDate.setMonth(currentCalDate.getMonth() + diff); renderCalendarWBS(); }
+    
+    function renderCalendarWBS() {
+      const year = currentCalDate.getFullYear(); const month = currentCalDate.getMonth();
+      document.getElementById('cal-month-title').innerText = `${year}年 ${month + 1}月`;
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      
+      const cols = projects.length;
+      if (cols === 0) {
+        document.getElementById('calendar-wrapper').innerHTML = '<p style="text-align:center; padding:20px; color:#8e8e93;">プロジェクトがありません</p>';
+        return;
+      }
+
+      let html = `<div class="calendar-grid-vertical" style="grid-template-columns: 50px repeat(${cols}, minmax(130px, 1fr));">`;
+      html += `<div class="cal-v-header">日付</div>`;
+      projects.forEach(p => { html += `<div class="cal-v-header">${p.name}</div>`; });
+
+      for(let i=1; i<=daysInMonth; i++) {
+        const cDate = new Date(year, month, i);
+        const dayOfWeek = cDate.getDay();
+        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6) ? 'weekend' : '';
+        const dayStr = ['日','月','火','水','木','金','土'][dayOfWeek];
+        
+        html += `<div class="cal-v-date ${isWeekend}">${i}<br><span style="font-size:0.75em; color:#8e8e93;">${dayStr}</span></div>`;
+        
+        projects.forEach(p => {
+          html += `<div class="cal-v-cell ${isWeekend}">`;
+          const pTasks = tasks.filter(t => t.projectId === p.id);
+          
+          pTasks.forEach(task => {
+             const tStart = new Date(task.startDate); tStart.setHours(0,0,0,0);
+             const tEnd = new Date(task.deadline.split('T')[0]); tEnd.setHours(0,0,0,0);
+             const cDateMidnight = new Date(year, month, i); cDateMidnight.setHours(0,0,0,0);
+             
+             const isStart = (cDateMidnight.getTime() === tStart.getTime());
+             const isEnd = (cDateMidnight.getTime() === tEnd.getTime());
+             const isBetween = (tStart.getTime() < cDateMidnight.getTime() && cDateMidnight.getTime() < tEnd.getTime());
+             
+             const doneStyle = task.status === 'completed' ? 'text-decoration:line-through; opacity:0.5;' : '';
+
+             // 直感的な記号に置き換え
+             if (isStart && isEnd) {
+                 html += `<div class="v-evt start-end" style="${doneStyle}" onclick="openModal('${task.id}')">🌟 ${task.name}</div>`;
+             } else if (isStart) {
+                 html += `<div class="v-evt start" style="${doneStyle}" onclick="openModal('${task.id}')">🟢 ${task.name}</div>`;
+             } else if (isEnd) {
+                 html += `<div class="v-evt end" style="${doneStyle}" onclick="openModal('${task.id}')">🏁 ${task.name}</div>`;
+             } else if (isBetween) {
+                 html += `<div class="v-evt between" style="${doneStyle}" onclick="openModal('${task.id}')">⬇️ ${task.name}</div>`;
+             }
+          });
+          html += `</div>`;
+        });
+      }
+      html += `</div>`;
+      document.getElementById('calendar-wrapper').innerHTML = html;
+    }
+
+    // --- 設定関連 ---
     function openSettings() { document.getElementById('page-settings').style.display = 'block'; renderMembers(); }
     function closeSettings() { document.getElementById('page-settings').style.display = 'none'; }
     function renderMembers() {
@@ -326,153 +574,19 @@
     }
     function updateProjectDropdowns() {
       const html = projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-      document.getElementById('task-project-select').innerHTML = html || '<option value="">プロジェクトがありません</option>';
+      document.getElementById('task-project-select').innerHTML = html || '<option value="">(PJを作成してください)</option>';
       document.getElementById('edit-project-select').innerHTML = html;
-      if (currentProjectId) document.getElementById('task-project-select').value = currentProjectId;
-    }
-
-    // --- データ描画用ヘルパー ---
-    function getFilteredTasks(status) {
-      let arr = tasks.filter(t => t.status === status);
-      if (currentProjectId) arr = arr.filter(t => t.projectId === currentProjectId);
-      return arr;
-    }
-    function getProjectName(id) { const p = projects.find(x => x.id === id); return p ? p.name : '不明'; }
-
-    // --- ページ描画 ---
-    function renderProjects() {
-      ['pq1','pq2','pq3','pq4'].forEach(q => document.getElementById(`${q}-list`).innerHTML = '');
-      projects.forEach(p => {
-        const pTasks = tasks.filter(t => t.projectId === p.id);
-        const activeCount = pTasks.filter(t => t.status === 'active').length;
-        const totalCount = pTasks.length;
-        const progress = totalCount > 0 ? Math.round((pTasks.filter(t=>t.status==='completed').length / totalCount)*100) : 0;
-        
-        const card = document.createElement('div'); card.className = 'proj-card'; card.onclick = () => openProject(p.id);
-        card.innerHTML = `<span>📁 ${p.name}</span><span class="proj-card-count">残: ${activeCount}件 / 進捗: ${progress}%</span>`;
-        if (p.importance === 'high' && p.urgency === 'high') document.getElementById('pq1-list').appendChild(card);
-        else if (p.importance === 'high' && p.urgency === 'low') document.getElementById('pq2-list').appendChild(card);
-        else if (p.importance === 'low' && p.urgency === 'high') document.getElementById('pq3-list').appendChild(card);
-        else document.getElementById('pq4-list').appendChild(card);
-      });
-    }
-
-    function renderTasks() {
-      const container = document.getElementById('task-list-container'); container.innerHTML = '';
-      getFilteredTasks('active').sort((a,b) => new Date(a.deadline) - new Date(b.deadline)).forEach(t => container.appendChild(createListCard(t)));
-    }
-
-    function renderMatrix() {
-      const mType = document.getElementById('matrix-type').value;
-      if (mType === 'eisenhower') { document.getElementById('q1-title').innerText = '重要・緊急'; document.getElementById('q2-title').innerText = '重要・非緊急'; document.getElementById('q3-title').innerText = '非重要・緊急'; document.getElementById('q4-title').innerText = '非重要・非緊急'; } 
-      else { document.getElementById('q1-title').innerText = '高効果・低労力'; document.getElementById('q2-title').innerText = '高効果・高労力'; document.getElementById('q3-title').innerText = '低効果・低労力'; document.getElementById('q4-title').innerText = '低効果・高労力'; }
-      ['q1','q2','q3','q4'].forEach(q => document.getElementById(`m${q}-list`).innerHTML = '');
       
-      getFilteredTasks('active').forEach(task => {
-        const div = document.createElement('div'); div.className = 'mini-card';
-        const projBadge = currentProjectId === null ? `<div class="badge-proj">${getProjectName(task.projectId)}</div>` : '';
-        div.innerHTML = `${projBadge}<div style="font-weight:bold; margin-bottom:2px;">${task.name}</div><div style="color:#8e8e93; font-size:0.9em;">👤${task.assignee}</div>`;
-        div.onclick = () => openModal(task.id);
-        const t1 = mType === 'eisenhower' ? task.importance : task.impact; const t2 = mType === 'eisenhower' ? task.urgency : task.effort;
-        if (t1==='high' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq1-list').appendChild(div);
-        else if (t1==='high' && t2===(mType==='eisenhower'?'low':'high')) document.getElementById('mq2-list').appendChild(div);
-        else if (t1==='low' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq3-list').appendChild(div);
-        else document.getElementById('mq4-list').appendChild(div);
-      });
+      const filterHtml = '<option value="all">📁 すべてのPJ</option>' + html;
+      document.getElementById('matrix-proj-filter').innerHTML = filterHtml;
     }
 
-    function renderCompleted() {
-      const container = document.getElementById('completed-list'); container.innerHTML = '';
-      getFilteredTasks('completed').forEach(t => container.appendChild(createListCard(t, true)));
-    }
-
-    function createListCard(task, isCompleted = false) {
-      const card = document.createElement('div'); card.className = 'list-card'; card.onclick = () => openModal(task.id);
-      const projBadge = currentProjectId === null ? `<div class="badge-proj">${getProjectName(task.projectId)}</div>` : '';
-      card.innerHTML = `<div>${projBadge}<div style="font-weight:bold; ${isCompleted ? 'text-decoration:line-through; color:#8e8e93;' : ''}">${task.name}</div><div style="font-size:0.8em; color:#8e8e93;">📅 ${task.deadline.split('T')[0].slice(5)} | 👤 ${task.assignee}</div></div><span style="font-size:1.2em;">${isCompleted ? '✅' : '›'}</span>`;
-      return card;
-    }
-
-    // --- 新・カレンダー WBS (縦型クロステーブル) ---
-    function changeMonth(diff) { currentCalDate.setMonth(currentCalDate.getMonth() + diff); renderCalendarWBS(); }
-    
-    function renderCalendarWBS() {
-      const year = currentCalDate.getFullYear();
-      const month = currentCalDate.getMonth();
-      document.getElementById('cal-month-title').innerText = `${year}年 ${month + 1}月`;
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      
-      // 表示する列（プロジェクト）の決定
-      const displayProjects = currentProjectId ? projects.filter(p => p.id === currentProjectId) : projects;
-      const cols = displayProjects.length;
-      
-      // グリッド構築: 1列目(日付) 50px + 各プロジェクト列 (最小120px)
-      let html = `<div class="calendar-grid-vertical" style="grid-template-columns: 50px repeat(${cols}, minmax(130px, 1fr));">`;
-      
-      // 表頭 (ヘッダー)
-      html += `<div class="cal-v-header">日付</div>`;
-      displayProjects.forEach(p => {
-        html += `<div class="cal-v-header">${p.name}</div>`;
-      });
-
-      const allTasks = getFilteredTasks('active').concat(getFilteredTasks('completed'));
-
-      // 日付ループ (縦軸)
-      for(let i=1; i<=daysInMonth; i++) {
-        const cDate = new Date(year, month, i);
-        const dayOfWeek = cDate.getDay();
-        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6) ? 'weekend' : '';
-        const dayStr = ['日','月','火','水','木','金','土'][dayOfWeek];
-        
-        // 日付セル
-        html += `<div class="cal-v-date ${isWeekend}">${i}<br><span style="font-size:0.75em; color:#8e8e93;">${dayStr}</span></div>`;
-        
-        // プロジェクトごとのセル
-        displayProjects.forEach(p => {
-          html += `<div class="cal-v-cell ${isWeekend}">`;
-          
-          const pTasks = allTasks.filter(t => t.projectId === p.id);
-          pTasks.forEach(task => {
-             const tStart = new Date(task.startDate);
-             // 時間を無視して日付のみで比較するための処理
-             tStart.setHours(0,0,0,0);
-             
-             const tEndStr = task.deadline.split('T')[0];
-             const tEnd = new Date(tEndStr);
-             tEnd.setHours(0,0,0,0);
-             
-             const cDateMidnight = new Date(year, month, i);
-             cDateMidnight.setHours(0,0,0,0);
-             
-             const isStart = (cDateMidnight.getTime() === tStart.getTime());
-             const isEnd = (cDateMidnight.getTime() === tEnd.getTime());
-             const isBetween = (tStart.getTime() < cDateMidnight.getTime() && cDateMidnight.getTime() < tEnd.getTime());
-             
-             const doneStyle = task.status === 'completed' ? 'text-decoration:line-through; opacity:0.6;' : '';
-
-             if (isStart && isEnd) {
-                 html += `<div class="v-evt start-end" style="${doneStyle}" onclick="openModal('${task.id}')">▶︎🚩 ${task.name}</div>`;
-             } else if (isStart) {
-                 html += `<div class="v-evt start" style="${doneStyle}" onclick="openModal('${task.id}')">▶︎ ${task.name}</div>`;
-             } else if (isEnd) {
-                 html += `<div class="v-evt end" style="${doneStyle}" onclick="openModal('${task.id}')">🚩 ${task.name}</div>`;
-             } else if (isBetween) {
-                 html += `<div class="v-evt between" style="${doneStyle}" onclick="openModal('${task.id}')">┃ ${task.name}</div>`;
-             }
-          });
-          html += `</div>`;
-        });
-      }
-      html += `</div>`;
-      document.getElementById('calendar-wrapper').innerHTML = html;
-    }
-
-    // --- データ登録 ---
+    // --- データ作成 ---
     function createProject() {
       const name = document.getElementById('new-proj-name').value.trim();
       if(!name) return;
-      projects.push({ id: Date.now().toString(), name: name, importance: document.getElementById('new-proj-imp').value, urgency: document.getElementById('new-proj-urg').value });
-      saveData(); document.getElementById('projectModal').style.display = 'none'; document.getElementById('new-proj-name').value = ''; updateProjectDropdowns(); renderProjects();
+      projects.push({ id: Date.now().toString(), name: name });
+      saveData(); document.getElementById('projectModal').style.display = 'none'; document.getElementById('new-proj-name').value = ''; updateProjectDropdowns(); renderList();
     }
 
     document.getElementById('taskForm').addEventListener('submit', (e) => {
@@ -486,53 +600,16 @@
         importance: document.getElementById('importance').value, urgency: document.getElementById('urgency').value, impact: document.getElementById('impact').value, effort: document.getElementById('effort').value,
         notifies: Array.from(document.querySelectorAll('.notify-opt')).map(sel => sel.value), notifiedAlerts: [], status: 'active'
       });
-      saveData(); document.getElementById('taskForm').reset(); document.getElementById('taskDetails').removeAttribute('open'); navToTab('page-tasks');
+      saveData(); document.getElementById('taskForm').reset(); document.getElementById('taskDetails').removeAttribute('open'); renderList();
     });
 
-    // --- カレンダー・メモ連携機能 ---
-    window.addToAppleCalendar = function() {
-      if(!currentOpenedTaskId) return; const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
-      
-      const formatICSDate = (date) => date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' + String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
-      const startDate = new Date(t.startDate + "T09:00:00"); const endDate = new Date(t.deadline); const now = new Date();
-      
-      const icsLines = [
-        "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Visualizer App//JP", "BEGIN:VEVENT",
-        `UID:${t.id}@visualizer.local`, `DTSTAMP:${formatICSDate(now)}`, `DTSTART:${formatICSDate(startDate)}`, `DTEND:${formatICSDate(endDate)}`,
-        `SUMMARY:${t.name}`, `DESCRIPTION:【プロジェクト】${getProjectName(t.projectId)}\\n【担当】${t.assignee}\\n\\n${(t.memo || '').replace(/\n/g, '\\n')}`,
-        "END:VEVENT", "END:VCALENDAR"
-      ];
-      
-      const blob = new Blob([icsLines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = `${t.name}.ics`; document.body.appendChild(a); a.click();
-      window.URL.revokeObjectURL(url); document.body.removeChild(a);
-    }
-
-    window.addToGoogleCalendar = function() {
-      if(!currentOpenedTaskId) return; const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
-      
-      const formatGCalDate = (date) => date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' + String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
-      const startDate = new Date(t.startDate + "T09:00:00"); const endDate = new Date(t.deadline);
-      const text = encodeURIComponent(t.name);
-      const dates = encodeURIComponent(`${formatGCalDate(startDate)}/${formatGCalDate(endDate)}`);
-      const details = encodeURIComponent(`【プロジェクト】${getProjectName(t.projectId)}\n【担当】${t.assignee}\n\n${t.memo || ''}`);
-      
-      window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}`, '_blank');
-    }
-
-    window.copyToMemo = function() {
-      if(!currentOpenedTaskId) return; const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
-      const text = `■タスク名: ${t.name}\n■プロジェクト: ${getProjectName(t.projectId)}\n■担当者: ${t.assignee}\n■期間: ${t.startDate} 〜 ${t.deadline.replace('T',' ')}\n\n■メモ:\n${t.memo || 'なし'}`;
-      navigator.clipboard.writeText(text).then(() => { alert('タスクの内容をコピーしました！\nメモ帳アプリなどにペーストしてください。'); }).catch(err => { alert('コピーに失敗しました。'); });
-    }
-
-    // --- モーダル制御 ---
+    // --- モーダル・連携 ---
     window.openModal = function(id) {
       const t = tasks.find(x => x.id === id); if(!t) return; currentOpenedTaskId = id;
       document.getElementById('modal-view-mode').style.display = 'block'; document.getElementById('modal-edit-mode').style.display = 'none';
+      const p = projects.find(x => x.id === t.projectId);
       document.getElementById('modal-title').innerText = t.name;
-      document.getElementById('modal-meta').innerHTML = `📁 ${getProjectName(t.projectId)} <br>👤 ${t.assignee} <br>📅 期限: ${t.deadline.replace('T', ' ')}`;
+      document.getElementById('modal-meta').innerHTML = `📁 ${p?p.name:''} <br>👤 ${t.assignee} <br>📅 期限: ${t.deadline.replace('T', ' ')}`;
       document.getElementById('modal-memo').innerText = t.memo || 'メモはありません';
       
       document.getElementById('sync-buttons-container').style.display = t.status === 'active' ? 'block' : 'none';
@@ -548,7 +625,6 @@
       const t = tasks.find(x => x.id === id);
       document.getElementById('edit-id').value = t.id; document.getElementById('edit-name').value = t.name; document.getElementById('edit-memo').value = t.memo; document.getElementById('edit-project-select').value = t.projectId;
       document.getElementById('edit-startDate').value = t.startDate; document.getElementById('edit-deadline').value = t.deadline; document.getElementById('edit-assignee').value = t.assignee;
-      document.getElementById('edit-importance').value = t.importance; document.getElementById('edit-urgency').value = t.urgency; document.getElementById('edit-impact').value = t.impact; document.getElementById('edit-effort').value = t.effort;
       document.getElementById('modal-view-mode').style.display = 'none'; document.getElementById('modal-edit-mode').style.display = 'block';
     }
     
@@ -558,7 +634,6 @@
       if(t) {
         t.name = document.getElementById('edit-name').value; t.memo = document.getElementById('edit-memo').value; t.projectId = document.getElementById('edit-project-select').value;
         t.startDate = document.getElementById('edit-startDate').value; t.deadline = document.getElementById('edit-deadline').value; t.assignee = document.getElementById('edit-assignee').value;
-        t.importance = document.getElementById('edit-importance').value; t.urgency = document.getElementById('edit-urgency').value; t.impact = document.getElementById('edit-impact').value; t.effort = document.getElementById('edit-effort').value;
         saveData(); closeModal();
         const curTab = document.querySelector('.nav-btn.active').id.replace('tab-', 'page-'); navToTab(curTab);
       }
@@ -570,29 +645,39 @@
     window.restoreTask = function(id) { const t = tasks.find(x => x.id === id); if(t) { t.status = 'active'; saveData(); closeModal(); const curTab = document.querySelector('.nav-btn.active').id.replace('tab-', 'page-'); navToTab(curTab); } }
     window.deleteTask = function(id) { if(confirm('削除しますか？')) { tasks = tasks.filter(x => x.id !== id); saveData(); closeModal(); const curTab = document.querySelector('.nav-btn.active').id.replace('tab-', 'page-'); navToTab(curTab); } }
 
-    // --- バックグラウンド通知 ---
-    function requestNotificationPermission() { if ("Notification" in window) { Notification.requestPermission().then(p => { if (p === "granted") { alert("通知を許可しました"); document.getElementById('notify-btn').style.display = 'none'; }}); } }
-    if ("Notification" in window && Notification.permission === "granted") { document.getElementById('notify-btn').style.display = 'none'; }
+    window.addToAppleCalendar = function() {
+      const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
+      const formatICSDate = (date) => date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' + String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
+      const startDate = new Date(t.startDate + "T09:00:00"); const endDate = new Date(t.deadline); const now = new Date();
+      const p = projects.find(x => x.id === t.projectId);
+      const icsLines = ["BEGIN:VCALENDAR", "VERSION:2.0", "BEGIN:VEVENT", `UID:${t.id}@visualizer`, `DTSTAMP:${formatICSDate(now)}`, `DTSTART:${formatICSDate(startDate)}`, `DTEND:${formatICSDate(endDate)}`, `SUMMARY:${t.name}`, `DESCRIPTION:【PJ】${p?p.name:''}\\n【担当】${t.assignee}\\n\\n${(t.memo || '').replace(/\n/g, '\\n')}`, "END:VEVENT", "END:VCALENDAR"];
+      const blob = new Blob([icsLines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = `${t.name}.ics`; document.body.appendChild(a); a.click(); window.URL.revokeObjectURL(url); document.body.removeChild(a);
+    }
 
-    setInterval(() => {
-      if (Notification.permission !== "granted") return;
-      const now = new Date(); let updated = false;
-      tasks.forEach(task => {
-        if (task.status !== 'active' || !task.deadline) return;
-        const diffMinutes = Math.floor((new Date(task.deadline) - now) / 60000);
-        (task.notifies || []).forEach(min => {
-          if (!min) return; const m = parseInt(min, 10); if (!task.notifiedAlerts) task.notifiedAlerts = [];
-          if (diffMinutes <= m && diffMinutes > m - 2 && !task.notifiedAlerts.includes(m)) {
-            new Notification(`⏰ 期限が近づいています`, { body: `【${getProjectName(task.projectId)}】${task.name}\n期限: ${task.deadline.replace('T', ' ')}` });
-            task.notifiedAlerts.push(m); updated = true;
-          }
-        });
-      });
-      if (updated) saveData();
-    }, 60000);
+    window.addToGoogleCalendar = function() {
+      const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
+      const formatGCalDate = (date) => date.getUTCFullYear() + String(date.getUTCMonth() + 1).padStart(2, '0') + String(date.getUTCDate()).padStart(2, '0') + 'T' + String(date.getUTCHours()).padStart(2, '0') + String(date.getUTCMinutes()).padStart(2, '0') + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
+      const p = projects.find(x => x.id === t.projectId);
+      const text = encodeURIComponent(t.name);
+      const dates = encodeURIComponent(`${formatGCalDate(new Date(t.startDate + "T09:00:00"))}/${formatGCalDate(new Date(t.deadline))}`);
+      const details = encodeURIComponent(`【PJ】${p?p.name:''}\n【担当】${t.assignee}\n\n${t.memo || ''}`);
+      window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}`, '_blank');
+    }
 
-    // 初期化
-    updateAssigneeDropdowns(); updateProjectDropdowns(); navToTab('page-projects');
+    window.copyToMemo = function() {
+      const t = tasks.find(x => x.id === currentOpenedTaskId); if(!t) return;
+      const p = projects.find(x => x.id === t.projectId);
+      const text = `■タスク: ${t.name}\n■プロジェクト: ${p?p.name:''}\n■期間: ${t.startDate} 〜 ${t.deadline.replace('T',' ')}\n\n${t.memo || ''}`;
+      navigator.clipboard.writeText(text).then(() => { alert('コピーしました！\nメモ帳にペーストしてください。'); });
+    }
+
+    // 初期化実行
+    initGoalsUI();
+    updateAssigneeDropdowns(); 
+    updateProjectDropdowns(); 
+    navToTab('page-goals'); // 起動時は目標タブ
   </script>
 </body>
 </html>
