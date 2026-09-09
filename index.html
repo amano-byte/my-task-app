@@ -8,6 +8,9 @@
     :root { --primary: #0969da; --bg: #f0f2f5; --q1: #d73a49; --q2: #28a745; --q3: #dbab09; --q4: #6a737d; }
     body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; background-color: var(--bg); color: #333; }
     
+    /* 通知ボタン */
+    #notify-btn { display: block; margin: 10px auto; background: #2da44e; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+    
     /* ナビゲーションバー */
     .navbar { background: #24292e; color: white; display: flex; overflow-x: auto; white-space: nowrap; padding: 10px; gap: 10px; }
     .nav-btn { background: transparent; color: #aaa; border: none; font-size: 16px; padding: 8px 16px; cursor: pointer; border-radius: 4px; font-weight: bold; }
@@ -28,6 +31,9 @@
     textarea { resize: vertical; min-height: 80px; }
     button.submit-btn { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; grid-column: span 2; margin-top: 15px; font-size: 16px; padding: 12px; }
     
+    .notify-group { display: flex; gap: 5px; grid-column: span 2; }
+    .notify-group select { flex: 1; font-size: 12px; }
+
     /* マトリクス画面 */
     .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
     .filter-bar select { width: auto; flex-grow: 1; }
@@ -69,6 +75,7 @@
       .matrix, .form-grid { grid-template-columns: 1fr; }
       .full-width, button.submit-btn, .form-group-title { grid-column: span 1; }
       .wbs-task { grid-template-columns: 1fr; gap: 5px; }
+      .notify-group { flex-direction: column; }
     }
   </style>
 </head>
@@ -81,6 +88,8 @@
     <button class="nav-btn" onclick="navTo('page-wbs')">③ WBS進捗</button>
     <button class="nav-btn" onclick="navTo('page-completed')">④ 完了済み</button>
   </div>
+
+  <button id="notify-btn" onclick="requestNotificationPermission()">🔔 プッシュ通知を許可する (iPhoneはホーム画面追加後に押す)</button>
 
   <!-- ① タスク入力画面 -->
   <div id="page-input" class="page active">
@@ -95,14 +104,19 @@
           <option value="ワーク(仕事)">🏢 ワーク (仕事)</option>
           <option value="ライフ(私生活)">🏠 ライフ (私生活)</option>
         </select>
-        <!-- プロジェクト名は自由入力 ＆ 過去の入力をサジェスト -->
         <input type="text" id="project" list="project-list" placeholder="プロジェクト名 (例: 新規営業リスト作成)" required>
         <datalist id="project-list"></datalist>
 
-        <div class="form-group-title">スケジュール</div>
+        <div class="form-group-title">スケジュールと通知</div>
         <div><small style="color:#666">開始日</small><input type="date" id="startDate" required></div>
         <div><small style="color:#666">期限日・時間</small><input type="datetime-local" id="deadline" required></div>
         <input type="text" id="assignee" placeholder="担当者 (任意)" class="full-width">
+        
+        <div class="notify-group">
+          <select class="notify-opt"><option value="">通知1：なし</option><option value="5">5分前</option><option value="15">15分前</option><option value="30">30分前</option><option value="60">1時間前</option><option value="180">3時間前</option><option value="360">6時間前</option><option value="720">12時間前</option><option value="1440">1日前</option><option value="10080">1週間前</option></select>
+          <select class="notify-opt"><option value="">通知2：なし</option><option value="5">5分前</option><option value="15">15分前</option><option value="30">30分前</option><option value="60">1時間前</option><option value="180">3時間前</option><option value="360">6時間前</option><option value="720">12時間前</option><option value="1440">1日前</option><option value="10080">1週間前</option></select>
+          <select class="notify-opt"><option value="">通知3：なし</option><option value="5">5分前</option><option value="15">15分前</option><option value="30">30分前</option><option value="60">1時間前</option><option value="180">3時間前</option><option value="360">6時間前</option><option value="720">12時間前</option><option value="1440">1日前</option><option value="10080">1週間前</option></select>
+        </div>
 
         <div class="form-group-title">評価軸①：アイゼンハワー (優先順位)</div>
         <select id="importance"><option value="high">重要度：高</option><option value="low">重要度：低</option></select>
@@ -155,9 +169,27 @@
   </div>
 
   <script>
-    let tasks = JSON.parse(localStorage.getItem('matrixTasksV5')) || [];
+    let tasks = JSON.parse(localStorage.getItem('matrixTasksV6')) || [];
 
-    // ナビゲーション制御
+    // --- 通知関連処理 ---
+    function requestNotificationPermission() {
+      if (!("Notification" in window)) {
+        alert("このブラウザは通知に対応していません。");
+        return;
+      }
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          alert("通知が許可されました！");
+          document.getElementById('notify-btn').style.display = 'none';
+        }
+      });
+    }
+
+    if ("Notification" in window && Notification.permission === "granted") {
+      document.getElementById('notify-btn').style.display = 'none';
+    }
+
+    // --- ナビゲーション制御 ---
     window.navTo = function(pageId) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -165,15 +197,17 @@
       event.target.classList.add('active');
       
       updateDataLists(); 
-      
       if(pageId === 'page-matrix') { updateSubFilter(); renderMatrix(); }
       if(pageId === 'page-wbs') { renderWBS(); }
       if(pageId === 'page-completed') { renderCompleted(); }
     }
 
-    // フォーム送信
+    // --- フォーム送信処理 ---
     document.getElementById('taskForm').addEventListener('submit', (e) => {
       e.preventDefault();
+      
+      const notifies = Array.from(document.querySelectorAll('.notify-opt')).map(sel => sel.value);
+
       const newTask = {
         id: Date.now().toString(),
         name: document.getElementById('taskName').value,
@@ -187,6 +221,8 @@
         urgency: document.getElementById('urgency').value,
         impact: document.getElementById('impact').value,
         effort: document.getElementById('effort').value,
+        notifies: notifies,
+        notifiedAlerts: [], // 通知済みフラグ
         status: 'active'
       };
       tasks.push(newTask);
@@ -195,7 +231,7 @@
       alert('タスクを登録しました！');
     });
 
-    function saveData() { localStorage.setItem('matrixTasksV5', JSON.stringify(tasks)); }
+    function saveData() { localStorage.setItem('matrixTasksV6', JSON.stringify(tasks)); }
 
     // サジェスト更新
     function updateDataLists() {
@@ -203,7 +239,7 @@
       document.getElementById('project-list').innerHTML = projects.map(p => `<option value="${p}">`).join('');
     }
 
-    // マトリクス画面
+    // --- マトリクス画面 ---
     window.updateSubFilter = function() {
       const type = document.getElementById('filter-type').value;
       const sub = document.getElementById('sub-filter');
@@ -260,7 +296,7 @@
       });
     }
 
-    // WBS画面
+    // --- WBS画面 ---
     window.renderWBS = function() {
       const container = document.getElementById('wbs-container');
       container.innerHTML = '';
@@ -301,7 +337,7 @@
       });
     }
 
-    // 完了画面
+    // --- 完了画面 ---
     window.renderCompleted = function() {
       const list = document.getElementById('completed-list');
       list.innerHTML = '';
@@ -317,6 +353,13 @@
     function buildCardHTML(task, isCompletedView = false) {
       const memoHtml = task.memo ? `<div class="task-memo">${task.memo}</div>` : '';
       const dt = task.deadline.replace('T', ' ');
+      
+      let notifyText = (task.notifies || []).filter(n => n !== "").map(n => {
+        if(n >= 1440) return (n/1440) + '日前';
+        if(n >= 60) return (n/60) + '時間前';
+        return n + '分前';
+      }).join(', ');
+      notifyText = notifyText ? `🔔 通知: ${notifyText}` : '';
       
       let actionButtons = !isCompletedView 
         ? `<button class="btn-icon btn-complete" onclick="markDone('${task.id}')" title="完了にする">✅</button>`
@@ -334,7 +377,7 @@
           ${memoHtml}
           <div class="task-meta">
             <span>👤 ${task.assignee}</span>
-            <span>📅 期限: ${dt}</span>
+            <span style="text-align:right;">📅 期限: ${dt}<br><small>${notifyText}</small></span>
           </div>
         </div>
       `;
@@ -343,6 +386,38 @@
     window.markDone = function(id) { const t = tasks.find(x => x.id === id); if(t) { t.status = 'completed'; saveData(); renderMatrix(); } }
     window.restoreTask = function(id) { const t = tasks.find(x => x.id === id); if(t) { t.status = 'active'; saveData(); renderCompleted(); } }
     window.deleteTask = function(id) { if(confirm('完全に削除しますか？')) { tasks = tasks.filter(x => x.id !== id); saveData(); renderCompleted(); } }
+
+    // --- バックグラウンド通知チェッカー（1分ごとに実行） ---
+    setInterval(() => {
+      if (Notification.permission !== "granted") return;
+      const now = new Date();
+      let updated = false;
+
+      tasks.forEach(task => {
+        if (task.status !== 'active' || !task.deadline) return;
+        
+        const taskTime = new Date(task.deadline);
+        const diffMinutes = Math.floor((taskTime - now) / 60000); // 期限までの残り分数
+
+        (task.notifies || []).forEach(notifyMin => {
+          if (!notifyMin) return;
+          const min = parseInt(notifyMin, 10);
+          
+          if (!task.notifiedAlerts) task.notifiedAlerts = []; // 古いデータ対策
+          
+          // 設定した時間前〜その1分後までの間にいる ＆ まだ通知していない場合
+          if (diffMinutes <= min && diffMinutes > min - 2 && !task.notifiedAlerts.includes(min)) {
+            new Notification(`⏰ 期限が近づいています`, {
+              body: `【${task.project}】${task.name}\n期限: ${task.deadline.replace('T', ' ')}`,
+            });
+            task.notifiedAlerts.push(min);
+            updated = true;
+          }
+        });
+      });
+
+      if (updated) saveData(); // 通知フラグを保存
+    }, 60000);
 
     updateDataLists();
   </script>
