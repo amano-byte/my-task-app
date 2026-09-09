@@ -8,31 +8,39 @@
   <title>Visualizer</title>
   
   <style>
-    /* 目に優しいくすみカラー（モダン・スレート）パレット */
+    /* =========================================
+       カラーパレット (ワインレッドテーマ)
+       ========================================= */
     :root { 
-      --primary: #475569;     /* 落ち着いたスレートグレー */
-      --primary-light: #f1f5f9;
-      --bg: #f8fafc;          /* 柔らかいオフホワイト */
-      --card-bg: #ffffff;
-      --text-main: #334155;
-      --text-sub: #64748b;
-      --q1: #ef4444; /* ソフトレッド */
-      --q2: #10b981; /* ソフトグリーン */
-      --q3: #f59e0b; /* ソフトオレンジ */
-      --q4: #94a3b8; /* ソフトグレー */
+      --primary: #8b2635;       /* 優しいワインレッド */
+      --primary-light: #b04153; /* 少し明るいワインレッド */
+      --bg-dark: #6e1c28;       /* 濃いめの背景 */
+      --card-bg: rgba(255, 255, 255, 0.95); /* 半透明の白で読みやすく */
+      --text-main: #2d3748;
+      --text-sub: #718096;
+      --q1: #e53e3e; --q2: #38a169; --q3: #dd6b20; --q4: #a0aec0;
     }
     
-    body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; margin: 0; padding: 0; background-color: var(--bg); color: var(--text-main); -webkit-tap-highlight-color: transparent; }
+    /* 🐺 MWAM風スタンプ背景 */
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; 
+      margin: 0; padding: 0; 
+      background-color: var(--primary); 
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Ctext x='20' y='60' font-size='45' opacity='0.12'%3E🐺%3C/text%3E%3Ctext x='70' y='120' font-size='22' font-weight='900' font-family='Arial, sans-serif' fill='%23ffffff' opacity='0.08' transform='rotate(-15 70 120)'%3EMWAM%3C/text%3E%3C/svg%3E");
+      background-attachment: fixed;
+      color: var(--text-main); 
+      -webkit-tap-highlight-color: transparent; 
+    }
     
-    /* ヘッダー */
-    .app-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 12px) 15px 12px 15px; z-index: 1000; height: 28px; }
-    .header-btn { background: none; border: none; color: var(--primary); font-size: 15px; font-weight: bold; padding: 0; cursor: pointer; min-width: 65px; display: flex; align-items: center; gap: 4px; }
+    /* ヘッダー (ワインレッドに白文字) */
+    .app-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(139, 38, 53, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 12px) 15px 12px 15px; z-index: 1000; height: 28px; color: white; }
+    .header-btn { background: none; border: none; color: white; font-size: 15px; font-weight: bold; padding: 0; cursor: pointer; min-width: 65px; display: flex; align-items: center; gap: 4px; }
     .header-btn.right { justify-content: flex-end; }
-    .header-title { font-weight: 800; font-size: 17px; margin: 0; text-align: center; flex-grow: 1; letter-spacing: 0.5px; }
+    .header-title { font-weight: 800; font-size: 17px; margin: 0; text-align: center; flex-grow: 1; letter-spacing: 1px; }
 
-    /* 下部ナビゲーションタブ (5つ) */
-    .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; height: 56px; }
-    .nav-btn { background: transparent; border: none; font-size: 10px; color: #94a3b8; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 20%; cursor: pointer; transition: 0.2s; }
+    /* 下部ナビゲーションタブ (白背景でアイコンを強調) */
+    .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; height: 56px; }
+    .nav-btn { background: transparent; border: none; font-size: 10px; color: #a0aec0; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 20%; cursor: pointer; transition: 0.2s; }
     .nav-btn .icon { font-size: 22px; margin-bottom: 3px; transition: 0.2s; }
     .nav-btn.active { color: var(--primary); font-weight: bold; }
     .nav-btn.active .icon { transform: scale(1.1); }
@@ -42,44 +50,49 @@
     .page.active { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* 汎用コンポーネント */
-    .primary-btn { display: block; width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 10px; }
-    .card { background: var(--card-bg); padding: 18px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); margin-bottom: 16px; border: 1px solid #f1f5f9; }
+    /* 汎用コンポーネント (カードは白で文字を見やすく) */
+    .primary-btn { display: block; width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); margin-bottom: 10px; }
+    .card { background: var(--card-bg); padding: 18px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.5); }
     .form-grid { display: flex; flex-direction: column; gap: 12px; }
-    .form-group-title { font-size: 0.85em; font-weight: bold; color: var(--text-sub); margin-top: 5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+    .form-group-title { font-size: 0.85em; font-weight: bold; color: var(--primary); margin-top: 5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
     input, select, textarea { padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; background: #fff; appearance: none; -webkit-appearance: none; font-family: inherit; color: var(--text-main); }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 38, 53, 0.2); }
     
     /* トグルボタン */
-    .toggle-group { display: flex; background: #e2e8f0; border-radius: 10px; padding: 4px; margin-bottom: 20px; }
-    .toggle-btn { flex: 1; border: none; background: transparent; padding: 10px; font-weight: bold; font-size: 14px; border-radius: 8px; color: var(--text-sub); cursor: pointer; transition: 0.2s; }
-    .toggle-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .toggle-group { display: flex; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 4px; margin-bottom: 20px; }
+    .toggle-btn { flex: 1; border: none; background: transparent; padding: 10px; font-weight: bold; font-size: 14px; border-radius: 8px; color: rgba(255,255,255,0.7); cursor: pointer; transition: 0.2s; }
+    .toggle-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-    /* 🔥 目標設定 (トップ画面) 独自スタイル */
-    .goal-block { margin-bottom: 15px; }
-    .goal-label { font-weight: 800; font-size: 0.9em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-    .goal-input { width: 100%; min-height: 70px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; font-size: 14.5px; color: var(--text-main); line-height: 1.5; resize: vertical; }
-    .mvv-mission { color: #db2777; } .mvv-vision { color: #2563eb; } .mvv-value { color: #059669; }
+    /* 🔥 行動設定 (トップ画面) 独自スタイル */
+    .goal-block { margin-bottom: 12px; }
+    .goal-label { font-weight: 800; font-size: 0.9em; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .goal-input { width: 100%; min-height: 60px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; font-size: 14.5px; color: var(--text-main); line-height: 1.5; resize: vertical; }
+
+    /* 習慣化チェックリスト */
+    .habit-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e2e8f0; }
+    .habit-label { display: flex; align-items: center; gap: 10px; font-size: 15px; flex-grow: 1; }
+    .habit-checkbox { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--primary); }
+    .habit-checked { text-decoration: line-through; color: var(--text-sub); }
 
     /* 📝 リスト画面 */
-    .proj-acc { background: var(--card-bg); border-radius: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); overflow: hidden; border: 1px solid #f1f5f9; }
-    .proj-acc-summary { padding: 16px; font-weight: bold; font-size: 16px; outline: none; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-bottom: 1px solid #e2e8f0; cursor: pointer; }
+    .proj-acc { background: var(--card-bg); border-radius: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; }
+    .proj-acc-summary { padding: 16px; font-weight: bold; font-size: 16px; outline: none; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.03); border-bottom: 1px solid #e2e8f0; cursor: pointer; color: var(--primary); }
     .proj-acc-summary::-webkit-details-marker { display: none; }
-    .proj-acc-content { padding: 12px; background: #fff; }
-    .list-card { background: #f8fafc; padding: 14px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 4px solid var(--primary); transition: 0.2s; }
+    .proj-acc-content { padding: 12px; background: transparent; }
+    .list-card { background: #fff; padding: 14px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 4px solid var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .list-card.done { border-left-color: #cbd5e1; opacity: 0.6; }
 
     /* ⊞ マトリクス画面 */
     .matrix-container { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; height: calc(100vh - 220px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); min-height: 400px; }
-    .quadrant { background: var(--card-bg); border-radius: 16px; padding: 10px; display: flex; flex-direction: column; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-    .q1 { border-color: rgba(239, 68, 68, 0.3); } .q2 { border-color: rgba(16, 185, 129, 0.3); }
-    .q3 { border-color: rgba(245, 158, 11, 0.3); } .q4 { border-color: rgba(148, 163, 184, 0.3); }
+    .quadrant { background: var(--card-bg); border-radius: 16px; padding: 10px; display: flex; flex-direction: column; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .q1 { border-color: rgba(229, 62, 62, 0.4); } .q2 { border-color: rgba(56, 161, 105, 0.4); }
+    .q3 { border-color: rgba(221, 107, 32, 0.4); } .q4 { border-color: rgba(160, 174, 192, 0.4); }
     .quadrant h3 { margin: 0 0 10px 0; font-size: 0.85em; text-align: center; padding-bottom: 6px; border-bottom: 1px dashed #e2e8f0; color: var(--text-main); }
     .q-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-    .mini-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; font-size: 0.8em; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+    .mini-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; font-size: 0.8em; cursor: pointer; }
 
     /* 🗓 カレンダー画面 (ガントチャート) */
-    .calendar-wrapper { overflow-x: auto; background: var(--card-bg); border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 16px; border: 1px solid #f1f5f9; }
+    .calendar-wrapper { overflow-x: auto; background: var(--card-bg); border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 16px; border: 1px solid #f1f5f9; }
     .calendar-grid-vertical { display: grid; background: #e2e8f0; gap: 1px; min-width: 100%; }
     .cal-v-header { background: #f8fafc; font-weight: bold; font-size: 0.8em; text-align: center; padding: 12px 4px; position: sticky; top: 0; z-index: 10; border-bottom: 2px solid var(--primary); color: var(--text-main); }
     .cal-v-date { background: #f8fafc; text-align: center; font-weight: bold; font-size: 0.9em; padding: 10px 0; color: var(--text-main); }
@@ -87,19 +100,22 @@
     .cal-v-cell { background: white; padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 44px; }
     .cal-v-cell.weekend { background: #fbfbfc; }
     
-    .v-evt { font-size: 0.75em; padding: 6px 8px; border-radius: 8px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    .v-evt.start { background: #e0f2fe; color: #0284c7; }
-    .v-evt.end { background: #fee2e2; color: #dc2626; }
-    .v-evt.start-end { background: #fef3c7; color: #d97706; }
-    .v-evt.between { background: transparent; color: var(--text-sub); padding-left: 10px; font-weight: normal; box-shadow: none; display: flex; align-items: center; gap: 4px;}
+    .v-evt { font-size: 0.75em; padding: 6px 8px; border-radius: 8px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-left: 4px solid transparent; }
+    .v-evt.start { background: #e0f2fe; color: #0284c7; border-left-color: #0284c7; }
+    .v-evt.end { background: #fee2e2; color: #dc2626; border-left-color: #dc2626; }
+    .v-evt.start-end { background: #fef3c7; color: #d97706; border-left-color: #d97706; }
+    .v-evt.between { background: transparent; color: var(--text-sub); padding-left: 10px; font-weight: normal; box-shadow: none; display: flex; align-items: center; gap: 4px; }
 
-    /* 🔗 確認画面 (Lit.Link風) */
-    .lit-link-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 16px; margin-bottom: 14px; border-radius: 30px; background: white; color: var(--text-main); font-weight: bold; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; transition: 0.2s; font-size: 15px; }
-    .lit-link-btn:active { transform: scale(0.98); }
+    /* 🔗 確認画面 (アプリ連携追加) */
+    .app-icon-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+    .app-icon-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: white; font-size: 11px; font-weight: bold; text-align: center; }
+    .app-icon-img { width: 50px; height: 50px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); color: var(--text-main); }
+    
+    .lit-link-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 16px; margin-bottom: 14px; border-radius: 30px; background: rgba(255,255,255,0.9); color: var(--primary); font-weight: bold; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.5); font-size: 15px; }
 
     /* モーダル */
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-    .modal-content { background: white; padding: 24px; border-radius: 20px; width: 100%; max-width: 400px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { background: white; padding: 24px; border-radius: 20px; width: 100%; max-width: 400px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
     .modal-close { float: right; font-size: 24px; background: none; border: none; padding: 0; line-height: 1; margin-top: -5px; color: var(--text-sub); }
     .modal-btn { border: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; flex: 1; }
   </style>
@@ -110,60 +126,69 @@
   <div class="app-header">
     <button id="header-left-btn" class="header-btn" onclick="openGoalActionModal()" style="display:none;">＋ 連携</button>
     <div id="header-spacer" class="header-btn" style="visibility:hidden;"></div>
-    <h2 id="header-title" class="header-title">🔥 目標設定</h2>
+    <h2 id="header-title" class="header-title">🔥 行動</h2>
     <button id="header-right-btn" class="header-btn right" onclick="openSettings()">⚙️ 設定</button>
   </div>
 
-  <!-- 下部タブ (5つ: リスト、マトリクス、目標、カレンダー、確認) -->
+  <!-- 下部タブ (5つ) -->
   <div class="navbar">
     <button id="tab-list" class="nav-btn" onclick="navToTab('page-list')"><span class="icon">📝</span><span>リスト</span></button>
     <button id="tab-matrix" class="nav-btn" onclick="navToTab('page-matrix')"><span class="icon">⊞</span><span>マトリクス</span></button>
-    <!-- 目標を真ん中に配置 -->
-    <button id="tab-goals" class="nav-btn active" onclick="navToTab('page-goals')"><span class="icon">🔥</span><span>目標</span></button>
+    <button id="tab-goals" class="nav-btn active" onclick="navToTab('page-goals')"><span class="icon">🔥</span><span>行動</span></button>
     <button id="tab-wbs" class="nav-btn" onclick="navToTab('page-wbs')"><span class="icon">🗓</span><span>カレンダー</span></button>
     <button id="tab-links" class="nav-btn" onclick="navToTab('page-links')"><span class="icon">🔗</span><span>確認</span></button>
   </div>
 
   <!-- ===============================
-       ページ1: 🔥 目標設定 (トップ画面)
+       ページ1: 🔥 行動設定 (トップ画面)
        =============================== -->
   <div id="page-goals" class="page active">
+    
+    <!-- ライフを先に配置 -->
     <div class="toggle-group">
-      <button id="tg-work" class="toggle-btn active" onclick="switchGoalTab('work')">🏢 ワーク</button>
-      <button id="tg-life" class="toggle-btn" onclick="switchGoalTab('life')">🏠 ライフ</button>
+      <button id="tg-life" class="toggle-btn active" onclick="switchGoalTab('life')">🏠 ライフ</button>
+      <button id="tg-work" class="toggle-btn" onclick="switchGoalTab('work')">🏢 ワーク</button>
     </div>
 
-    <!-- MVV -->
-    <div class="card" style="margin-bottom: 24px;">
+    <div class="card" style="padding:15px; margin-bottom: 20px;">
       <div class="goal-block">
-        <div class="goal-label mvv-mission">🚩 Mission <span style="font-size:0.7em; color:var(--text-sub); font-weight:normal;">(果たすべき使命)</span></div>
+        <div class="goal-label" style="color:#e53e3e;">🚩 Mission <span style="font-size:0.7em; color:var(--text-sub); font-weight:normal;">(果たすべき使命)</span></div>
         <textarea id="goal-mission" class="goal-input" placeholder="あなたの使命は何ですか？" oninput="saveGoals()"></textarea>
       </div>
       <div class="goal-block">
-        <div class="goal-label mvv-vision">👁 Vision <span style="font-size:0.7em; color:var(--text-sub); font-weight:normal;">(実現したい未来)</span></div>
+        <div class="goal-label" style="color:#3182ce;">👁 Vision <span style="font-size:0.7em; color:var(--text-sub); font-weight:normal;">(実現したい未来)</span></div>
         <textarea id="goal-vision" class="goal-input" placeholder="どのような未来を描いていますか？" oninput="saveGoals()"></textarea>
       </div>
       <div class="goal-block" style="margin-bottom:0;">
-        <div class="goal-label mvv-value">💎 Value <span style="font-size:0.7em; color:var(--text-sub); font-weight:normal;">(大切にする価値観)</span></div>
+        <div class="goal-label" style="color:#38a169;">💎 Value <span style="font-size:0.7em; color:var(--text-sub); font-weight:normal;">(大切にする価値観)</span></div>
         <textarea id="goal-value" class="goal-input" placeholder="行動の基盤となる価値観は？" oninput="saveGoals()"></textarea>
       </div>
     </div>
 
-    <h3 style="font-size:1.1em; text-align:center; color:var(--text-sub); margin-bottom:15px;">行動計画 (アクション)</h3>
-
-    <!-- 行動計画一覧 -->
-    <div id="goal-periods-container" style="display:flex; flex-direction:column; gap:12px;">
+    <!-- 期間ごとの行動リスト (アコーディオン廃止・一目で見れる一覧表示) -->
+    <h3 style="font-size:1.1em; text-align:center; color:white; margin-bottom:15px; text-shadow:0 1px 3px rgba(0,0,0,0.3);">期間別の行動</h3>
+    <div id="goal-periods-container" style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
       <!-- JSで生成 -->
     </div>
+    
+    <!-- 習慣化 (チェックリスト) -->
+    <details class="card" style="padding:15px;" open>
+      <summary style="font-weight:bold; color:var(--primary); outline:none; font-size:1.1em;">🔁 習慣化 (チェックリスト)</summary>
+      <div style="margin-top:15px; display:flex; gap:8px; margin-bottom:15px;">
+        <input type="text" id="new-habit-input" placeholder="新しい習慣を追加..." style="flex:1;">
+        <button onclick="addHabit()" style="background:var(--primary); color:white; border:none; border-radius:8px; padding:0 15px; font-weight:bold;">追加</button>
+      </div>
+      <div id="habit-list-container"></div>
+    </details>
   </div>
 
   <!-- ===============================
        ページ2: 📝 リスト
        =============================== -->
   <div id="page-list" class="page">
-    <div class="toggle-group">
-      <button id="tg-active" class="toggle-btn active" onclick="switchListTab('active')">進行中</button>
-      <button id="tg-done" class="toggle-btn" onclick="switchListTab('completed')">完了済み</button>
+    <div class="toggle-group" style="background:rgba(255,255,255,0.3);">
+      <button id="tg-active" class="toggle-btn active" onclick="switchListTab('active')" style="color:white;">進行中</button>
+      <button id="tg-done" class="toggle-btn" onclick="switchListTab('completed')" style="color:white;">完了済み</button>
     </div>
 
     <div class="card" style="padding:10px; margin-bottom:20px;">
@@ -220,50 +245,55 @@
        ページ4: 🗓 カレンダー (縦型)
        =============================== -->
   <div id="page-wbs" class="page">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-      <button onclick="changeMonth(-1)" style="border:none; background:none; font-size:20px; color:var(--primary);">◀</button>
-      <h3 id="cal-month-title" style="margin:0; font-size:18px;">-</h3>
-      <button onclick="changeMonth(1)" style="border:none; background:none; font-size:20px; color:var(--primary);">▶</button>
-    </div>
     
-    <div class="calendar-wrapper" id="calendar-wrapper"></div>
-    
-    <details style="background:white; border-radius:12px; padding:12px; box-shadow:0 1px 3px rgba(0,0,0,0.03); border:1px solid #f1f5f9;">
-      <summary style="font-weight:bold; color:var(--primary); outline:none;">ℹ️ 記号について（一目でわかるルール）</summary>
+    <details class="card" style="padding:12px; margin-bottom:15px; border-radius:12px;">
+      <summary style="font-weight:bold; color:var(--primary); outline:none;">ℹ️ 記号について（カレンダーの見方）</summary>
       <ul style="font-size:0.85em; color:var(--text-sub); margin:10px 0 0 0; padding-left:20px; line-height:1.8;">
         <li><span style="color:#0284c7; font-weight:bold; background:#e0f2fe; padding:2px 6px; border-radius:4px;">🟢 開始</span> : タスクを開始する日。</li>
         <li><span style="color:#dc2626; font-weight:bold; background:#fee2e2; padding:2px 6px; border-radius:4px;">🏁 期限</span> : タスクを完了させる期限日。</li>
         <li><span style="color:var(--text-sub); font-weight:bold;">⬇️ 進行中</span> : 開始から期限までの「期間中」を表します。</li>
-        <li><span style="color:#d97706; font-weight:bold; background:#fef3c7; padding:2px 6px; border-radius:4px;">🌟 単日</span> : その日のうちに開始し、完了するタスクです。</li>
+        <li><span style="color:#d97706; font-weight:bold; background:#fef3c7; padding:2px 6px; border-radius:4px;">🌟 単日</span> : その日のうちに開始し完了するタスクです。</li>
       </ul>
     </details>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; color:white;">
+      <button onclick="changeMonth(-1)" style="border:none; background:none; font-size:24px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.5);">◀</button>
+      <h3 id="cal-month-title" style="margin:0; font-size:18px; text-shadow:0 1px 2px rgba(0,0,0,0.5);">-</h3>
+      <button onclick="changeMonth(1)" style="border:none; background:none; font-size:24px; color:white; text-shadow:0 1px 2px rgba(0,0,0,0.5);">▶</button>
+    </div>
+    
+    <div class="calendar-wrapper" id="calendar-wrapper"></div>
   </div>
 
   <!-- ===============================
-       ページ5: 🔗 確認 (Lit.Link風)
+       ページ5: 🔗 確認 (アプリ連携＆リンク)
        =============================== -->
   <div id="page-links" class="page">
-    <div style="text-align:center; margin-bottom:24px; padding-top:10px;">
-      <div style="width:80px; height:80px; background:var(--primary); border-radius:50%; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; color:white; font-size:36px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">🔗</div>
-      <h2 style="margin:0; font-size:18px;">My Links</h2>
-      <p style="margin:4px 0 0; font-size:13px; color:var(--text-sub);">よく使うページ・資料まとめ</p>
+    <div style="text-align:center; margin-bottom:24px; padding-top:10px; color:white;">
+      <div style="width:70px; height:70px; background:rgba(255,255,255,0.2); border-radius:50%; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; color:white; font-size:30px; box-shadow:0 4px 10px rgba(0,0,0,0.1); backdrop-filter:blur(5px);">📱</div>
+      <h2 style="margin:0; font-size:18px;">ショートカット</h2>
+      <p style="margin:4px 0 0; font-size:13px; opacity:0.8;">他のアプリやWebに一瞬で移動</p>
     </div>
     
-    <div id="links-container">
-      <!-- リンクボタンが生成される -->
-    </div>
+    <!-- アプリアイコンエリア -->
+    <div id="apps-container" class="app-icon-grid"></div>
+
+    <h3 style="color:white; font-size:15px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:5px; margin-bottom:15px; text-shadow:0 1px 2px rgba(0,0,0,0.3);">🔗 Webリンク集</h3>
+    <!-- Webリンクエリア -->
+    <div id="links-container"></div>
   </div>
 
   <!-- ===============================
        設定ページ・モーダル群
        =============================== -->
   
-  <!-- ⚙️設定ページ (メンバー＆リンク管理) -->
-  <div id="page-settings" class="page" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:1500; overflow-y:auto; padding-top:20px;">
-    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-      <h2 style="margin:0;">設定</h2>
-      <button onclick="closeSettings()" style="font-size:16px; background:none; border:none; color:var(--primary); font-weight:bold;">完了</button>
+  <!-- ⚙️設定ページ -->
+  <div id="page-settings" class="page" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:1500; overflow-y:auto; padding-top:20px; background-image:none;">
+    <div style="display:flex; justify-content:space-between; margin-bottom:20px; align-items:center;">
+      <h2 style="margin:0; color:var(--text-main);">設定</h2>
+      <button onclick="closeSettings()" style="font-size:15px; background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:20px; font-weight:bold;">完了</button>
     </div>
+    
     <button id="notify-btn" class="primary-btn" style="background:var(--q2);" onclick="requestNotificationPermission()">🔔 プッシュ通知を許可する</button>
     
     <h3 style="margin-top:20px; font-size:15px; color:var(--text-main);">👥 担当者設定</h3>
@@ -273,11 +303,18 @@
     </div>
     <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:30px;" id="member-list-container"></div>
 
-    <h3 style="font-size:15px; color:var(--text-main);">🔗 リンク管理 (確認ページ用)</h3>
+    <h3 style="font-size:15px; color:var(--text-main);">📱 アプリ・リンク管理</h3>
     <div class="card form-grid">
-      <input type="text" id="new-link-title" placeholder="タイトル (例: 社内ポータル)">
-      <input type="url" id="new-link-url" placeholder="URL (https://...)">
-      <button onclick="addLink()" style="background:var(--primary); color:white; border:none; border-radius:8px; padding:12px; font-weight:bold;">リンクを追加</button>
+      <div style="display:flex; gap:10px;">
+        <select id="new-link-type" style="width:100px;">
+          <option value="app">アプリ</option>
+          <option value="web">Web</option>
+        </select>
+        <input type="text" id="new-link-title" placeholder="名前 (LINE など)">
+      </div>
+      <input type="url" id="new-link-url" placeholder="URLまたはスキーム (line://)">
+      <button onclick="addLink()" style="background:var(--primary); color:white; border:none; border-radius:8px; padding:12px; font-weight:bold;">追加する</button>
+      <p style="font-size:11px; color:var(--text-sub); margin:0;">※アプリのURLスキーム例: <code>line://</code>, <code>twitter://</code>, <code>instagram://</code>, <code>calshow://</code>(カレンダー)</p>
     </div>
     <div style="display:flex; flex-direction:column; gap:10px;" id="settings-links-container"></div>
   </div>
@@ -286,7 +323,7 @@
   <div id="projectModal" class="modal-overlay">
     <div class="modal-content">
       <button class="modal-close" onclick="document.getElementById('projectModal').style.display='none'">×</button>
-      <h3 style="margin-top:0;">新規プロジェクト</h3>
+      <h3 style="margin-top:0; color:var(--text-main);">新規プロジェクト</h3>
       <input type="text" id="new-proj-name" placeholder="プロジェクト名" style="margin-bottom:15px;">
       <button class="primary-btn" onclick="createProject()">作成する</button>
     </div>
@@ -296,25 +333,21 @@
   <div id="goalActionModal" class="modal-overlay">
     <div class="modal-content">
       <button class="modal-close" onclick="document.getElementById('goalActionModal').style.display='none'">×</button>
-      <h3 style="margin-top:0; color:var(--primary);">目標のアクション</h3>
-      <p style="font-size:13px; color:var(--text-sub); margin-bottom:15px;">どのアクションを実行しますか？</p>
+      <h3 style="margin-top:0; color:var(--primary);">連携アクション</h3>
+      <p style="font-size:13px; color:var(--text-sub); margin-bottom:15px;">どの行動計画を連携させますか？</p>
       
       <div class="form-group-title">1. アクションを選ぶ</div>
       <div style="display:flex; gap:10px; margin-bottom:15px;">
-        <button id="ga-btn-memo" class="toggle-btn active" style="background:#e2e8f0; color:var(--text-main);" onclick="selectGoalAction('memo')">📝 メモへコピー</button>
+        <button id="ga-btn-memo" class="toggle-btn active" style="background:#e2e8f0; color:var(--text-main);" onclick="selectGoalAction('memo')">📝 メモ帳へコピー</button>
         <button id="ga-btn-gcal" class="toggle-btn" style="background:#e2e8f0; color:var(--text-main);" onclick="selectGoalAction('gcal')">🇬 Gカレンダー</button>
       </div>
 
-      <div class="form-group-title">2. 対象の目標を選ぶ</div>
+      <div class="form-group-title">2. 対象の項目を選ぶ</div>
       <select id="goal-action-target" style="margin-bottom:20px;">
-        <option value="mission">🚩 Mission</option>
-        <option value="vision">👁 Vision</option>
-        <option value="value">💎 Value</option>
         <option value="yearly">📅 年次目標</option>
         <option value="monthly">📆 月次目標</option>
         <option value="weekly">🗓 週次目標</option>
         <option value="daily">☀️ 日次行動</option>
-        <option value="habit">🔁 習慣化</option>
       </select>
 
       <button class="primary-btn" onclick="executeGoalAction()">実行する</button>
@@ -327,9 +360,9 @@
       <button class="modal-close" onclick="closeModal()">×</button>
       
       <div id="modal-view-mode">
-        <h3 id="modal-title" style="margin-top:0;"></h3>
+        <h3 id="modal-title" style="margin-top:0; color:var(--text-main);"></h3>
         <div style="font-size:0.85em; color:var(--text-sub); margin-bottom:10px;" id="modal-meta"></div>
-        <div style="background:#f8fafc; padding:12px; border-radius:8px; font-size:0.9em; margin-bottom:15px; white-space:pre-wrap; border:1px solid #e2e8f0;" id="modal-memo"></div>
+        <div style="background:#f8fafc; padding:12px; border-radius:8px; font-size:0.9em; margin-bottom:15px; white-space:pre-wrap; border:1px solid #e2e8f0; color:var(--text-main);" id="modal-memo"></div>
         
         <div style="display:flex; gap:8px; margin-bottom:15px; flex-direction:column;">
           <button class="primary-btn" style="background:#f1f5f9; color:var(--text-main); font-size:14px; padding:10px; margin:0;" onclick="copyToMemo()">📝 メモ帳用にコピー</button>
@@ -362,43 +395,49 @@
   </div>
 
   <script>
-    // データ初期化 (V14)
-    let projects = JSON.parse(localStorage.getItem('vizProjectsV14')) || [];
-    let tasks = JSON.parse(localStorage.getItem('vizTasksV14')) || [];
-    let members = JSON.parse(localStorage.getItem('vizMembersV14')) || ["自分"];
-    let links = JSON.parse(localStorage.getItem('vizLinksV14')) || [];
+    // データ初期化 (V15)
+    let projects = JSON.parse(localStorage.getItem('vizProjectsV15')) || [];
+    let tasks = JSON.parse(localStorage.getItem('vizTasksV15')) || [];
+    let members = JSON.parse(localStorage.getItem('vizMembersV15')) || ["自分"];
     
-    // 目標データに habit (習慣化) を追加
-    let goals = JSON.parse(localStorage.getItem('vizGoalsV14')) || {
-      work: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habit: '' },
-      life: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habit: '' }
+    // アプリとWebリンクを統合管理
+    let userLinks = JSON.parse(localStorage.getItem('vizUserLinksV15')) || [
+      { type: 'app', title: 'カレンダー', url: 'calshow://', icon: '📅' },
+      { type: 'app', title: 'LINE', url: 'line://', icon: '💬' },
+      { type: 'app', title: 'Twitter(X)', url: 'twitter://', icon: '🐦' }
+    ];
+    
+    // 目標データ (ライフをデフォルト化、habitは配列化)
+    let goals = JSON.parse(localStorage.getItem('vizGoalsV15')) || {
+      life: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] },
+      work: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] }
     };
     
-    let currentGoalTab = 'work';
+    let currentGoalTab = 'life'; // 初期をライフに
     let currentListTab = 'active';
     let currentCalDate = new Date();
     let currentOpenedTaskId = null;
-    let selectedGoalAction = 'memo'; // 'memo' or 'gcal'
+    let selectedGoalAction = 'memo';
 
-    // 旧バージョン(V13)からのデータ移行
-    if(projects.length === 0 && localStorage.getItem('vizProjectsV13')) {
-      projects = JSON.parse(localStorage.getItem('vizProjectsV13'));
-      tasks = JSON.parse(localStorage.getItem('vizTasksV13'));
-      members = JSON.parse(localStorage.getItem('vizMembersV13'));
-      const oldGoals = JSON.parse(localStorage.getItem('vizGoalsV13'));
+    // V14からの移行処理
+    if(projects.length === 0 && localStorage.getItem('vizProjectsV14')) {
+      projects = JSON.parse(localStorage.getItem('vizProjectsV14'));
+      tasks = JSON.parse(localStorage.getItem('vizTasksV14'));
+      members = JSON.parse(localStorage.getItem('vizMembersV14'));
+      const oldGoals = JSON.parse(localStorage.getItem('vizGoalsV14'));
       if(oldGoals) {
-        goals.work = { ...goals.work, ...oldGoals.work };
-        goals.life = { ...goals.life, ...oldGoals.life };
+        goals.life = { ...goals.life, ...oldGoals.life, habits: [] };
+        goals.work = { ...goals.work, ...oldGoals.work, habits: [] };
       }
       saveData();
     }
 
     function saveData() {
-      localStorage.setItem('vizProjectsV14', JSON.stringify(projects));
-      localStorage.setItem('vizTasksV14', JSON.stringify(tasks));
-      localStorage.setItem('vizMembersV14', JSON.stringify(members));
-      localStorage.setItem('vizGoalsV14', JSON.stringify(goals));
-      localStorage.setItem('vizLinksV14', JSON.stringify(links));
+      localStorage.setItem('vizProjectsV15', JSON.stringify(projects));
+      localStorage.setItem('vizTasksV15', JSON.stringify(tasks));
+      localStorage.setItem('vizMembersV15', JSON.stringify(members));
+      localStorage.setItem('vizGoalsV15', JSON.stringify(goals));
+      localStorage.setItem('vizUserLinksV15', JSON.stringify(userLinks));
     }
 
     // --- UI/ヘッダー制御 ---
@@ -412,15 +451,14 @@
       const headerTitle = document.getElementById('header-title');
       const rightBtn = document.getElementById('header-right-btn');
       const leftBtn = document.getElementById('header-left-btn');
-      const spacer = document.getElementById('header-spacer');
       
       if(pageId === 'page-goals') {
-        headerTitle.innerText = '🔥 目標設定';
+        headerTitle.innerText = '🔥 行動';
         rightBtn.innerText = '⚙️ 設定'; rightBtn.onclick = openSettings;
-        leftBtn.style.display = 'block'; spacer.style.display = 'none';
+        leftBtn.style.display = 'block';
         renderGoals();
       } else {
-        leftBtn.style.display = 'none'; spacer.style.display = 'block';
+        leftBtn.style.display = 'none';
         if (pageId === 'page-list') {
           headerTitle.innerText = '📝 リスト';
           rightBtn.innerText = '＋ PJ作成'; rightBtn.onclick = () => { document.getElementById('projectModal').style.display='flex'; };
@@ -446,8 +484,7 @@
       { id: 'yearly', label: '📅 年次目標', color: '#db2777' },
       { id: 'monthly', label: '📆 月次目標', color: '#ea580c' },
       { id: 'weekly', label: '🗓 週次目標', color: '#059669' },
-      { id: 'daily', label: '☀️ 日次行動', color: '#0284c7' },
-      { id: 'habit', label: '🔁 習慣化', color: '#7c3aed' }
+      { id: 'daily', label: '☀️ 日次行動', color: '#0284c7' }
     ];
 
     function initGoalsUI() {
@@ -455,24 +492,25 @@
       container.innerHTML = goalPeriods.map(p => `
         <div class="card goal-block" style="margin-bottom:0; padding:15px;">
           <div class="goal-label" style="color:${p.color};">${p.label}</div>
-          <textarea id="goal-${p.id}" class="goal-input" style="min-height:50px; background:white; border:1px dashed #cbd5e1;" placeholder="ここに入力..." oninput="saveGoals()"></textarea>
+          <textarea id="goal-${p.id}" class="goal-input" placeholder="ここに入力..." onblur="saveGoals()"></textarea>
         </div>
       `).join('');
     }
     
     function switchGoalTab(tab) {
       currentGoalTab = tab;
-      document.getElementById('tg-work').classList.toggle('active', tab === 'work');
       document.getElementById('tg-life').classList.toggle('active', tab === 'life');
+      document.getElementById('tg-work').classList.toggle('active', tab === 'work');
       renderGoals();
     }
 
     function renderGoals() {
       const g = goals[currentGoalTab];
-      document.getElementById('goal-mission').value = g.mission;
-      document.getElementById('goal-vision').value = g.vision;
-      document.getElementById('goal-value').value = g.value;
+      document.getElementById('goal-mission').value = g.mission || '';
+      document.getElementById('goal-vision').value = g.vision || '';
+      document.getElementById('goal-value').value = g.value || '';
       goalPeriods.forEach(p => document.getElementById(`goal-${p.id}`).value = g[p.id] || '');
+      renderHabits();
     }
 
     function saveGoals() {
@@ -482,6 +520,44 @@
       g.value = document.getElementById('goal-value').value;
       goalPeriods.forEach(p => g[p.id] = document.getElementById(`goal-${p.id}`).value);
       saveData();
+    }
+
+    // --- 習慣化 (チェックリスト) ---
+    function renderHabits() {
+      const container = document.getElementById('habit-list-container');
+      container.innerHTML = '';
+      const habits = goals[currentGoalTab].habits || [];
+      if(habits.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-sub); font-size:13px; text-align:center;">習慣がありません</div>'; return;
+      }
+      habits.forEach((h, i) => {
+        container.innerHTML += `
+          <div class="habit-item">
+            <label class="habit-label">
+              <input type="checkbox" class="habit-checkbox" ${h.checked ? 'checked' : ''} onchange="toggleHabit(${i})">
+              <span class="${h.checked ? 'habit-checked' : ''}">${h.name}</span>
+            </label>
+            <button onclick="deleteHabit(${i})" style="background:none; border:none; color:var(--q1); font-size:16px;">×</button>
+          </div>
+        `;
+      });
+    }
+    function addHabit() {
+      const input = document.getElementById('new-habit-input');
+      const val = input.value.trim();
+      if(val) {
+        if(!goals[currentGoalTab].habits) goals[currentGoalTab].habits = [];
+        goals[currentGoalTab].habits.push({ name: val, checked: false });
+        input.value = ''; saveData(); renderHabits();
+      }
+    }
+    function toggleHabit(i) {
+      goals[currentGoalTab].habits[i].checked = !goals[currentGoalTab].habits[i].checked;
+      saveData(); renderHabits();
+    }
+    function deleteHabit(i) {
+      goals[currentGoalTab].habits.splice(i, 1);
+      saveData(); renderHabits();
     }
 
     // --- 左上 ＋連携アクション ---
@@ -496,7 +572,7 @@
     function executeGoalAction() {
       const targetId = document.getElementById('goal-action-target').value;
       const text = goals[currentGoalTab][targetId];
-      if(!text) { alert('対象の項目にテキストが入力されていません。'); return; }
+      if(!text) { alert('対象の項目に入力がありません。'); return; }
       
       const labelText = document.querySelector(`#goal-action-target option[value="${targetId}"]`).innerText;
       const category = currentGoalTab === 'work' ? 'ワーク' : 'ライフ';
@@ -514,16 +590,22 @@
       }
     }
 
-    // --- 🔗 リンク画面 ---
+    // --- 🔗 確認画面 (Lit.Link風) ---
     function renderLinksPage() {
-      const container = document.getElementById('links-container');
-      container.innerHTML = '';
-      if(links.length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:var(--text-sub);">右上の「設定」からリンクを追加してください</p>'; return;
-      }
-      links.forEach(l => {
-        container.innerHTML += `<a href="${l.url}" target="_blank" class="lit-link-btn">${l.title}</a>`;
+      const appsContainer = document.getElementById('apps-container');
+      const linksContainer = document.getElementById('links-container');
+      appsContainer.innerHTML = ''; linksContainer.innerHTML = '';
+      
+      userLinks.forEach(l => {
+        if(l.type === 'app') {
+          const iconChar = l.icon || '📱';
+          appsContainer.innerHTML += `<a href="${l.url}" class="app-icon-btn"><div class="app-icon-img">${iconChar}</div><span>${l.title}</span></a>`;
+        } else {
+          linksContainer.innerHTML += `<a href="${l.url}" target="_blank" class="lit-link-btn">${l.title}</a>`;
+        }
       });
+      if(appsContainer.innerHTML === '') appsContainer.innerHTML = '<p style="color:white; font-size:12px; grid-column:span 4; text-align:center;">アプリの登録はありません</p>';
+      if(linksContainer.innerHTML === '') linksContainer.innerHTML = '<p style="color:white; font-size:12px; text-align:center;">Webリンクの登録はありません</p>';
     }
 
     // --- 📝 リスト画面 (プロジェクトごとの全体像) ---
@@ -535,35 +617,19 @@
     }
 
     function renderList() {
-      const container = document.getElementById('list-container');
-      container.innerHTML = '';
+      const container = document.getElementById('list-container'); container.innerHTML = '';
       if(projects.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-sub);">右上の「＋ PJ作成」からプロジェクトを追加してください。</div>`; return;
+        container.innerHTML = `<div style="text-align:center; padding:20px; color:rgba(255,255,255,0.7);">右上の「＋ PJ作成」から追加してください。</div>`; return;
       }
-
       projects.forEach(p => {
         const pTasks = tasks.filter(t => t.projectId === p.id && t.status === currentListTab);
         pTasks.sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
-        
-        let html = `
-          <details class="proj-acc" open>
-            <summary class="proj-acc-summary">📁 ${p.name} <span style="font-size:0.85em; color:var(--text-sub); font-weight:normal;">${pTasks.length}件</span></summary>
-            <div class="proj-acc-content">
-        `;
-        if(pTasks.length === 0) {
-          html += `<div style="color:var(--text-sub); font-size:13px; text-align:center; padding:10px 0;">タスクはありません</div>`;
-        } else {
+        let html = `<details class="proj-acc" open><summary class="proj-acc-summary">📁 ${p.name} <span style="font-size:0.85em; color:var(--text-sub); font-weight:normal;">${pTasks.length}件</span></summary><div class="proj-acc-content">`;
+        if(pTasks.length === 0) html += `<div style="color:var(--text-sub); font-size:13px; text-align:center; padding:10px 0;">タスクはありません</div>`;
+        else {
           pTasks.forEach(t => {
             const isDone = t.status === 'completed';
-            html += `
-              <div class="list-card ${isDone ? 'done' : ''}" onclick="openModal('${t.id}')">
-                <div>
-                  <div style="font-weight:bold; ${isDone ? 'text-decoration:line-through;' : ''}">${t.name}</div>
-                  <div style="font-size:0.8em; color:var(--text-sub); margin-top:4px;">📅 ${t.deadline.split('T')[0].slice(5)} | 👤 ${t.assignee}</div>
-                </div>
-                <span style="font-size:1.2em; color:var(--text-sub);">${isDone ? '✅' : '›'}</span>
-              </div>
-            `;
+            html += `<div class="list-card ${isDone ? 'done' : ''}" onclick="openModal('${t.id}')"><div><div style="font-weight:bold; ${isDone ? 'text-decoration:line-through;' : ''}">${t.name}</div><div style="font-size:0.8em; color:var(--text-sub); margin-top:4px;">📅 ${t.deadline.split('T')[0].slice(5)} | 👤 ${t.assignee}</div></div><span style="font-size:1.2em; color:var(--text-sub);">${isDone ? '✅' : '›'}</span></div>`;
           });
         }
         html += `</div></details>`;
@@ -575,7 +641,6 @@
     function renderMatrix() {
       const mType = document.getElementById('matrix-type').value;
       const filterProj = document.getElementById('matrix-proj-filter').value;
-      
       if (mType === 'eisenhower') { document.getElementById('q1-title').innerText = '重要・緊急'; document.getElementById('q2-title').innerText = '重要・非緊急'; document.getElementById('q3-title').innerText = '非重要・緊急'; document.getElementById('q4-title').innerText = '非重要・非緊急'; } 
       else { document.getElementById('q1-title').innerText = '高効果・低労力'; document.getElementById('q2-title').innerText = '高効果・高労力'; document.getElementById('q3-title').innerText = '低効果・低労力'; document.getElementById('q4-title').innerText = '低効果・高労力'; }
       ['q1','q2','q3','q4'].forEach(q => document.getElementById(`m${q}-list`).innerHTML = '');
@@ -586,10 +651,9 @@
       targetTasks.forEach(task => {
         const div = document.createElement('div'); div.className = 'mini-card';
         const p = projects.find(x => x.id === task.projectId);
-        const pBadge = filterProj === 'all' ? `<div style="font-size:0.7em; color:#0284c7; margin-bottom:2px;">[${p?p.name.slice(0,5):''}]</div>` : '';
+        const pBadge = filterProj === 'all' ? `<div style="font-size:0.7em; color:var(--primary); margin-bottom:2px;">[${p?p.name.slice(0,5):''}]</div>` : '';
         div.innerHTML = `${pBadge}<div style="font-weight:bold; color:var(--text-main); margin-bottom:2px;">${task.name}</div>`;
         div.onclick = () => openModal(task.id);
-        
         const t1 = mType === 'eisenhower' ? task.importance : task.impact; const t2 = mType === 'eisenhower' ? task.urgency : task.effort;
         if (t1==='high' && t2===(mType==='eisenhower'?'high':'low')) document.getElementById('mq1-list').appendChild(div);
         else if (t1==='high' && t2===(mType==='eisenhower'?'low':'high')) document.getElementById('mq2-list').appendChild(div);
@@ -609,41 +673,30 @@
       const cols = projects.length;
       if (cols === 0) { document.getElementById('calendar-wrapper').innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-sub);">プロジェクトがありません</p>'; return; }
 
-      let html = `<div class="calendar-grid-vertical" style="grid-template-columns: 50px repeat(${cols}, minmax(130px, 1fr));">`;
-      html += `<div class="cal-v-header">日付</div>`;
+      let html = `<div class="calendar-grid-vertical" style="grid-template-columns: 50px repeat(${cols}, minmax(130px, 1fr));"><div class="cal-v-header">日付</div>`;
       projects.forEach(p => { html += `<div class="cal-v-header">${p.name}</div>`; });
 
       for(let i=1; i<=daysInMonth; i++) {
-        const cDate = new Date(year, month, i);
-        const dayOfWeek = cDate.getDay();
+        const cDate = new Date(year, month, i); const dayOfWeek = cDate.getDay();
         const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6) ? 'weekend' : '';
         const dayStr = ['日','月','火','水','木','金','土'][dayOfWeek];
-        
         html += `<div class="cal-v-date ${isWeekend}">${i}<br><span style="font-size:0.75em; color:var(--text-sub);">${dayStr}</span></div>`;
         
         projects.forEach(p => {
           html += `<div class="cal-v-cell ${isWeekend}">`;
-          const pTasks = tasks.filter(t => t.projectId === p.id);
-          
-          pTasks.forEach(task => {
+          tasks.filter(t => t.projectId === p.id).forEach(task => {
              const tStart = new Date(task.startDate); tStart.setHours(0,0,0,0);
              const tEnd = new Date(task.deadline.split('T')[0]); tEnd.setHours(0,0,0,0);
              const cDateMidnight = new Date(year, month, i); cDateMidnight.setHours(0,0,0,0);
-             
              const isStart = (cDateMidnight.getTime() === tStart.getTime());
              const isEnd = (cDateMidnight.getTime() === tEnd.getTime());
              const isBetween = (tStart.getTime() < cDateMidnight.getTime() && cDateMidnight.getTime() < tEnd.getTime());
              const doneStyle = task.status === 'completed' ? 'text-decoration:line-through; opacity:0.5;' : '';
 
-             if (isStart && isEnd) {
-                 html += `<div class="v-evt start-end" style="${doneStyle}" onclick="openModal('${task.id}')">🌟 ${task.name}</div>`;
-             } else if (isStart) {
-                 html += `<div class="v-evt start" style="${doneStyle}" onclick="openModal('${task.id}')">🟢 ${task.name}</div>`;
-             } else if (isEnd) {
-                 html += `<div class="v-evt end" style="${doneStyle}" onclick="openModal('${task.id}')">🏁 ${task.name}</div>`;
-             } else if (isBetween) {
-                 html += `<div class="v-evt between" style="${doneStyle}" onclick="openModal('${task.id}')">⬇️ ${task.name}</div>`;
-             }
+             if (isStart && isEnd) html += `<div class="v-evt start-end" style="${doneStyle}" onclick="openModal('${task.id}')">🌟 ${task.name}</div>`;
+             else if (isStart) html += `<div class="v-evt start" style="${doneStyle}" onclick="openModal('${task.id}')">🟢 ${task.name}</div>`;
+             else if (isEnd) html += `<div class="v-evt end" style="${doneStyle}" onclick="openModal('${task.id}')">🏁 ${task.name}</div>`;
+             else if (isBetween) html += `<div class="v-evt between" style="${doneStyle}" onclick="openModal('${task.id}')">⬇️ ${task.name}</div>`;
           });
           html += `</div>`;
         });
@@ -652,21 +705,41 @@
       document.getElementById('calendar-wrapper').innerHTML = html;
     }
 
-    // --- 設定・データ操作系 ---
+    // --- 設定関連 ---
     function openSettings() { document.getElementById('page-settings').style.display = 'block'; renderMembers(); renderSettingsLinks(); }
     function closeSettings() { document.getElementById('page-settings').style.display = 'none'; if(document.getElementById('page-links').classList.contains('active')) renderLinksPage(); }
     
     // メンバー管理
     function renderMembers() {
       const container = document.getElementById('member-list-container'); container.innerHTML = '';
-      members.forEach((m, i) => container.innerHTML += `<div class="member-item" style="background:#f8fafc; padding:10px; border-radius:8px;"><span>👤 ${m}</span>${m !== '自分' ? `<button onclick="deleteMember(${i})" style="background:none; border:none; color:var(--q1); font-size:20px;">×</button>` : ''}</div>`);
+      members.forEach((m, i) => container.innerHTML += `<div class="card" style="margin:0; padding:10px; display:flex; justify-content:space-between;"><span>👤 ${m}</span>${m !== '自分' ? `<button onclick="deleteMember(${i})" style="background:none; border:none; color:var(--q1); font-size:20px;">×</button>` : ''}</div>`);
       updateAssigneeDropdowns();
     }
     function addMember() { const name = document.getElementById('new-member-name').value.trim(); if(name && !members.includes(name)) { members.push(name); saveData(); document.getElementById('new-member-name').value=''; renderMembers(); } }
     function deleteMember(i) { members.splice(i, 1); saveData(); renderMembers(); }
     function updateAssigneeDropdowns() { const html = members.map(m => `<option value="${m}">${m}</option>`).join(''); document.getElementById('assignee').innerHTML = html; document.getElementById('edit-assignee').innerHTML = html; }
     
-    // プロジェクト管理
+    // リンク＆アプリ管理
+    function renderSettingsLinks() {
+      const container = document.getElementById('settings-links-container'); container.innerHTML = '';
+      userLinks.forEach((l, i) => {
+        container.innerHTML += `<div class="card" style="margin:0; padding:10px; display:flex; justify-content:space-between; align-items:center;"><div><div style="font-weight:bold; font-size:14px;">${l.type==='app'?'📱':'🌐'} ${l.title}</div><div style="font-size:11px; color:var(--text-sub);">${l.url}</div></div><button onclick="deleteLink(${i})" style="background:none; border:none; color:var(--q1); font-size:20px;">×</button></div>`;
+      });
+    }
+    function addLink() {
+      const type = document.getElementById('new-link-type').value;
+      const title = document.getElementById('new-link-title').value.trim();
+      const url = document.getElementById('new-link-url').value.trim();
+      if(title && url) {
+        let icon = type === 'app' ? '📱' : '🌐';
+        if(url.includes('line://')) icon = '💬'; else if(url.includes('twitter://')) icon = '🐦'; else if(url.includes('instagram://')) icon = '📷';
+        userLinks.push({type, title, url, icon}); saveData(); 
+        document.getElementById('new-link-title').value=''; document.getElementById('new-link-url').value=''; renderSettingsLinks(); 
+      }
+    }
+    function deleteLink(i) { userLinks.splice(i, 1); saveData(); renderSettingsLinks(); }
+
+    // プロジェクト作成・タスク登録
     function updateProjectDropdowns() {
       const html = projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
       document.getElementById('task-project-select').innerHTML = html || '<option value="">(PJを作成してください)</option>';
@@ -675,31 +748,12 @@
     }
     function createProject() {
       const name = document.getElementById('new-proj-name').value.trim();
-      if(!name) return;
-      projects.push({ id: Date.now().toString(), name: name });
-      saveData(); document.getElementById('projectModal').style.display = 'none'; document.getElementById('new-proj-name').value = ''; updateProjectDropdowns();
-      if(document.getElementById('page-list').classList.contains('active')) renderList();
+      if(!name) return; projects.push({ id: Date.now().toString(), name: name });
+      saveData(); document.getElementById('projectModal').style.display = 'none'; document.getElementById('new-proj-name').value = ''; updateProjectDropdowns(); if(document.getElementById('page-list').classList.contains('active')) renderList();
     }
-
-    // リンク管理
-    function renderSettingsLinks() {
-      const container = document.getElementById('settings-links-container'); container.innerHTML = '';
-      links.forEach((l, i) => {
-        container.innerHTML += `<div style="background:#f8fafc; padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;"><div><div style="font-weight:bold; font-size:14px;">${l.title}</div><div style="font-size:11px; color:var(--text-sub);">${l.url}</div></div><button onclick="deleteLink(${i})" style="background:none; border:none; color:var(--q1); font-size:20px;">×</button></div>`;
-      });
-    }
-    function addLink() {
-      const title = document.getElementById('new-link-title').value.trim();
-      const url = document.getElementById('new-link-url').value.trim();
-      if(title && url) { links.push({title, url}); saveData(); document.getElementById('new-link-title').value=''; document.getElementById('new-link-url').value=''; renderSettingsLinks(); }
-    }
-    function deleteLink(i) { links.splice(i, 1); saveData(); renderSettingsLinks(); }
-
-    // タスク登録
     document.getElementById('taskForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      const projId = document.getElementById('task-project-select').value;
-      if(!projId) { alert("プロジェクトを作成してください。"); return; }
+      const projId = document.getElementById('task-project-select').value; if(!projId) { alert("プロジェクトを作成してください。"); return; }
       tasks.push({
         id: Date.now().toString(), projectId: projId, name: document.getElementById('taskName').value, memo: document.getElementById('memo').value,
         startDate: document.getElementById('startDate').value, deadline: document.getElementById('deadline').value, assignee: document.getElementById('assignee').value,
@@ -729,6 +783,7 @@
       const t = tasks.find(x => x.id === id);
       document.getElementById('edit-id').value = t.id; document.getElementById('edit-name').value = t.name; document.getElementById('edit-memo').value = t.memo; document.getElementById('edit-project-select').value = t.projectId;
       document.getElementById('edit-startDate').value = t.startDate; document.getElementById('edit-deadline').value = t.deadline; document.getElementById('edit-assignee').value = t.assignee;
+      document.getElementById('edit-importance').value = t.importance; document.getElementById('edit-urgency').value = t.urgency; document.getElementById('edit-impact').value = t.impact; document.getElementById('edit-effort').value = t.effort;
       document.getElementById('modal-view-mode').style.display = 'none'; document.getElementById('modal-edit-mode').style.display = 'block';
     }
     document.getElementById('editForm').addEventListener('submit', (e) => {
@@ -736,6 +791,7 @@
       if(t) {
         t.name = document.getElementById('edit-name').value; t.memo = document.getElementById('edit-memo').value; t.projectId = document.getElementById('edit-project-select').value;
         t.startDate = document.getElementById('edit-startDate').value; t.deadline = document.getElementById('edit-deadline').value; t.assignee = document.getElementById('edit-assignee').value;
+        t.importance = document.getElementById('edit-importance').value; t.urgency = document.getElementById('edit-urgency').value; t.impact = document.getElementById('edit-impact').value; t.effort = document.getElementById('edit-effort').value;
         saveData(); closeModal(); const curTab = document.querySelector('.nav-btn.active').id.replace('tab-', 'page-'); navToTab(curTab);
       }
     });
@@ -791,7 +847,7 @@
 
     // 初期化実行
     initGoalsUI(); updateAssigneeDropdowns(); updateProjectDropdowns(); 
-    navToTab('page-goals');
+    navToTab('page-goals'); // 起動時は目標タブ
   </script>
 </body>
 </html>
