@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プロジェクト＆タスク管理ダッシュボード</title>
+  <style>
+    :root { --primary: #0969da; --bg: #f0f2f5; --q1: #d73a49; --q2: #28a745; --q3: #dbab09; --q4: #6a737d; }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; background-color: var(--bg); color: #333; }
+    
+    /* ナビゲーションバー */
+    .navbar { background: #24292e; color: white; display: flex; overflow-x: auto; white-space: nowrap; padding: 10px; gap: 10px; }
+    .nav-btn { background: transparent; color: #aaa; border: none; font-size: 16px; padding: 8px 16px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+    .nav-btn.active { color: white; background: #3f4448; }
+    
+    .page { padding: 15px; display: none; max-width: 1200px; margin: 0 auto; }
+    .page.active { display: block; }
+
+    /* 汎用スタイル */
+    h2.section-title { font-size: 1.2rem; border-bottom: 2px solid #ddd; padding-bottom: 5px; margin-top: 0; }
+    .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 15px; }
+    
+    /* フォーム (タスク入力画面) */
+    .form-grid { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
+    .full-width { grid-column: span 2; }
+    .form-group-title { grid-column: span 2; font-size: 0.9em; font-weight: bold; color: var(--primary); margin-top: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;}
+    input, select, textarea, button { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%; box-sizing: border-box; }
+    textarea { resize: vertical; min-height: 80px; }
+    button.submit-btn { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; grid-column: span 2; margin-top: 15px; font-size: 16px; padding: 12px; }
+    
+    /* マトリクス画面 */
+    .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .filter-bar select { width: auto; flex-grow: 1; }
+    
+    .matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .quadrant { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-direction: column; min-height: 350px; }
+    .quadrant h3 { margin-top: 0; font-size: 1em; border-bottom: 3px solid; padding-bottom: 5px; display: flex; justify-content: space-between; align-items: baseline; }
+    .quadrant h3 span { font-size: 0.75em; color: #666; font-weight: normal; }
+    .q1 h3 { border-color: var(--q1); } .q2 h3 { border-color: var(--q2); } .q3 h3 { border-color: var(--q3); } .q4 h3 { border-color: var(--q4); }
+    
+    /* タスクカード */
+    .task-list { flex-grow: 1; overflow-y: auto; padding-top: 10px; display: flex; flex-direction: column; gap: 10px; }
+    .task-card { background: #f8f9fa; border-left: 4px solid var(--primary); padding: 12px; border-radius: 4px; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .task-title { font-weight: bold; font-size: 1.05em; margin-bottom: 5px; padding-right: 40px; }
+    .task-badges { display: flex; gap: 5px; margin-bottom: 8px; flex-wrap: wrap; }
+    .badge { font-size: 0.7em; padding: 2px 6px; border-radius: 10px; background: #e1e4e8; color: #586069; }
+    .badge.project { background: #ddf4ff; color: #0969da; }
+    .task-memo { font-size: 0.85em; color: #555; margin-bottom: 8px; white-space: pre-wrap; background: white; padding: 5px; border: 1px dashed #ccc; }
+    .task-meta { font-size: 0.75em; color: #666; display: flex; justify-content: space-between; }
+    
+    /* ボタン類 */
+    .card-actions { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; }
+    .btn-icon { background: none; border: none; cursor: pointer; font-size: 1.2em; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+    .btn-icon:hover { background: #e1e4e8; }
+    .btn-complete { color: var(--q2); }
+    .btn-delete { color: var(--q1); }
+    .btn-restore { color: var(--primary); }
+
+    /* WBS (ビジュアライザー) 画面 */
+    .wbs-project { margin-bottom: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .wbs-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 5px; margin-bottom: 15px; }
+    .progress-bar-bg { background: #eee; height: 10px; border-radius: 5px; width: 150px; overflow: hidden; }
+    .progress-bar-fill { background: var(--q2); height: 100%; transition: width 0.3s; }
+    .wbs-task { display: grid; grid-template-columns: 2fr 1fr 1fr; align-items: center; padding: 8px; border-bottom: 1px solid #eee; font-size: 0.9em; }
+    .wbs-task:last-child { border-bottom: none; }
+    .wbs-task.completed { color: #999; text-decoration: line-through; }
+    
+    @media (max-width: 768px) {
+      .matrix, .form-grid { grid-template-columns: 1fr; }
+      .full-width, button.submit-btn, .form-group-title { grid-column: span 1; }
+      .wbs-task { grid-template-columns: 1fr; gap: 5px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ナビゲーション -->
+  <div class="navbar">
+    <button class="nav-btn active" onclick="navTo('page-input')">① タスク入力</button>
+    <button class="nav-btn" onclick="navTo('page-matrix')">② マトリクス分析</button>
+    <button class="nav-btn" onclick="navTo('page-wbs')">③ WBS進捗</button>
+    <button class="nav-btn" onclick="navTo('page-completed')">④ 完了済み</button>
+  </div>
+
+  <!-- ① タスク入力画面 -->
+  <div id="page-input" class="page active">
+    <div class="card">
+      <h2 class="section-title">新しいタスクを追加</h2>
+      <form id="taskForm" class="form-grid">
+        <input type="text" id="taskName" class="full-width" placeholder="タスク名 (必須)" required>
+        <textarea id="memo" class="full-width" placeholder="詳細メモ・手順などを記入"></textarea>
+        
+        <div class="form-group-title">タスク分類</div>
+        <select id="label" required>
+          <option value="ワーク(仕事)">🏢 ワーク (仕事)</option>
+          <option value="ライフ(私生活)">🏠 ライフ (私生活)</option>
+        </select>
+        <!-- プロジェクト名は自由入力 ＆ 過去の入力をサジェスト -->
+        <input type="text" id="project" list="project-list" placeholder="プロジェクト名 (例: 新規営業リスト作成)" required>
+        <datalist id="project-list"></datalist>
+
+        <div class="form-group-title">スケジュール</div>
+        <div><small style="color:#666">開始日</small><input type="date" id="startDate" required></div>
+        <div><small style="color:#666">期限日・時間</small><input type="datetime-local" id="deadline" required></div>
+        <input type="text" id="assignee" placeholder="担当者 (任意)" class="full-width">
+
+        <div class="form-group-title">評価軸①：アイゼンハワー (優先順位)</div>
+        <select id="importance"><option value="high">重要度：高</option><option value="low">重要度：低</option></select>
+        <select id="urgency"><option value="high">緊急度：高</option><option value="low">緊急度：低</option></select>
+
+        <div class="form-group-title">評価軸②：タスクマトリクス (費用対効果)</div>
+        <select id="impact"><option value="high">効果(インパクト)：高</option><option value="low">効果(インパクト)：低</option></select>
+        <select id="effort"><option value="low">労力(コスト)：低 (ラク)</option><option value="high">労力(コスト)：高 (大変)</option></select>
+
+        <button type="submit" class="submit-btn">＋ タスクを登録する</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ② マトリクス画面 -->
+  <div id="page-matrix" class="page">
+    <div class="filter-bar">
+      <select id="matrix-type" onchange="renderMatrix()">
+        <option value="eisenhower">📊 アイゼンハワーマトリクス (重要×緊急)</option>
+        <option value="impact">📈 タスクマトリクス (効果×労力)</option>
+      </select>
+      <select id="filter-type" onchange="updateSubFilter()">
+        <option value="all">🌐 全体を表示</option>
+        <option value="label">🏷️ ラベル別 (ワーク/ライフ) で絞り込み</option>
+        <option value="project">📁 プロジェクト別で絞り込み</option>
+      </select>
+      <select id="sub-filter" style="display:none;" onchange="renderMatrix()"></select>
+    </div>
+
+    <div class="matrix">
+      <div class="quadrant q1"><h3 id="q1-title"></h3><div class="task-list" id="q1-list"></div></div>
+      <div class="quadrant q2"><h3 id="q2-title"></h3><div class="task-list" id="q2-list"></div></div>
+      <div class="quadrant q3"><h3 id="q3-title"></h3><div class="task-list" id="q3-list"></div></div>
+      <div class="quadrant q4"><h3 id="q4-title"></h3><div class="task-list" id="q4-list"></div></div>
+    </div>
+  </div>
+
+  <!-- ③ ビジュアライザー (WBS) 画面 -->
+  <div id="page-wbs" class="page">
+    <h2 class="section-title">プロジェクト進捗ビジュアライザー</h2>
+    <div id="wbs-container"></div>
+  </div>
+
+  <!-- ④ 完了タスク一覧画面 -->
+  <div id="page-completed" class="page">
+    <h2 class="section-title">完了済みタスク (アーカイブ)</h2>
+    <div class="card">
+      <div class="task-list" id="completed-list"></div>
+    </div>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('matrixTasksV5')) || [];
+
+    // ナビゲーション制御
+    window.navTo = function(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      event.target.classList.add('active');
+      
+      updateDataLists(); 
+      
+      if(pageId === 'page-matrix') { updateSubFilter(); renderMatrix(); }
+      if(pageId === 'page-wbs') { renderWBS(); }
+      if(pageId === 'page-completed') { renderCompleted(); }
+    }
+
+    // フォーム送信
+    document.getElementById('taskForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newTask = {
+        id: Date.now().toString(),
+        name: document.getElementById('taskName').value,
+        memo: document.getElementById('memo').value,
+        label: document.getElementById('label').value,
+        project: document.getElementById('project').value,
+        startDate: document.getElementById('startDate').value,
+        deadline: document.getElementById('deadline').value,
+        assignee: document.getElementById('assignee').value || '未設定',
+        importance: document.getElementById('importance').value,
+        urgency: document.getElementById('urgency').value,
+        impact: document.getElementById('impact').value,
+        effort: document.getElementById('effort').value,
+        status: 'active'
+      };
+      tasks.push(newTask);
+      saveData();
+      document.getElementById('taskForm').reset();
+      alert('タスクを登録しました！');
+    });
+
+    function saveData() { localStorage.setItem('matrixTasksV5', JSON.stringify(tasks)); }
+
+    // サジェスト更新
+    function updateDataLists() {
+      const projects = [...new Set(tasks.map(t => t.project))];
+      document.getElementById('project-list').innerHTML = projects.map(p => `<option value="${p}">`).join('');
+    }
+
+    // マトリクス画面
+    window.updateSubFilter = function() {
+      const type = document.getElementById('filter-type').value;
+      const sub = document.getElementById('sub-filter');
+      sub.innerHTML = '';
+      if (type === 'all') {
+        sub.style.display = 'none';
+      } else if (type === 'label') {
+        sub.style.display = 'block';
+        sub.innerHTML = '<option value="ワーク(仕事)">ワーク (仕事)</option><option value="ライフ(私生活)">ライフ (私生活)</option>';
+      } else if (type === 'project') {
+        sub.style.display = 'block';
+        const projects = [...new Set(tasks.map(t => t.project))];
+        sub.innerHTML = projects.map(p => `<option value="${p}">${p}</option>`).join('');
+      }
+      renderMatrix();
+    }
+
+    window.renderMatrix = function() {
+      const mType = document.getElementById('matrix-type').value;
+      const fType = document.getElementById('filter-type').value;
+      const fVal = document.getElementById('sub-filter').value;
+
+      if (mType === 'eisenhower') {
+        document.getElementById('q1-title').innerHTML = '重要・緊急 <span>(すぐやる)</span>';
+        document.getElementById('q2-title').innerHTML = '重要・緊急でない <span>(計画する)</span>';
+        document.getElementById('q3-title').innerHTML = '重要でない・緊急 <span>(任せる)</span>';
+        document.getElementById('q4-title').innerHTML = '重要でない・緊急でない <span>(やめる)</span>';
+      } else {
+        document.getElementById('q1-title').innerHTML = '高効果・低労力 <span>(クイックウィン)</span>';
+        document.getElementById('q2-title').innerHTML = '高効果・高労力 <span>(大プロジェクト)</span>';
+        document.getElementById('q3-title').innerHTML = '低効果・低労力 <span>(スキマ時間)</span>';
+        document.getElementById('q4-title').innerHTML = '低効果・高労力 <span>(見直す)</span>';
+      }
+
+      ['q1','q2','q3','q4'].forEach(q => document.getElementById(`${q}-list`).innerHTML = '');
+
+      let activeTasks = tasks.filter(t => t.status === 'active');
+      if (fType === 'label') activeTasks = activeTasks.filter(t => t.label === fVal);
+      if (fType === 'project') activeTasks = activeTasks.filter(t => t.project === fVal);
+
+      activeTasks.forEach(task => {
+        const card = buildCardHTML(task);
+        if (mType === 'eisenhower') {
+          if (task.importance==='high' && task.urgency==='high') document.getElementById('q1-list').innerHTML += card;
+          else if (task.importance==='high' && task.urgency==='low') document.getElementById('q2-list').innerHTML += card;
+          else if (task.importance==='low' && task.urgency==='high') document.getElementById('q3-list').innerHTML += card;
+          else document.getElementById('q4-list').innerHTML += card;
+        } else {
+          if (task.impact==='high' && task.effort==='low') document.getElementById('q1-list').innerHTML += card;
+          else if (task.impact==='high' && task.effort==='high') document.getElementById('q2-list').innerHTML += card;
+          else if (task.impact==='low' && task.effort==='low') document.getElementById('q3-list').innerHTML += card;
+          else document.getElementById('q4-list').innerHTML += card;
+        }
+      });
+    }
+
+    // WBS画面
+    window.renderWBS = function() {
+      const container = document.getElementById('wbs-container');
+      container.innerHTML = '';
+      const projects = [...new Set(tasks.map(t => t.project))];
+      
+      projects.forEach(projName => {
+        const pTasks = tasks.filter(t => t.project === projName);
+        if(pTasks.length === 0) return;
+
+        const completedCount = pTasks.filter(t => t.status === 'completed').length;
+        const progress = Math.round((completedCount / pTasks.length) * 100);
+        pTasks.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+
+        let html = `
+          <div class="wbs-project">
+            <div class="wbs-header">
+              <h3 style="margin:0;">📁 ${projName}</h3>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:0.9em; font-weight:bold;">進捗: ${progress}%</span>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${progress}%;"></div></div>
+              </div>
+            </div>
+            <div>
+        `;
+
+        pTasks.forEach(t => {
+          const isDone = t.status === 'completed';
+          html += `
+            <div class="wbs-task ${isDone ? 'completed' : ''}">
+              <div>${isDone ? '✅' : '⏳'} <strong>${t.name}</strong></div>
+              <div>期間: ${t.startDate} 〜 ${t.deadline.split('T')[0]}</div>
+              <div style="text-align:right;">👤 ${t.assignee}</div>
+            </div>
+          `;
+        });
+        html += `</div></div>`;
+        container.innerHTML += html;
+      });
+    }
+
+    // 完了画面
+    window.renderCompleted = function() {
+      const list = document.getElementById('completed-list');
+      list.innerHTML = '';
+      const completedTasks = tasks.filter(t => t.status === 'completed');
+      
+      if(completedTasks.length === 0) {
+        list.innerHTML = '<p style="color:#666;">完了済みのタスクはありません。</p>';
+        return;
+      }
+      completedTasks.forEach(task => list.innerHTML += buildCardHTML(task, true));
+    }
+
+    function buildCardHTML(task, isCompletedView = false) {
+      const memoHtml = task.memo ? `<div class="task-memo">${task.memo}</div>` : '';
+      const dt = task.deadline.replace('T', ' ');
+      
+      let actionButtons = !isCompletedView 
+        ? `<button class="btn-icon btn-complete" onclick="markDone('${task.id}')" title="完了にする">✅</button>`
+        : `<button class="btn-icon btn-restore" onclick="restoreTask('${task.id}')" title="未完了に戻す">↩️</button>
+           <button class="btn-icon btn-delete" onclick="deleteTask('${task.id}')" title="完全に削除する">🗑️</button>`;
+
+      return `
+        <div class="task-card">
+          <div class="card-actions">${actionButtons}</div>
+          <div class="task-title">${task.name}</div>
+          <div class="task-badges">
+            <span class="badge">${task.label}</span>
+            <span class="badge project">${task.project}</span>
+          </div>
+          ${memoHtml}
+          <div class="task-meta">
+            <span>👤 ${task.assignee}</span>
+            <span>📅 期限: ${dt}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    window.markDone = function(id) { const t = tasks.find(x => x.id === id); if(t) { t.status = 'completed'; saveData(); renderMatrix(); } }
+    window.restoreTask = function(id) { const t = tasks.find(x => x.id === id); if(t) { t.status = 'active'; saveData(); renderCompleted(); } }
+    window.deleteTask = function(id) { if(confirm('完全に削除しますか？')) { tasks = tasks.filter(x => x.id !== id); saveData(); renderCompleted(); } }
+
+    updateDataLists();
+  </script>
+</body>
+</html>
