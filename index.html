@@ -8,43 +8,18 @@
   <title>Visualizer</title>
   
   <style>
-    /* =========================================
-       カラーパレット (ワインレッドテーマ)
-       ========================================= */
-    :root { 
-      --primary: #8b2635; 
-      --bg-dark: #6e1c28; 
-      --card-bg: rgba(255, 255, 255, 0.95);
-      --text-main: #2d3748;
-      --text-sub: #718096;
-      --q1: #e53e3e; --q2: #38a169; --q3: #dd6b20; --q4: #a0aec0;
-      /* ポストイット風 背景色 */
-      --q1-bg: rgba(229, 62, 62, 0.12);
-      --q2-bg: rgba(56, 161, 105, 0.12);
-      --q3-bg: rgba(221, 107, 32, 0.12);
-      --q4-bg: rgba(160, 174, 192, 0.15);
-    }
+    :root { --primary: #8b2635; --bg-dark: #6e1c28; --card-bg: rgba(255, 255, 255, 0.95); --text-main: #2d3748; --text-sub: #718096; --q1: #e53e3e; --q2: #38a169; --q3: #dd6b20; --q4: #a0aec0; --q1-bg: rgba(229, 62, 62, 0.12); --q2-bg: rgba(56, 161, 105, 0.12); --q3-bg: rgba(221, 107, 32, 0.12); --q4-bg: rgba(160, 174, 192, 0.15); }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; margin: 0; padding: 0; background-color: var(--primary); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Ctext x='20' y='60' font-size='45' opacity='0.12'%3E🐺%3C/text%3E%3Ctext x='70' y='120' font-size='22' font-weight='900' font-family='Arial, sans-serif' fill='%23ffffff' opacity='0.08' transform='rotate(-15 70 120)'%3EMWAM%3C/text%3E%3C/svg%3E"); background-attachment: fixed; color: var(--text-main); -webkit-tap-highlight-color: transparent; }
     
-    body { 
-      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; 
-      margin: 0; padding: 0; 
-      background-color: var(--primary); 
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Ctext x='20' y='60' font-size='45' opacity='0.12'%3E🐺%3C/text%3E%3Ctext x='70' y='120' font-size='22' font-weight='900' font-family='Arial, sans-serif' fill='%23ffffff' opacity='0.08' transform='rotate(-15 70 120)'%3EMWAM%3C/text%3E%3C/svg%3E");
-      background-attachment: fixed; color: var(--text-main); -webkit-tap-highlight-color: transparent; 
-    }
-    
-    /* ヘッダー */
     .app-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(139, 38, 53, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 12px) 15px 12px 15px; z-index: 1000; height: 28px; color: white; }
     .header-btn { background: none; border: none; color: white; font-size: 15px; font-weight: bold; padding: 0; cursor: pointer; min-width: 65px; display: flex; align-items: center; gap: 4px; }
     .header-title { font-weight: 800; font-size: 17px; margin: 0; text-align: center; flex-grow: 1; letter-spacing: 1px; }
 
-    /* モード切替 */
     .global-toggle-bar { position: fixed; top: calc(53px + env(safe-area-inset-top)); left: 0; right: 0; padding: 10px 15px; z-index: 990; background: linear-gradient(to bottom, rgba(139, 38, 53, 0.9), transparent); }
     .global-toggle { display: flex; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
     .global-toggle button { flex: 1; border: none; background: transparent; padding: 10px; font-weight: bold; font-size: 14px; border-radius: 8px; color: rgba(255,255,255,0.7); cursor: pointer; transition: 0.2s; }
     .global-toggle button.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-    /* 下部ナビゲーション */
     .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; height: 56px; }
     .nav-btn { background: transparent; border: none; font-size: 10px; color: #a0aec0; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 20%; cursor: pointer; transition: 0.2s; }
     .nav-btn .icon { font-size: 22px; margin-bottom: 3px; transition: 0.2s; }
@@ -74,7 +49,6 @@
     /* リスト */
     .proj-acc { background: var(--card-bg); border-radius: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; }
     .proj-acc-summary { padding: 16px; font-weight: bold; font-size: 16px; outline: none; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.03); border-bottom: 1px solid #e2e8f0; cursor: pointer; color: var(--primary); }
-    .proj-acc-summary::-webkit-details-marker { display: none; }
     .list-card { background: #fff; padding: 14px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 4px solid var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .list-card.done { border-left-color: #cbd5e1; opacity: 0.6; }
 
@@ -193,7 +167,7 @@
     <div id="list-container"></div>
   </div>
 
-  <!-- ページ3: ⊞ マトリクス -->
+  <!-- ページ3: ⊞ マトリクス (付箋風) -->
   <div id="page-matrix" class="page">
     <div class="toggle-group" style="background:rgba(0,0,0,0.4);">
       <button id="tg-matrix-active" class="toggle-btn active" onclick="switchMatrixTab('active')" style="color:white;">進行中</button>
@@ -228,6 +202,16 @@
     </div>
     
     <div class="gantt-wrapper" id="gantt-wrapper"></div>
+    
+    <details style="background:white; border-radius:12px; padding:12px; box-shadow:0 1px 3px rgba(0,0,0,0.03); border:1px solid #f1f5f9;">
+      <summary style="font-weight:bold; color:var(--primary); outline:none;">ℹ️ 記号について（カレンダーの見方）</summary>
+      <ul style="font-size:0.85em; color:var(--text-sub); margin:10px 0 0 0; padding-left:20px; line-height:1.8;">
+        <li><span style="color:#0284c7; font-weight:bold; background:#e0f2fe; padding:2px 6px; border-radius:4px;">🟢 開始</span> : タスクを開始する日。</li>
+        <li><span style="color:#dc2626; font-weight:bold; background:#fee2e2; padding:2px 6px; border-radius:4px;">🏁 期限</span> : タスクを完了させる期限日。</li>
+        <li><span style="color:var(--text-sub); font-weight:bold;">⬇️ 進行中</span> : 開始から期限までの「期間中」を表します。</li>
+        <li><span style="color:#d97706; font-weight:bold; background:#fef3c7; padding:2px 6px; border-radius:4px;">🌟 単日</span> : その日のうちに開始し完了するタスクです。</li>
+      </ul>
+    </details>
   </div>
 
   <!-- ページ5: 🔗 確認 -->
@@ -237,26 +221,31 @@
       <h2 style="margin:0; font-size:18px;">ショートカット</h2>
     </div>
     <div id="apps-container" class="app-icon-grid"></div>
-    <h3 style="color:white; font-size:15px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:5px; margin-bottom:15px;">🔗 Webリンク集</h3>
+    <h3 style="color:white; font-size:15px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:5px; margin-bottom:15px; text-shadow:0 1px 2px rgba(0,0,0,0.3);">🔗 Webリンク集</h3>
     <div id="links-container"></div>
   </div>
 
-  <!-- ⚙️設定ページ -->
+  <!-- ⚙️設定ページ (完全に不透明な背景) -->
   <div id="page-settings" class="page" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#5a1721; z-index:3000; overflow-y:auto; padding-top:20px; background-image:none !important;">
     <div style="display:flex; justify-content:space-between; margin-bottom:20px; align-items:center;">
       <h2 style="margin:0; color:white;">設定</h2>
       <button onclick="closeSettings()" style="font-size:15px; background:white; border:none; color:var(--primary); padding:8px 16px; border-radius:20px; font-weight:bold;">完了</button>
     </div>
     
-    <h3 style="margin-top:20px; font-size:15px; color:white;">📥 データの書き出し</h3>
+    <button id="notify-btn" class="primary-btn" style="background:var(--q2);" onclick="requestNotificationPermission()">🔔 プッシュ通知を許可する</button>
+
+    <h3 style="margin-top:20px; font-size:15px; color:white;">📥 データの書き出し (テキスト/CSV)</h3>
     <div class="card" style="display:flex; flex-direction:column; gap:10px;">
       <button onclick="exportTasksText()" class="primary-btn" style="background:#475569; margin:0;">📋 タスク一覧をテキストコピー</button>
       <button onclick="exportTasksCSV()" class="primary-btn" style="margin:0;">📝 タスクをエクセル(CSV)保存</button>
       <button onclick="exportGoalsCSV()" class="primary-btn" style="background:#ea580c; margin:0;">🎯 目標・行動をエクセル(CSV)保存</button>
+      <p style="font-size:11px; color:var(--text-sub); margin:0;">※現在選択中のモード（ライフ/ワーク）のデータが出力されます。</p>
     </div>
 
-    <h3 style="margin-top:20px; font-size:15px; color:white;">🔄 機種変更・データ共有</h3>
+    <h3 style="margin-top:20px; font-size:15px; color:white;">🔄 強制復元・データ共有</h3>
     <div class="card" style="display:flex; flex-direction:column; gap:10px;">
+      <button onclick="forceRecoverData()" class="primary-btn" style="background:#d97706; margin:0;">🔍 過去のデータを探して復元する</button>
+      <hr style="border:0; border-top:1px solid #e2e8f0; width:100%; margin:5px 0;">
       <button onclick="exportData()" class="primary-btn" style="margin:0;">全データをコピー (書き出し)</button>
       <textarea id="import-data-text" placeholder="もらったデータをここにペースト..." style="height:60px; font-size:11px;"></textarea>
       <button onclick="importData()" class="primary-btn" style="background:var(--q2); margin:0;">データを読み込む</button>
@@ -277,6 +266,7 @@
       </div>
       <input type="url" id="new-link-url" placeholder="URLまたはスキーム">
       <button onclick="addLink()" style="background:var(--primary); color:white; border:none; border-radius:8px; padding:12px; font-weight:bold;">追加する</button>
+      <p style="font-size:11px; color:var(--text-sub); margin:0;">※現在のモードに追加されます</p>
     </div>
     <div style="display:flex; flex-direction:column; gap:10px;" id="settings-links-container"></div>
   </div>
@@ -338,11 +328,43 @@
   </div>
 
   <script>
-    // データ初期化 (V18 - 追加機能対応)
-    let projects = JSON.parse(localStorage.getItem('vizProjectsV18')) || [];
-    let tasks = JSON.parse(localStorage.getItem('vizTasksV18')) || [];
-    let members = JSON.parse(localStorage.getItem('vizMembersV18')) || ["自分"];
-    let userLinks = JSON.parse(localStorage.getItem('vizUserLinksV18')) || [
+    // --- 🚨 強力なデータ復旧エンジン (過去全バージョン検索) ---
+    function recoverOldData() {
+      const oldVersions = ['18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8'];
+      for (let v of oldVersions) {
+        let oldProj = localStorage.getItem(`vizProjectsV${v}`);
+        if (oldProj && JSON.parse(oldProj).length > 0) {
+           return {
+             v: v,
+             p: JSON.parse(oldProj),
+             t: JSON.parse(localStorage.getItem(`vizTasksV${v}`)) || [],
+             m: JSON.parse(localStorage.getItem(`vizMembersV${v}`)) || ["自分"],
+             l: JSON.parse(localStorage.getItem(`vizUserLinksV${v}`)) || [],
+             g: JSON.parse(localStorage.getItem(`vizGoalsV${v}`)) || null
+           };
+        }
+      }
+      return null;
+    }
+
+    window.forceRecoverData = function() {
+      const recovered = recoverOldData();
+      if(recovered) {
+        if(confirm(`過去のデータ(V${recovered.v})が見つかりました。復元しますか？\n(現在のデータは上書きされます)`)) {
+          projects = recovered.p.map(p => ({...p, mode: p.mode || 'life'}));
+          tasks = recovered.t.map(t => ({...t, mode: t.mode || 'life'}));
+          members = recovered.m; userLinks = recovered.l.map(l => ({...l, mode: l.mode || 'life'}));
+          if(recovered.g) { goals.life = {...goals.life, ...recovered.g.life}; goals.work = {...goals.work, ...recovered.g.work}; }
+          saveData(); alert("復元完了しました！画面を更新します。"); location.reload();
+        }
+      } else { alert("過去のデータは見つかりませんでした。"); }
+    }
+
+    // --- データ初期化 (V19 - 復旧・強化版) ---
+    let projects = JSON.parse(localStorage.getItem('vizProjectsV19')) || [];
+    let tasks = JSON.parse(localStorage.getItem('vizTasksV19')) || [];
+    let members = JSON.parse(localStorage.getItem('vizMembersV19')) || ["自分"];
+    let userLinks = JSON.parse(localStorage.getItem('vizUserLinksV19')) || [
       { type: 'app', title: 'Gemini', url: 'https://gemini.google.com/', icon: '✨', mode: 'life' },
       { type: 'app', title: 'ChatGPT', url: 'https://chatgpt.com/', icon: '🤖', mode: 'life' },
       { type: 'app', title: 'Copilot', url: 'https://copilot.microsoft.com/', icon: '💻', mode: 'life' },
@@ -352,7 +374,7 @@
       { type: 'app', title: 'ChatGPT', url: 'https://chatgpt.com/', icon: '🤖', mode: 'work' },
       { type: 'app', title: 'Copilot', url: 'https://copilot.microsoft.com/', icon: '💻', mode: 'work' }
     ];
-    let goals = JSON.parse(localStorage.getItem('vizGoalsV18')) || {
+    let goals = JSON.parse(localStorage.getItem('vizGoalsV19')) || {
       life: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] },
       work: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] }
     };
@@ -365,17 +387,22 @@
     let currentOpenedTaskId = null;
     let selectedGoalAction = 'memo';
 
-    // 移行処理
-    if(projects.length === 0 && localStorage.getItem('vizProjectsV17')) {
-      projects = JSON.parse(localStorage.getItem('vizProjectsV17')); tasks = JSON.parse(localStorage.getItem('vizTasksV17'));
-      members = JSON.parse(localStorage.getItem('vizMembersV17')); userLinks = JSON.parse(localStorage.getItem('vizUserLinksV17'));
-      goals = JSON.parse(localStorage.getItem('vizGoalsV17')); saveData();
+    // 初回起動時に過去データがあれば自動移行
+    if(projects.length === 0) {
+      const rec = recoverOldData();
+      if(rec) {
+        projects = rec.p.map(p => ({...p, mode: p.mode || 'life'}));
+        tasks = rec.t.map(t => ({...t, mode: t.mode || 'life'}));
+        members = rec.m; userLinks = rec.l.map(l => ({...l, mode: l.mode || 'life'}));
+        if(rec.g) { goals.life = {...goals.life, ...rec.g.life}; goals.work = {...goals.work, ...rec.g.work}; }
+        saveData();
+      }
     }
 
     function saveData() {
-      localStorage.setItem('vizProjectsV18', JSON.stringify(projects)); localStorage.setItem('vizTasksV18', JSON.stringify(tasks));
-      localStorage.setItem('vizMembersV18', JSON.stringify(members)); localStorage.setItem('vizGoalsV18', JSON.stringify(goals));
-      localStorage.setItem('vizUserLinksV18', JSON.stringify(userLinks));
+      localStorage.setItem('vizProjectsV19', JSON.stringify(projects)); localStorage.setItem('vizTasksV19', JSON.stringify(tasks));
+      localStorage.setItem('vizMembersV19', JSON.stringify(members)); localStorage.setItem('vizGoalsV19', JSON.stringify(goals));
+      localStorage.setItem('vizUserLinksV19', JSON.stringify(userLinks));
     }
 
     function switchGlobalMode(mode) {
@@ -566,7 +593,7 @@
       curProjs.forEach(p => {
         const pTasks = tasks.filter(t => t.projectId === p.id).sort((a,b) => new Date(a.startDate) - new Date(b.startDate));
         const progress = pTasks.length > 0 ? Math.round((pTasks.filter(t=>t.status==='completed').length / pTasks.length)*100) : 0;
-        let lDate = '-'; if(pTasks.length>0) lDate = pTasks.reduce((l,t) => new Date(t.deadline)>new Date(l.deadline)?t:l).deadline.split('T')[0];
+        let lDate = '-'; if(pTasks.length>0) lDate = pTasks.reduce((l,t) => new Date(t.deadline)>new Date(l.deadline)?t:l).deadline.split('T')[0].slice(5);
 
         html += `<div class="gantt-cell gantt-proj-info"><div style="font-weight:bold; font-size:13px;">${p.name}</div><div style="font-size:11px; color:var(--q2);">進捗: ${progress}%</div><div style="font-size:11px; color:var(--q1);">🏁 ${lDate}</div></div>`;
         html += `<div class="gantt-cell" style="padding:0;"><div class="gantt-tasks-area"><div style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; pointer-events:none;">`;
@@ -585,9 +612,9 @@
           if (currentCalView === 'daily') {
             const mStart = new Date(year, month, 1); const mEnd = new Date(year, month + 1, 0);
             if (tEnd >= mStart && tStart <= mEnd) {
-              const startDay = Math.max(1, tStart.getDate() + (tStart.getMonth() < month ? -31 : 0)); // 簡易補正
+              const startDay = Math.max(1, tStart.getDate() + (tStart.getMonth() < month ? -31 : 0)); 
               const actualStart = tStart < mStart ? 1 : tStart.getDate();
-              const actualEnd = tEnd > mEnd ? daysInMonth : tEnd.getDate();
+              const actualEnd = tEnd > mEnd ? new Date(year, month + 1, 0).getDate() : tEnd.getDate();
               marginLeft = (actualStart - 1) * cellWidth; width = (actualEnd - actualStart + 1) * cellWidth - 4; shouldRender = true;
             }
           } else if (currentCalView === 'monthly') {
@@ -712,6 +739,8 @@
     }
 
     // --- バックグラウンド通知 ---
+    function requestNotificationPermission() { if ("Notification" in window) { Notification.requestPermission().then(p => { if (p === "granted") { alert("通知を許可しました"); document.getElementById('notify-btn').style.display = 'none'; }}); } }
+    if ("Notification" in window && Notification.permission === "granted") { document.getElementById('notify-btn').style.display = 'none'; }
     setInterval(() => {
       if (Notification.permission !== "granted") return;
       const now = new Date(); let updated = false;
