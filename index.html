@@ -4,13 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Visualizer</title>
   
   <style>
-    /* =========================================
-       カラーパレット (ワインレッドテーマ)
-       ========================================= */
     :root { 
       --primary: #8b2635; 
       --bg-dark: #6e1c28; 
@@ -26,29 +23,27 @@
       background-color: var(--primary); 
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Ctext x='20' y='60' font-size='45' opacity='0.12'%3E🐺%3C/text%3E%3Ctext x='70' y='120' font-size='22' font-weight='900' font-family='Arial, sans-serif' fill='%23ffffff' opacity='0.08' transform='rotate(-15 70 120)'%3EMWAM%3C/text%3E%3C/svg%3E");
       background-attachment: fixed; color: var(--text-main); -webkit-tap-highlight-color: transparent; 
+      /* iPhoneのホーム画面追加時のスクロールバグ対策 */
+      min-height: 100dvh; overflow-x: hidden;
     }
     
-    /* ヘッダー (モード切り替え統合) */
-    .app-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(139, 38, 53, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 12px) 15px 12px 15px; z-index: 1000; height: 32px; color: white; }
+    .app-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(139, 38, 53, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 10px) 15px 10px 15px; z-index: 1000; height: 32px; color: white; }
     
     .header-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
     .header-btn { background: none; border: none; color: white; font-size: 15px; font-weight: bold; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .header-title { font-weight: 800; font-size: 17px; margin: 0; text-align: center; flex: 1; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .header-right-group { display: flex; justify-content: flex-end; flex: 1; }
 
-    /* モード切替ボタンスタイル (小型化) */
     .mode-toggle-mini { display: flex; background: rgba(0,0,0,0.3); border-radius: 6px; padding: 3px; }
     .mode-toggle-mini button { border: none; background: transparent; padding: 4px 10px; font-weight: bold; font-size: 12px; border-radius: 4px; color: rgba(255,255,255,0.6); cursor: pointer; transition: 0.2s; }
     .mode-toggle-mini button.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
 
-    /* 下部ナビゲーション */
     .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; height: 56px; }
     .nav-btn { background: transparent; border: none; font-size: 10px; color: #a0aec0; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 20%; cursor: pointer; transition: 0.2s; }
     .nav-btn .icon { font-size: 22px; margin-bottom: 3px; transition: 0.2s; }
     .nav-btn.active { color: var(--primary); font-weight: bold; }
     
-    /* ページの余白 (エラー修正済み) */
-    .page { display: none; padding: calc(75px + env(safe-area-inset-top)) 15px calc(80px + env(safe-area-inset-bottom)); max-width: 900px; margin: 0 auto; min-height: 100vh; box-sizing: border-box; }
+    .page { display: none; padding: calc(65px + env(safe-area-inset-top)) 15px calc(80px + env(safe-area-inset-bottom)); max-width: 900px; margin: 0 auto; min-height: 100dvh; box-sizing: border-box; }
     .page.active { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     
@@ -72,25 +67,20 @@
     /* リスト */
     .proj-acc { background: var(--card-bg); border-radius: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; }
     .proj-acc-summary { padding: 16px; font-weight: bold; font-size: 16px; outline: none; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.03); border-bottom: 1px solid #e2e8f0; cursor: pointer; color: var(--primary); }
-    .proj-acc-summary::-webkit-details-marker { display: none; }
     .list-card { background: #fff; padding: 14px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-left: 4px solid var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .list-card.done { border-left-color: #cbd5e1; opacity: 0.6; }
 
-    /* マトリクス (付箋/ポストイット風デザイン) */
-    .matrix-container { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; height: calc(100vh - 290px); min-height: 400px; }
+    /* マトリクス (dvh対応で崩れ防止) */
+    .matrix-container { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; height: calc(100dvh - 280px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); min-height: 400px; }
     .quadrant { background: white; border-radius: 16px; padding: 10px; display: flex; flex-direction: column; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .q1 { border-color: var(--q1); } .q2 { border-color: var(--q2); }
-    .q3 { border-color: var(--q3); } .q4 { border-color: var(--q4); }
+    .q1 { border-color: var(--q1); background-color: rgba(229, 62, 62, 0.12); } 
+    .q2 { border-color: var(--q2); background-color: rgba(56, 161, 105, 0.12); }
+    .q3 { border-color: var(--q3); background-color: rgba(221, 107, 32, 0.12); } 
+    .q4 { border-color: var(--q4); background-color: rgba(160, 174, 192, 0.15); }
     .quadrant h3 { margin: 0 0 10px 0; font-size: 0.85em; text-align: center; padding-bottom: 6px; border-bottom: 1px dashed rgba(0,0,0,0.1); color: var(--text-main); display: flex; flex-direction: column; gap: 2px;}
     .q-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 2px; }
-    
-    /* 付箋カラーのカード */
-    .mini-card { border-radius: 6px; padding: 8px; font-size: 0.8em; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05); color: var(--text-main); }
+    .mini-card { background: rgba(255,255,255,0.9); border-radius: 6px; padding: 8px; font-size: 0.8em; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05); color: var(--text-main); }
     .mini-card.done { opacity: 0.5; text-decoration: line-through; }
-    .mc-q1 { background-color: #fee2e2; border-left: 4px solid var(--q1); }
-    .mc-q2 { background-color: #dcfce7; border-left: 4px solid var(--q2); }
-    .mc-q3 { background-color: #ffedd5; border-left: 4px solid var(--q3); }
-    .mc-q4 { background-color: #f1f5f9; border-left: 4px solid var(--q4); }
 
     /* ガントチャート */
     .gantt-wrapper { overflow-x: auto; background: var(--card-bg); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.5); }
@@ -120,7 +110,7 @@
 </head>
 <body>
 
-  <!-- 固定ヘッダー (左上に連携とモード切替をコンパクトに配置) -->
+  <!-- ヘッダー -->
   <div class="app-header">
     <div class="header-left-group">
       <button id="header-left-btn" class="header-btn" onclick="openGoalActionModal()" style="display:none; background:rgba(0,0,0,0.3); padding:4px 8px; border-radius:6px; font-size:12px;">＋連携</button>
@@ -135,7 +125,7 @@
     </div>
   </div>
 
-  <!-- 下部タブ (5つ) -->
+  <!-- 下部タブ -->
   <div class="navbar">
     <button id="tab-list" class="nav-btn" onclick="navToTab('page-list')"><span class="icon">📝</span><span>リスト</span></button>
     <button id="tab-matrix" class="nav-btn" onclick="navToTab('page-matrix')"><span class="icon">⊞</span><span>マトリクス</span></button>
@@ -194,7 +184,7 @@
     <div id="list-container"></div>
   </div>
 
-  <!-- ページ3: ⊞ マトリクス (付箋風) -->
+  <!-- ページ3: ⊞ マトリクス -->
   <div id="page-matrix" class="page">
     <div class="toggle-group" style="background:rgba(0,0,0,0.4);">
       <button id="tg-matrix-active" class="toggle-btn active" onclick="switchMatrixTab('active')" style="color:white;">進行中</button>
@@ -214,7 +204,7 @@
     </div>
   </div>
 
-  <!-- ページ4: 🗓 カレンダー (年次・月次・週次・日次) -->
+  <!-- ページ4: 🗓 カレンダー -->
   <div id="page-wbs" class="page">
     
     <details class="card" style="padding:12px; margin-bottom:15px; border-radius:12px;">
@@ -268,7 +258,6 @@
       <button onclick="exportTasksText()" class="primary-btn" style="background:#475569; margin:0;">📋 タスク一覧をテキストコピー</button>
       <button onclick="exportTasksCSV()" class="primary-btn" style="margin:0;">📝 タスクをエクセル(CSV)保存</button>
       <button onclick="exportGoalsCSV()" class="primary-btn" style="background:#ea580c; margin:0;">🎯 目標・行動をエクセル(CSV)保存</button>
-      <p style="font-size:11px; color:var(--text-sub); margin:0;">※現在選択中のモード（ライフ/ワーク）のデータが出力されます。</p>
     </div>
 
     <h3 style="margin-top:20px; font-size:15px; color:white;">🔄 強制復元・データ共有</h3>
@@ -295,7 +284,6 @@
       </div>
       <input type="url" id="new-link-url" placeholder="URLまたはスキーム">
       <button onclick="addLink()" style="background:var(--primary); color:white; border:none; border-radius:8px; padding:12px; font-weight:bold;">追加する</button>
-      <p style="font-size:11px; color:var(--text-sub); margin:0;">※現在のモードに追加されます</p>
     </div>
     <div style="display:flex; flex-direction:column; gap:10px;" id="settings-links-container"></div>
   </div>
@@ -359,7 +347,7 @@
   <script>
     // --- 🚨 データ復旧エンジン ---
     function recoverOldData() {
-      const oldVersions = ['20', '19', '18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8'];
+      const oldVersions = ['21', '20', '19', '18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8'];
       for (let v of oldVersions) {
         let oldProj = localStorage.getItem(`vizProjectsV${v}`);
         if (oldProj && JSON.parse(oldProj).length > 0) {
@@ -382,11 +370,11 @@
       } else if (!recovered) { alert("過去のデータは見つかりませんでした。"); }
     }
 
-    // --- データ初期化 (V21) ---
-    let projects = JSON.parse(localStorage.getItem('vizProjectsV21')) || [];
-    let tasks = JSON.parse(localStorage.getItem('vizTasksV21')) || [];
-    let members = JSON.parse(localStorage.getItem('vizMembersV21')) || ["自分"];
-    let userLinks = JSON.parse(localStorage.getItem('vizUserLinksV21')) || [
+    // --- データ初期化 (V22) ---
+    let projects = JSON.parse(localStorage.getItem('vizProjectsV22')) || [];
+    let tasks = JSON.parse(localStorage.getItem('vizTasksV22')) || [];
+    let members = JSON.parse(localStorage.getItem('vizMembersV22')) || ["自分"];
+    let userLinks = JSON.parse(localStorage.getItem('vizUserLinksV22')) || [
       { type: 'app', title: 'Gemini', url: 'https://gemini.google.com/', icon: '✨', mode: 'life' },
       { type: 'app', title: 'ChatGPT', url: 'https://chatgpt.com/', icon: '🤖', mode: 'life' },
       { type: 'app', title: 'Copilot', url: 'https://copilot.microsoft.com/', icon: '💻', mode: 'life' },
@@ -396,7 +384,7 @@
       { type: 'app', title: 'ChatGPT', url: 'https://chatgpt.com/', icon: '🤖', mode: 'work' },
       { type: 'app', title: 'Copilot', url: 'https://copilot.microsoft.com/', icon: '💻', mode: 'work' }
     ];
-    let goals = JSON.parse(localStorage.getItem('vizGoalsV21')) || {
+    let goals = JSON.parse(localStorage.getItem('vizGoalsV22')) || {
       life: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] },
       work: { mission: '', vision: '', value: '', yearly: '', monthly: '', weekly: '', daily: '', habits: [] }
     };
@@ -404,7 +392,7 @@
     let currentGlobalMode = 'life'; 
     let currentListTab = 'active';
     let currentMatrixTab = 'active';
-    let currentCalView = 'daily'; // daily, weekly, monthly, yearly
+    let currentCalView = 'daily'; 
     let currentCalDate = new Date();
     let currentOpenedTaskId = null;
     let selectedGoalAction = 'memo';
@@ -420,9 +408,9 @@
     }
 
     function saveData() {
-      localStorage.setItem('vizProjectsV21', JSON.stringify(projects)); localStorage.setItem('vizTasksV21', JSON.stringify(tasks));
-      localStorage.setItem('vizMembersV21', JSON.stringify(members)); localStorage.setItem('vizGoalsV21', JSON.stringify(goals));
-      localStorage.setItem('vizUserLinksV21', JSON.stringify(userLinks));
+      localStorage.setItem('vizProjectsV22', JSON.stringify(projects)); localStorage.setItem('vizTasksV22', JSON.stringify(tasks));
+      localStorage.setItem('vizMembersV22', JSON.stringify(members)); localStorage.setItem('vizGoalsV22', JSON.stringify(goals));
+      localStorage.setItem('vizUserLinksV22', JSON.stringify(userLinks));
     }
 
     function switchGlobalMode(mode) {
@@ -522,7 +510,7 @@
     function switchListTab(tab) { currentListTab = tab; document.getElementById('tg-active').classList.toggle('active', tab === 'active'); document.getElementById('tg-done').classList.toggle('active', tab === 'completed'); renderList(); }
     function renderList() {
       const container = document.getElementById('list-container'); container.innerHTML = ''; const curProjs = getFilteredProjects();
-      if(curProjs.length === 0) { container.innerHTML = `<div style="text-align:center; padding:20px; color:white;">右上の「⚙️設定」または左記からPJを追加してください。</div>`; return; }
+      if(curProjs.length === 0) { container.innerHTML = `<div style="text-align:center; padding:20px; color:white;">右上の「⚙️設定」からPJを追加してください。</div>`; return; }
       curProjs.forEach(p => {
         const pTasks = tasks.filter(t => t.projectId === p.id && t.status === currentListTab).sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
         let html = `<details class="proj-acc" open><summary class="proj-acc-summary"><span>📁 ${p.name} <span style="font-size:0.85em; color:var(--text-sub); font-weight:normal;">${pTasks.length}件</span></span><button onclick="deleteProject('${p.id}', event)" style="background:none;border:none;font-size:18px;color:var(--q1);padding:5px;">🗑️</button></summary><div class="proj-acc-content"><ul style="margin:0; padding-left:20px; font-size:15px; line-height:1.8;">`;
@@ -597,7 +585,6 @@
       
       if(currentCalView === 'daily') {
         document.getElementById('cal-period-title').innerText = `${year}年 ${month + 1}月`;
-        // 修正: 月末まで確実に表示するため日数を計算
         const daysInMonth = new Date(year, month + 1, 0).getDate(); colCount = daysInMonth; cellWidth = 35;
         for(let i=1; i<=daysInMonth; i++) {
           const d = new Date(year, month, i).getDay(); const isW = (d===0||d===6) ? 'weekend' : '';
@@ -784,8 +771,6 @@
     }
 
     // --- バックグラウンド通知 ---
-    function requestNotificationPermission() { if ("Notification" in window) { Notification.requestPermission().then(p => { if (p === "granted") { alert("通知を許可しました"); document.getElementById('notify-btn').style.display = 'none'; }}); } }
-    if ("Notification" in window && Notification.permission === "granted") { document.getElementById('notify-btn').style.display = 'none'; }
     setInterval(() => {
       if (Notification.permission !== "granted") return;
       const now = new Date(); let updated = false;
